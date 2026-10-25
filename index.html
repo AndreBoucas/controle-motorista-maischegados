@@ -6,8 +6,8 @@
 <title>Controle Financeiro Motorista APP</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#00a88f">
-<link rel="icon" href="icon-192.png?v=22">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=22">
+<link rel="icon" href="icon-192.png?v=24">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=24">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Controle Financeiro Motorista APP">
@@ -89,6 +89,20 @@ header.sem-r{background:#d64545}header.sem-a{background:#d99100}
 .dgt{font-size:12px;font-weight:800;color:var(--mut);margin:12px 0 2px}.dgt+.ir{border-top:0}
 .pdn{width:40px;height:36px;border:0;border-radius:10px;background:var(--in);color:var(--tx);font-size:20px}
 #gctab button{font-size:12px;padding:8px 3px;line-height:1.2}
+.cmp{display:grid;grid-template-columns:1.6fr 1fr 1fr .8fr;gap:5px 6px;font-size:12px;align-items:center}.cmp .h{color:var(--mut);font-weight:700;font-size:11px}.cmp .v{text-align:right;font-weight:700}.cmp .x{text-align:right;font-weight:800}.cmp .sep{grid-column:1/-1;border-top:1px solid var(--bd)}
+#lk{position:fixed;inset:0;z-index:9999;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+#lk.on{display:flex}
+.lkb{width:100%;max-width:340px;text-align:center}
+.lkic{width:64px;height:64px;margin:0 auto 10px;border-radius:20px;background:var(--hd);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center}
+.lkt{font-weight:800;font-size:16px}.lkm{font-size:14px;color:var(--mut);margin:10px 0 14px;min-height:20px}
+.lkd{display:flex;gap:14px;justify-content:center;margin-bottom:22px;min-height:16px}.lkd i{width:14px;height:14px;border-radius:50%;border:2px solid var(--hd)}.lkd i.on{background:var(--hd)}
+.lkd.err{animation:lksh .35s}@keyframes lksh{0%,100%{transform:none}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.lkpad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.lkpad button{height:62px;border-radius:18px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:24px;font-weight:600}
+.lkpad button.lkx{background:none;border:0;font-size:20px;color:var(--mut)}
+.lkpad button:active{background:var(--in)}
+#lkesq{margin-top:16px;border:0;background:none;color:var(--hd);font-size:14px;font-weight:700;padding:8px}
+.lkf{display:none;text-align:left;margin-top:12px;font-size:13px;line-height:1.5}
 .sync{text-align:center;font-size:12px;opacity:.85;margin-top:8px}
 .bk{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bk button{padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);font-size:14px;font-weight:600}
 nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:calc(100% - 20px);max-width:500px;background:var(--card);border:1px solid var(--bd);border-radius:26px;box-shadow:0 8px 28px rgba(0,0,0,.2);display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;padding:6px;z-index:4}
@@ -100,9 +114,9 @@ nav button.on{background:rgba(0,168,143,.17);color:var(--hd)}
 nav button.on b{font-weight:800}
 .mtit{margin:0 14px 10px;padding:10px 14px;border-left:4px solid var(--hd);background:var(--card);border-radius:10px;font-size:16px;font-weight:800}
 #fab{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom,0px));right:16px;width:58px;height:58px;border-radius:50%;background:var(--hd);color:#fff;border:4px solid var(--bg);font-size:30px;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:5}
-#ov,#ov2,#ov3,#ov4,#ov5,#ov6,#ov7,#ov8,#ov9{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10;align-items:flex-end;justify-content:center}
-#ov.on,#ov2.on,#ov3.on,#ov4.on,#ov5.on,#ov6.on,#ov7.on,#ov8.on,#ov9.on{display:flex}
-#sh,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7,#sh8,#sh9{background:var(--card);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow-y:auto}
+#ov,#ov2,#ov3,#ov4,#ov5,#ov6,#ov7,#ov8,#ov9,#ov10{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10;align-items:flex-end;justify-content:center}
+#ov.on,#ov2.on,#ov3.on,#ov4.on,#ov5.on,#ov6.on,#ov7.on,#ov8.on,#ov9.on,#ov10.on{display:flex}
+#sh,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7,#sh8,#sh9,#sh10{background:var(--card);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow-y:auto}
 .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tabs button{padding:11px;border:0;border-radius:10px;background:var(--in);color:var(--mut);font-weight:700;font-size:15px}
 .tabs button.on.r{background:var(--ok);color:#fff}.tabs button.on.d{background:var(--bad);color:#fff}
@@ -114,10 +128,29 @@ nav button.on b{font-weight:800}
 .f label{font-size:12px;color:var(--mut);display:block;margin-bottom:4px}
 .f input{width:100%;padding:12px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx)}
 #sv,#ssv{width:100%;margin-top:16px;padding:15px;border:0;border-radius:12px;background:var(--hd);color:#fff;font-size:16px;font-weight:700}
-#cx,#scx,#zcx,#d4cx,#ic5cx,#d6cx,#s7cx,#s8cx,#s9cx{width:100%;margin-top:6px;padding:12px;border:0;background:none;color:var(--mut);font-size:15px}
+#cx,#scx,#zcx,#d4cx,#ic5cx,#d6cx,#s7cx,#s8cx,#s9cx,#lkscx{width:100%;margin-top:6px;padding:12px;border:0;background:none;color:var(--mut);font-size:15px}
 </style>
 </head>
 <body>
+<div id="lk"><div class="lkb">
+  <div class="lkic">🔒</div>
+  <div class="lkt">Controle Financeiro Motorista APP</div>
+  <div class="lkm" id="lkmsg">Digite seu PIN</div>
+  <div class="lkd" id="lkdots"></div>
+  <div class="lkpad" id="lkpad">
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="bio" class="lkx" id="lkbio" aria-label="Usar a digital">👆</button><button data-k="0">0</button><button data-k="del" class="lkx" aria-label="Apagar">⌫</button>
+  </div>
+  <button id="lkesq">Esqueci o PIN</button>
+  <div class="lkf" id="lkf">
+    <div id="lkftx"></div>
+    <input id="lkfi" autocomplete="off" style="width:100%;margin-top:8px;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font-size:16px;text-transform:uppercase">
+    <button class="pb" id="lkfok" disabled style="background:var(--bad)">Confirmar</button>
+    <button id="lkfcx" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--mut);font-size:15px">Voltar</button>
+  </div>
+</div></div>
 <div id="app">
 <div id="ident"><span id="idn"></span><span id="idv"></span><span id="idp"></span></div>
 <header>
@@ -135,7 +168,7 @@ nav button.on b{font-weight:800}
   <div class="box"><div class="ic" style="background:rgba(229,72,77,.15)">⬇️</div><div><small>Despesas · Do dia</small><b class="bad" id="desD">R$ 0,00</b></div></div>
 </div>
 <div id="mtit" class="mtit">🏠 Início</div>
-<div id="p1"><div id="metas"></div><div id="banner"></div><div class="st" id="turnoBox" style="margin-bottom:10px"></div>
+<div id="p1"><button id="gdpend" style="display:none;width:calc(100% - 28px);margin:0 14px 10px;padding:12px;border:1px solid var(--hd);border-radius:12px;background:var(--card);color:var(--hd);font-size:14px;font-weight:700">☁️ Toque para salvar o backup no Google Drive</button><div id="metas"></div><div id="banner"></div><div class="st" id="turnoBox" style="margin-bottom:10px"></div>
 <div style="margin:0 14px 10px"><button class="pb" id="reprap" style="margin-top:0;background:var(--card);color:var(--tx);border:1px solid var(--bd);display:none"></button></div>
 <div style="margin:0 14px 10px"><select id="fil" class="fsel"></select></div><div class="sec" id="lista"></div></div>
 <div id="p2" style="display:none">
@@ -148,6 +181,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Receitas x Despesas</h3><div class="tg"><button id="gd" class="on">Por dia</button><button id="gs">Por semana</button></div><div id="graf"></div><div id="gmax" style="font-size:11px;color:var(--mut);margin-top:6px"></div></div>
   <div class="st"><h3>Despesas por categoria</h3><div id="cats"></div></div>
   <div class="st"><h3>Detalhes</h3><div id="det"></div></div>
+  <div class="st"><h3>📈 Comparação com o mês anterior</h3><div id="cmpres"></div></div>
   <div class="st"><h3>⛽ Consumo de combustível</h3><div id="fuelres"></div></div>
   
 </div>
@@ -208,6 +242,15 @@ nav button.on b{font-weight:800}
     <div style="font-size:13px;line-height:1.5;color:var(--mut)">Instale para abrir em tela cheia, com ícone próprio e funcionando sem internet.</div>
     <button class="pb" id="instbtn" style="display:none">Instalar app</button>
     <div id="insttx" style="font-size:12px;color:var(--mut);margin-top:8px;line-height:1.4"></div></div>
+  <div class="st" id="lkcard"><h3>🔒 Bloqueio do app</h3>
+    <div id="lktx" style="font-size:12px;color:var(--mut);line-height:1.45;margin-bottom:8px"></div>
+    <button class="pb" id="lkon" style="margin-top:0">Criar PIN</button>
+    <div id="lkacts" style="display:none">
+      <label style="display:block;font-size:12px;color:var(--mut);margin:4px 0">Pedir o PIN de novo</label>
+      <select id="lktm" class="fsel" style="width:100%"><option value="-1">Só ao abrir o app</option><option value="1">Após 1 minuto fora do app</option><option value="5">Após 5 minutos fora do app</option><option value="15">Após 15 minutos fora do app</option><option value="30">Após 30 minutos fora do app</option></select>
+      <div class="bk" style="margin-top:10px"><button id="lkbiob">👆 Ativar digital</button><button id="lktroca">Trocar PIN</button></div>
+      <button id="lkoff" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--bad);font-size:14px;font-weight:700">Desligar o bloqueio</button>
+    </div></div>
   <div class="st"><h3>Backup</h3>
     <div style="font-size:12px;color:var(--mut);margin-bottom:8px;line-height:1.4">Seus dados ficam só neste aparelho. O backup é o seu seguro: guarde o arquivo no Google Drive, no WhatsApp ou no e-mail.</div>
     <div class="bk"><button id="bxp">⬇️ Baixar backup</button><button id="bsh">📤 Compartilhar</button></div>
@@ -218,11 +261,18 @@ nav button.on b{font-weight:800}
       <div style="font-weight:700;font-size:14px">🗂️ Backup automático em arquivo</div>
       <div id="arqtx" style="font-size:12px;color:var(--mut);line-height:1.4;margin:4px 0 8px"></div>
       <div class="bk"><button id="arqon">Escolher arquivo</button><button id="arqoff" style="display:none">Desativar</button></div></div>
+    <div id="gdbox" style="margin-top:12px;border-top:1px solid var(--bd);padding-top:12px">
+      <div style="font-weight:700;font-size:14px">☁️ Backup no Google Drive</div>
+      <div id="gdtx" style="font-size:12px;color:var(--mut);line-height:1.45;margin:4px 0 8px"></div>
+      <button id="gdon" class="pb" style="margin-top:0">Conectar ao Google Drive</button>
+      <div class="bk" id="gdacts" style="display:none"><button id="gdenv">☁️ Enviar agora</button><button id="gdres">⬇️ Restaurar do Drive</button></div>
+      <button id="gdoff" style="display:none;width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--bad);font-size:14px;font-weight:700">Desconectar do Google Drive</button>
+      <div style="text-align:center;margin-top:8px;font-size:12px"><a href="privacidade.html" target="_blank" rel="noopener" style="color:var(--hd)">Política de privacidade</a></div></div>
   </div>
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 01/11/2026 · v54</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 23/10/2026 · v59</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -240,6 +290,8 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Desempenho por dia da semana</h3><div id="rwd"></div></div>
   <div class="st"><h3>Receitas por origem</h3><div id="rrec"></div></div>
   <div class="st"><h3>Despesas por categoria</h3><div id="rdes"></div></div>
+  <div class="st"><h3>✅ Contas pagas e manutenção</h3><div id="rpag"></div></div>
+  <div class="st" id="rcmpc" style="display:none"><h3>📈 Comparação com o mês anterior</h3><div id="rcmp"></div></div>
   <div class="st"><h3>Manutenção no período</h3><div id="rman"></div></div>
   <div class="st" id="edcard"><h3>🧾 Relatório de despesas</h3>
     <div style="font-size:12px;color:var(--mut);margin-bottom:6px;line-height:1.4">Segue o período escolhido no topo. Escolha a origem e, se quiser, toque nas categorias e contas para filtrar.</div>
@@ -250,6 +302,10 @@ nav button.on b{font-weight:800}
     <button id="edlimpa" style="border:0;background:none;color:var(--hd);font-size:13px;font-weight:700;padding:8px 0">Limpar seleção</button>
     <div id="edres" style="margin-top:8px"></div>
     <button class="pb" id="edpdf">⬇️ Baixar relatório de despesas (PDF)</button></div>
+  <div class="st" id="gccard"><h3>💼 Relatório da Gestão de Custos</h3>
+    <div style="font-size:12px;color:var(--mut);margin-bottom:6px;line-height:1.4">Segue o período escolhido no topo. Mostra os custos diários (previsto × lançado), os custos mensais pagos e as parcelas separadas dos custos anuais e das reservas.</div>
+    <div id="gcres"></div>
+    <button class="pb" id="gcpdf">⬇️ Baixar relatório da Gestão de Custos (PDF)</button></div>
   <div class="st"><h3>Resumo anual (Imposto de Renda)</h3>
     <select id="iano" class="fsel"></select>
     <div id="ires" style="margin-top:10px"></div>
@@ -455,6 +511,19 @@ nav button.on b{font-weight:800}
   <button class="pb" id="s9ok">Salvar data</button>
   <button id="s9un" style="width:100%;margin-top:6px;padding:12px;border:0;background:none;color:var(--bad);font-size:15px;font-weight:700">Desmarcar como pago</button>
   <button id="s9cx">Cancelar</button>
+</div></div>
+<div id="ov10"><div id="sh10">
+  <b id="lkst" style="font-size:17px">Criar PIN</b>
+  <div id="lksi" style="font-size:13px;color:var(--mut);margin-top:6px;line-height:1.5"></div>
+  <div class="f">
+    <div id="lkpaw" style="grid-column:1/-1"><label>PIN atual</label><input id="lkpa" type="password" inputmode="numeric" maxlength="6" autocomplete="off"></div>
+    <div id="lkpnw" style="grid-column:1/-1"><label>Novo PIN (4 a 6 números)</label><input id="lkpn" type="password" inputmode="numeric" maxlength="6" autocomplete="off"></div>
+    <div id="lkprw" style="grid-column:1/-1"><label>Repita o novo PIN</label><input id="lkpr" type="password" inputmode="numeric" maxlength="6" autocomplete="off"></div>
+  </div>
+  <label id="lkbcw" style="display:none;align-items:center;gap:10px;margin-top:12px;font-size:14px"><input type="checkbox" id="lkbc" style="width:22px;height:22px"> Usar também a digital ou o rosto</label>
+  <div id="lkserr" style="color:var(--bad);font-size:13px;text-align:center;margin-top:8px"></div>
+  <button class="pb" id="lksok">Salvar</button>
+  <button id="lkscx">Cancelar</button>
 </div></div>
 <div id="ov5"><div id="sh5">
   <b style="font-size:17px">Escolha um ícone</b>
@@ -1180,7 +1249,7 @@ function renderEd(){
   }
   $("edres").innerHTML=h;
 }
-function pdfDoc(sub){
+function pdfDoc(sub,tit){
   var pages=[],cur,y,GR=[0.42,0.45,0.5],OK=[0,0.55,0.35],BAD=[0.85,0.25,0.28],BR=[0,0.66,0.56],W=PW-2*MG,o={GR:GR,OK:OK,BAD:BAD,BR:BR,W:W};
   function np(){cur=[];pages.push(cur);y=PH-MG}
   o.need=function(h){if(y-h<MG+18)np()};
@@ -1195,7 +1264,7 @@ function pdfDoc(sub){
   var pf=[];if(perfil.nome)pf.push("Motorista: "+perfil.nome);if(perfil.veic)pf.push("Veículo: "+perfil.veic);if(perfil.placa)pf.push("Placa: "+perfil.placa);
   var pl=pf.length?pdfWrap(pf.join("    |    "),10,W-40):[],bh=78+(pl.length?10+pl.length*13:0);
   cur.push(prect(0,PH-bh,PW,bh,BR));
-  cur.push(pop(MG,PH-38,"Relatório de Despesas",20,true,[1,1,1]));
+  cur.push(pop(MG,PH-38,tit||"Relatório de Despesas",20,true,[1,1,1]));
   cur.push(pop(MG,PH-58,sub,10,false,[1,1,1]));
   pl.forEach(function(l,i){cur.push(pop(MG,PH-76-13*i,l,10,true,[1,1,1]))});
   y=PH-bh;
@@ -1337,6 +1406,144 @@ function renderPd(){
   if(!Object.keys(pr).length&&!Object.keys(pd).length)$("pdrec").innerHTML='<div style="font-size:13px;color:var(--mut);margin-top:10px">Nenhum lançamento neste dia.</div>';
 }
 var diaSel=null,catPrev={},vcat="A",gcTab="D",cdIcone="🏷️",s8={};
+function pagasPer(ini,fim){return pagasCasa().filter(function(x){return x.d>=ini&&x.d<=fim})}
+function origNome(o){return o==="mensal"?"Custos mensais":o==="manut"?"Manutenção":"Despesas de casa"}
+function turnoLinha(e){
+  var t=[],hi=/^\d\d:\d\d$/.test(e.hi||"")?e.hi:"",hf=/^\d\d:\d\d$/.test(e.hf||"")?e.hf:"";
+  if(hi&&hf)t.push("Turno "+hi+" às "+hf);else if(hi)t.push("Início do turno "+hi);else if(hf)t.push("Fim do turno "+hf);
+  if(e.np>0)t.push((e.np|0)+((e.np|0)===1?" pausa":" pausas")+(e.mp>0?" ("+fmtDur(e.mp*60000)+")":""));else if(hf&&e.np===0)t.push("sem pausas");
+  if(e.nc>0)t.push((e.nc|0)+((e.nc|0)===1?" corrida":" corridas"));
+  return t.join("  ·  ");
+}
+function pagHtml(o,tot){
+  var ks=Object.keys(o).sort(function(a,b){return o[b].v-o[a].v}),h="";
+  if(!ks.length)return '<div style="font-size:13px;color:var(--mut)">Nenhuma conta paga nem manutenção no período.</div>';
+  ks.forEach(function(k){var x=o[k],pc=tot>0?x.v/tot*100:0;h+='<div class="bar"><div class="l"><span>'+x.ic+' '+esc(x.n)+' <small style="color:var(--mut)">('+origNome(x.o)+')</small></span><span>'+brl(x.v)+' · '+pc.toFixed(0)+'%</span></div><div class="b"><i style="width:'+pc+'%;background:var(--bad)"></i></div></div>'});
+  return h+kv("Total pago",brl(tot),"bad")+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Contas de casa, custos mensais e manutenção pagos. Saem do saldo, mas não entram no lucro nem nas metas.</div>';
+}
+function statsPer(ini,fim){
+  var o={r:0,s:0,k:0,hs:0,nc:0,nd:0,cp:0},dias={};
+  dados.forEach(function(e){if(e.data<ini||e.data>fim)return;o.k+=e.km||0;o.hs+=e.h||0;if(isR(e.tipo)){o.r+=e.valor;o.nc+=e.nc||0;dias[e.data]=1}else o.s+=e.valor});
+  o.nd=Object.keys(dias).length;o.l=o.r-o.s;
+  pagasPer(ini,fim).forEach(function(x){o.cp+=x.v});
+  return o;
+}
+function mAb(m){return ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][+m.slice(5,7)-1]+"/"+m.slice(2,4)}
+function compMes(m){
+  var hm=hoje().slice(0,7);if(m>hm)return null;
+  var pm=proxMes(m,-1),dA=diasDoMes(m),dB=diasDoMes(pm),parc=m===hm,dd=parc?+hoje().slice(8,10):dA,ddB=parc?Math.min(dd,dB):dB;
+  return {m:m,pm:pm,parc:parc,dd:dd,ddB:ddB,A:statsPer(m+"-01",m+"-"+p2(dd)),B:statsPer(pm+"-01",pm+"-"+p2(ddB)),BF:parc?statsPer(pm+"-01",pm+"-"+p2(dB)):null};
+}
+function compRows(c){
+  function g(o,k){return k==="gh"?(o.hs>0?o.r/o.hs:null):k==="lk"?(o.k>0?o.l/o.k:null):k==="gc"?(o.nc>0?o.r/o.nc:null):k==="lm"?(o.nd>0?o.l/o.nd:null):o[k]}
+  return [["Receitas","r","brl",1],["Despesas lançadas","s","brl",-1],["Lucro","l","brl",1],["Contas pagas e manutenção","cp","brl",-1],["Dias trabalhados","nd","n",1],["Lucro médio por dia","lm","brl",1],["Km rodados","k","km",0],["Horas trabalhadas","hs","h",0],["Corridas","nc","n",1],["Ganho por hora","gh","brl",1],["Lucro por km","lk","brl",1],["Ganho por corrida","gc","brl",1]].map(function(x){return {t:x[0],a:g(c.A,x[1]),b:g(c.B,x[1]),f:x[2],bom:x[3]}});
+}
+function compFmt(v,f){if(v===null||v===undefined)return "-";if(f==="brl")return brl(v);if(f==="km")return Math.round(v).toLocaleString("pt-BR")+" km";if(f==="h")return fmt1(v)+" h";return String(Math.round(v))}
+function compVar(a,b,bom,pdf){
+  if(a===null||b===null)return {t:"-",k:"m"};
+  if(Math.abs(b)<0.005)return Math.abs(a)<0.005?{t:"=",k:"m"}:{t:"novo",k:"m"};
+  var p=(a-b)/Math.abs(b)*100;
+  if(Math.abs(p)<0.5)return {t:"=",k:"m"};
+  var t=pdf?(p>0?"+":"-")+Math.round(Math.abs(p))+"%":(p>0?"▲ +":"▼ −")+Math.round(Math.abs(p))+"%";
+  return {t:t,k:bom===0?"m":((p>0)===(bom>0)?"ok":"bad")};
+}
+function compLegenda(c){
+  var t=c.parc?"Comparando 1 a "+c.dd+" de "+mesTxt(c.m).replace(/ de \d+$/,"")+" com 1 a "+c.ddB+" de "+mesTxt(c.pm).replace(/ de \d+$/,"")+" (mesmo número de dias).":"Mês inteiro comparado com o mês anterior inteiro.";
+  if(c.BF)t+=" "+mesTxt(c.pm).replace(/ de \d+$/,"").replace(/^./,function(x){return x.toUpperCase()})+" inteiro: receitas "+brl(c.BF.r)+", lucro "+brl(c.BF.l)+".";
+  return t;
+}
+function compHtml(c){
+  if(!c)return '<div style="font-size:13px;color:var(--mut)">Escolha um mês que já começou.</div>';
+  var h='<div class="cmp"><span class="h">Indicador</span><span class="h v">'+mAb(c.m)+'</span><span class="h v">'+mAb(c.pm)+'</span><span class="h x">Var.</span><span class="sep"></span>';
+  compRows(c).forEach(function(r){var v=compVar(r.a,r.b,r.bom);h+='<span>'+r.t+'</span><span class="v">'+compFmt(r.a,r.f)+'</span><span class="v" style="color:var(--mut)">'+compFmt(r.b,r.f)+'</span><span class="x" style="color:'+(v.k==="ok"?"var(--ok)":v.k==="bad"?"var(--bad)":"var(--mut)")+'">'+v.t+'</span>'});
+  h+='</div><div style="font-size:11px;color:var(--mut);margin-top:8px;line-height:1.4">'+compLegenda(c)+' Verde é melhora, vermelho é piora.</div>';
+  return h;
+}
+function gcMeses(ini,fim){
+  var hm=hoje().slice(0,7),a=ini==="0000-01-01"?null:ini.slice(0,7),b=fim==="9999-12-31"?hm:fim.slice(0,7),o=[];
+  if(!a)a=proxMes(b,-11);
+  for(var m=a;m<=b&&o.length<36;m=proxMes(m,1))o.push(m);
+  return o;
+}
+function gcCalc(ini,fim){
+  var hm=hoje().slice(0,7),ms=gcMeses(ini,fim),o={ini:ini,fim:fim,ms:ms,cd:[],cdP:0,cdL:0,nd:0,M:[],A:[],R:[]};
+  var lan={},dias={},nm={};
+  dados.forEach(function(e){if(e.data<ini||e.data>fim)return;if(isR(e.tipo))dias[e.data]=1;else lan[e.tipo]=(lan[e.tipo]||0)+e.valor});
+  o.nd=Object.keys(dias).length;
+  Object.keys(catPrev).forEach(function(k){if(+catPrev[k]>0)nm[k]=1});Object.keys(lan).forEach(function(k){nm[k]=1});
+  Object.keys(nm).forEach(function(n){var pd=+catPrev[n]||0,pp=pd*o.nd,l=lan[n]||0;o.cd.push({n:n,pd:pd,p:pp,l:l});o.cdP+=pp;o.cdL+=l});
+  o.cd.sort(function(a,b){return b.l-a.l||b.p-a.p});
+  venc.forEach(function(v){
+    var cat=v.cat||"A",pl=planoReserva(v),it={n:v.nome,me:[],t:0,ok:0,emb:v.emb!==false,vt:v.vt||0,np:0,acum:0};
+    pl.forEach(function(x){
+      if(cat!=="M")it.acum+=Math.min(x.valor,sepAtualV(v,x.m));
+      if(ms.indexOf(x.m)<0)return;
+      if(cat==="M"){var pg=!!(v.pg&&v.pg[x.m]);it.me.push({m:x.m,v:x.valor,ok:pg,d:pg?((v.pgd&&v.pgd[x.m])||(x.m+"-01")):"",fut:x.m>hm});it.t+=x.valor;if(pg){it.ok+=x.valor;it.np++}}
+      else{var sp=Math.min(x.valor,sepAtualV(v,x.m));it.me.push({m:x.m,v:x.valor,sep:sp,k:x.k,n:x.n,fut:x.m>hm});it.t+=x.valor;it.ok+=sp}
+    });
+    if(!it.me.length)return;
+    (cat==="M"?o.M:cat==="R"?o.R:o.A).push(it);
+  });
+  function sm(L,k){return L.reduce(function(a,x){return a+x[k]},0)}
+  o.tM=sm(o.M,"t");o.pM=sm(o.M,"ok");o.tA=sm(o.A,"t");o.sA=sm(o.A,"ok");o.tR=sm(o.R,"t");o.sR=sm(o.R,"ok");
+  o.fM=0;o.M.forEach(function(it){it.me.forEach(function(x){if(x.fut&&!x.ok)o.fM+=x.v})});
+  o.dc=0;ms.forEach(function(m){o.dc+=diasDoMes(m)});
+  o.tot=o.cdL+o.tM+o.tA+o.tR;
+  return o;
+}
+function gcPeriodo(g){return g.ms.length?(g.ms.length===1?mesTxt(g.ms[0]):mesTxt(g.ms[0])+" a "+mesTxt(g.ms[g.ms.length-1])):""}
+function renderGC(){
+  var pr=rPeriodo(),g=gcCalc(pr[0],pr[1]),h="";
+  function sub(t){return '<div style="font-size:13px;font-weight:800;margin:14px 0 4px">'+t+'</div>'}
+  function vz(t){return '<div style="font-size:13px;color:var(--mut)">'+t+'</div>'}
+  function lin(ic,n,det,val,pc,cor){return '<div class="ir" style="flex-wrap:wrap"><div style="font-size:20px">'+ic+'</div><div class="t"><b>'+esc(n)+'</b><div style="font-size:12px;color:var(--mut);line-height:1.4">'+det+'</div></div><b>'+val+'</b>'+(pc!=null?'<div class="pg" style="width:100%"><i style="width:'+Math.min(100,pc)+'%'+(cor?';background:'+cor:'')+'"></i></div>':'')+'</div>'}
+  h+='<div style="font-size:12px;color:var(--mut);margin-bottom:4px">'+gcPeriodo(g).replace(/^./,function(x){return x.toUpperCase()})+'</div>';
+  h+=kv("🍽️ Custos diários lançados",brl(g.cdL),"bad")+kv("🗓️ Custos mensais",brl(g.tM)+" · pago "+brl(g.pM))+kv("📅 Custos anuais (parcelas)",brl(g.tA)+" · separado "+brl(g.sA))+kv("🏖️ Reservas (parcelas)",brl(g.tR)+" · separado "+brl(g.sR))+kv("Total da Gestão de Custos",brl(g.tot),"bad")+kv("Média por dia (mensais, anuais e reservas)",g.dc>0?brl((g.tM+g.tA+g.tR)/g.dc):"-");
+  h+=sub("🍽️ Custos diários")+(g.cd.length?g.cd.map(function(x){var i=info(x.n),det=x.pd>0?"Previsto "+brl(x.pd)+"/dia × "+g.nd+(g.nd===1?" dia":" dias")+" = "+brl(x.p)+" · lançado "+brl(x.l):"Sem previsto · lançado "+brl(x.l);if(x.pd>0&&x.l>0){var di=difInfo(x.p-x.l);det+=' → <b style="color:'+di[1]+'">'+di[0]+'</b>'}return lin(i[2],i[1],det,brl(x.l))}).join("")+(g.cdP>0?kv("Previsto × lançado (total)",brl(g.cdP)+" × "+brl(g.cdL)):""):vz("Nenhum custo diário no período."));
+  h+=sub("🗓️ Custos mensais")+(g.M.length?g.M.map(function(x){var det=x.me.length===1?(x.me[0].ok?"✅ pago em "+fmtBR(x.me[0].d).slice(0,5):(x.me[0].fut?"previsto":"a pagar")):(x.np+" de "+x.me.length+" meses pagos · pago "+brl(x.ok)+" de "+brl(x.t));return lin("🗓️",x.n,det+(x.emb?"":" · fora da meta"),brl(x.t),x.t>0?x.ok/x.t*100:0)}).join("")+(g.fM>0?kv("Previsto para meses futuros",brl(g.fM)):""):vz("Nenhum custo mensal no período."));
+  function resv(L){return L.map(function(x){var det="Parcelas no período "+brl(x.t)+" · separado "+brl(x.ok)+" ("+(x.t>0?Math.round(x.ok/x.t*100):0)+"%)"+(x.vt>0?"<br>Plano: "+brl(x.vt)+" · já separado "+brl(x.acum):"")+(x.emb?"":" · fora da meta");return lin("💰",x.n,det,brl(x.t),x.t>0?x.ok/x.t*100:0)}).join("")}
+  h+=sub("📅 Custos anuais")+(g.A.length?resv(g.A):vz("Nenhum custo anual no período."));
+  h+=sub("🏖️ Reservas")+(g.R.length?resv(g.R):vz("Nenhuma reserva no período."));
+  $("gcres").innerHTML=h;
+}
+function gcPdf(g){
+  var d=pdfDoc("Período: "+gcPeriodo(g)+"    |    Gerado em "+fmtBR(hoje()),"Relatório da Gestão de Custos");
+  d.sec("Resumo");
+  d.kvr("Custos diários lançados",brl(g.cdL),d.BAD);
+  d.kvr("Custos mensais",brl(g.tM)+"  (pago "+brl(g.pM)+")");
+  d.kvr("Custos anuais (parcelas)",brl(g.tA)+"  (separado "+brl(g.sA)+")");
+  d.kvr("Reservas (parcelas)",brl(g.tR)+"  (separado "+brl(g.sR)+")");
+  d.kvr("Total da Gestão de Custos",brl(g.tot),d.BAD);
+  d.kvr("Média por dia (mensais, anuais e reservas)",g.dc>0?brl((g.tM+g.tA+g.tR)/g.dc):"-");
+  function th(cols){d.need(34);d.rect(MG,-4,d.W,15,[0.93,0.94,0.96]);cols.forEach(function(c){d.txt(c[0],c[1],9,true,null,c[2])});d.down(17)}
+  function row(cols,i){d.need(14);if(i%2)d.rect(MG,-4,d.W,14,[0.97,0.97,0.98]);cols.forEach(function(c){d.txt(c[0],c[1],9,!!c[3],c[4]||null,c[2])});d.down(14)}
+  d.sec("Custos diários (previsto × lançado)");
+  if(!g.cd.length)d.vazio("Nenhum custo diário no período.");
+  else{
+    th([[MG+4,"Categoria"],[MG+290,"Previsto",true],[MG+390,"Lançado",true],[PW-MG-4,"Diferença",true]]);
+    g.cd.forEach(function(x,i){var df=x.pd>0&&x.l>0?x.p-x.l:null;row([[MG+4,info(x.n)[1]],[MG+290,x.pd>0?brl(x.p):"-",true],[MG+390,brl(x.l),true],[PW-MG-4,df===null?"-":(Math.abs(df)<0.005?"no previsto":(df>0?"economia ":"acima ")+brl(Math.abs(df))),true,df===null?false:true,df===null||Math.abs(df)<0.005?d.GR:(df>0?d.OK:d.BAD)]],i)});
+    if(g.cdP>0)d.kvr("Total previsto × lançado",brl(g.cdP)+" × "+brl(g.cdL));
+    d.vazio("Previsto = valor por dia × "+g.nd+(g.nd===1?" dia trabalhado":" dias trabalhados")+" no período.");
+  }
+  d.sec("Custos mensais");
+  if(!g.M.length)d.vazio("Nenhum custo mensal no período.");
+  g.M.forEach(function(x){
+    d.need(34);d.txt(MG,x.n,10,true);d.txt(PW-MG,brl(x.t)+"  (pago "+brl(x.ok)+")",10,true,null,true);d.down(15);
+    x.me.forEach(function(m,i){row([[MG+10,mesTxt(m.m)],[MG+290,brl(m.v),true],[PW-MG-4,m.ok?"Pago em "+fmtBR(m.d):(m.fut?"Previsto":"A pagar"),true,true,m.ok?d.OK:(m.fut?d.GR:d.BAD)]],i)});
+    d.down(4);
+  });
+  function resv(L,vz){
+    if(!L.length){d.vazio(vz);return}
+    L.forEach(function(x){
+      d.need(34);d.txt(MG,x.n,10,true);d.txt(PW-MG,"Plano "+brl(x.vt)+"  ·  já separado "+brl(x.acum),10,true,null,true);d.down(15);
+      x.me.forEach(function(m,i){row([[MG+10,mesTxt(m.m)+(m.k?"  (parcela "+m.k+"/"+m.n+")":"")],[MG+330,brl(m.v),true],[PW-MG-4,"Separado "+brl(m.sep),true,true,m.sep>=m.v-0.005?d.OK:(m.fut?d.GR:d.BAD)]],i)});
+      d.down(4);
+    });
+  }
+  d.sec("Custos anuais");resv(g.A,"Nenhum custo anual no período.");
+  d.sec("Reservas");resv(g.R,"Nenhuma reserva no período.");
+  return d.fim();
+}
 function perfilLimpa(o){o=o&&typeof o==="object"?o:{};return {nome:String(o.nome||"").slice(0,40),veic:String(o.veic||"").slice(0,40),placa:String(o.placa||"").toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,8),odo:Math.max(0,Math.round(+o.odo||0)),odoTs:Math.max(0,Math.round(+o.odoTs||0))}}
 function fillPerfil(){$("cnome").value=perfil.nome;$("cveic").value=perfil.veic;$("cplaca").value=perfil.placa;$("codo").value=odoAtual()!==null?Math.round(odoAtual()):"";odoInfo()}
 function perfilUI(){
@@ -1610,10 +1817,10 @@ function rPeriodo(){
   return [f(a),f(b)];
 }
 function relCalc(ov){
-  var pr=ov||rPeriodo(),ini=pr[0],fim=pr[1],r=0,s=0,k=0,hs=0,nc=0,por={},cat={},dias={},dl={},mm={};
+  var pr=ov||rPeriodo(),ini=pr[0],fim=pr[1],r=0,s=0,k=0,hs=0,nc=0,np0=0,mp0=0,tur=0,por={},cat={},dias={},dl={},mm={};
   var L=dados.filter(function(e){return e.data>=ini&&e.data<=fim}),S=servs.filter(function(x){return x.data>=ini&&x.data<=fim});
   L.forEach(function(e){
-    k+=e.km||0;hs+=e.h||0;if(isR(e.tipo))nc+=e.nc||0;
+    k+=e.km||0;hs+=e.h||0;if(isR(e.tipo)){nc+=e.nc||0;if(e.np>0)np0+=e.np|0;if(e.mp>0)mp0+=e.mp|0;if(e.hi&&e.hf)tur++}
     var m7=e.data.slice(0,7);mm[m7]=mm[m7]||{r:0,s:0};if(isR(e.tipo))mm[m7].r+=e.valor;else mm[m7].s+=e.valor;
     if(isR(e.tipo)){r+=e.valor;por[e.tipo]=(por[e.tipo]||0)+e.valor;dias[e.data]=1;dl[e.data]=(dl[e.data]||0)+e.valor}
     else{s+=e.valor;cat[e.tipo]=(cat[e.tipo]||0)+e.valor;dl[e.data]=(dl[e.data]||0)-e.valor}
@@ -1621,7 +1828,10 @@ function relCalc(ov){
   var best=null;Object.keys(dl).forEach(function(d){if(best===null||dl[d]>dl[best])best=d});
   var wd=[0,0,0,0,0,0,0],wc=[0,0,0,0,0,0,0];
   Object.keys(dias).forEach(function(d){var p=d.split("-"),w=new Date(+p[0],+p[1]-1,+p[2]).getDay();wd[w]+=dl[d];wc[w]++});
-  return {wd:wd,wc:wc,mm:mm,ini:ini,fim:fim,L:L,S:S,r:r,s:s,l:r-s,k:k,hs:hs,nc:nc,por:por,cat:cat,nd:Object.keys(dias).length,best:best,bestV:best?dl[best]:0,man:S.reduce(function(a,x){return a+(x.valor||0)},0)};
+  var P=pagasPer(ini,fim),pgo={},pgT=0;
+  P.forEach(function(x){var kk=x.n+"|"+x.o;pgo[kk]=pgo[kk]||{n:x.n,o:x.o,ic:x.ic,v:0};pgo[kk].v+=x.v;pgT+=x.v});
+  var cmp=null;if(!ov){var pv=$("rper").value;if(pv==="mes"||pv==="ant")cmp=compMes(ini.slice(0,7))}
+  return {P:P,pgo:pgo,pgT:pgT,cmp:cmp,np:np0,mp:mp0,tur:tur,wd:wd,wc:wc,mm:mm,ini:ini,fim:fim,L:L,S:S,r:r,s:s,l:r-s,k:k,hs:hs,nc:nc,por:por,cat:cat,nd:Object.keys(dias).length,best:best,bestV:best?dl[best]:0,man:S.reduce(function(a,x){return a+(x.valor||0)},0)};
 }
 var NS=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
 function wdRows(c){
@@ -1671,14 +1881,18 @@ function renderRel(){
     kv("Dias trabalhados",c.nd)+kv("Lucro médio por dia trabalhado",c.nd>0?brl(c.l/c.nd):"-")+
     kv("Melhor dia",c.best?fmtBR(c.best)+" ("+brl(c.bestV)+")":"-")+
     kv("Km rodados",c.k.toLocaleString("pt-BR")+" km")+kv("Lucro por km",c.k>0?brl(c.l/c.k):"-")+
-    kv("Horas trabalhadas",c.hs>0?c.hs.toLocaleString("pt-BR")+" h":"-")+kv("Ganho por hora",c.hs>0?brl(c.r/c.hs):"-")+kv("Lucro por hora",c.hs>0?brl(c.l/c.hs):"-")+kv("Corridas",c.nc>0?String(c.nc):"-")+kv("Ganho por corrida",c.nc>0?brl(c.r/c.nc):"-");
+    kv("Horas trabalhadas",c.hs>0?c.hs.toLocaleString("pt-BR")+" h":"-")+kv("Ganho por hora",c.hs>0?brl(c.r/c.hs):"-")+kv("Lucro por hora",c.hs>0?brl(c.l/c.hs):"-")+kv("Corridas",c.nc>0?String(c.nc):"-")+kv("Ganho por corrida",c.nc>0?brl(c.r/c.nc):"-")+
+    (c.tur>0||c.np>0?kv("Turnos com início e fim",String(c.tur))+kv("Pausas",c.np+(c.np===1?" pausa":" pausas")+(c.mp>0?" ("+fmtDur(c.mp*60000)+")":"")):"")+
+    kv("Contas pagas e manutenção",brl(c.pgT),"bad")+kv("Saldo após contas",brl(c.l-c.pgT),(c.l-c.pgT)>=0?"ok":"bad");
+  $("rpag").innerHTML=pagHtml(c.pgo,c.pgT);
+  $("rcmpc").style.display=c.cmp?"":"none";$("rcmp").innerHTML=c.cmp?compHtml(c.cmp):"";
   $("rwd").innerHTML=wdHtml(c);
   $("rrec").innerHTML=relBars(c.por,c.r,"var(--ok)");
   $("rdes").innerHTML=relBars(c.cat,c.s,"var(--bad)");
   var S=c.S.slice().sort(function(a,b){return String(a.data).localeCompare(String(b.data))}),h="";
   S.forEach(function(x){h+='<div class="ir"><div class="t"><b>'+esc(x.peca)+'</b><div style="font-size:12px;color:var(--mut)">'+fmtBR(x.data)+(x.local?' · '+esc(x.local):'')+'</div></div><b>'+(x.valor?brl(x.valor):'-')+'</b></div>'});
   $("rman").innerHTML=(h||'<div style="font-size:13px;color:var(--mut)">Nenhuma manutenção no período.</div>')+(S.length?kv("Total gasto",brl(c.man)):"");
-  renderEd();
+  renderEd();renderGC();
 }
 function relTxt(c){
   var t=["RELATÓRIO DO MOTORISTA","Período: "+relLbl(c)].concat(perfil.nome?["Motorista: "+perfil.nome]:[],perfil.veic?["Veículo: "+perfil.veic]:[],perfil.placa?["Placa: "+perfil.placa]:[],[""]).concat(["Receitas: "+brl(c.r),"Despesas: "+brl(c.s),"Lucro: "+brl(c.l),
@@ -1747,12 +1961,26 @@ function relPdf(c,ir){
   kvr("Melhor dia",c.best?fmtBR(c.best)+" ("+brl(c.bestV)+")":"-");
   kvr("Km rodados",c.k.toLocaleString("pt-BR")+" km");kvr("Lucro por km",c.k>0?brl(c.l/c.k):"-");
   kvr("Horas trabalhadas",c.hs>0?c.hs.toLocaleString("pt-BR")+" h":"-");kvr("Ganho por hora",c.hs>0?brl(c.r/c.hs):"-");kvr("Lucro por hora",c.hs>0?brl(c.l/c.hs):"-");kvr("Corridas",c.nc>0?String(c.nc):"-");kvr("Ganho por corrida",c.nc>0?brl(c.r/c.nc):"-");
+  if(c.tur>0||c.np>0){kvr("Turnos com início e fim",String(c.tur));kvr("Pausas",c.np+(c.np===1?" pausa":" pausas")+(c.mp>0?" ("+fmtDur(c.mp*60000)+")":""))}
+  kvr("Contas pagas e manutenção",brl(c.pgT),BAD);kvr("Saldo após contas",brl(c.l-c.pgT),(c.l-c.pgT)>=0?OK:BAD);
+  if(c.cmp){
+    sec("Comparação com o mês anterior");
+    need(34);cur.push(prect(MG,y-4,W,15,[0.93,0.94,0.96]));cur.push(pop(MG+4,y,"Indicador",9,true));cur.push(pop(MG+330,y,mAb(c.cmp.m)+(c.cmp.parc?" (até "+c.cmp.dd+")":""),9,true,null,true));cur.push(pop(MG+430,y,mAb(c.cmp.pm)+(c.cmp.parc?" (até "+c.cmp.ddB+")":""),9,true,null,true));cur.push(pop(PW-MG-4,y,"Var.",9,true,null,true));y-=17;
+    compRows(c.cmp).forEach(function(r,i){var v=compVar(r.a,r.b,r.bom,true);need(14);if(i%2)cur.push(prect(MG,y-4,W,14,[0.97,0.97,0.98]));cur.push(pop(MG+4,y,r.t,9));cur.push(pop(MG+330,y,compFmt(r.a,r.f),9,true,null,true));cur.push(pop(MG+430,y,compFmt(r.b,r.f),9,false,GR,true));cur.push(pop(PW-MG-4,y,v.t,9,true,v.k==="ok"?OK:v.k==="bad"?BAD:GR,true));y-=14});
+    pdfWrap(compLegenda(c.cmp),9,W).forEach(function(l){need(12);cur.push(pop(MG,y,l,9,false,GR));y-=12});
+  }
   sec("Desempenho por dia da semana");
   (function(){var w=wdRows(c);if(w.bi<0){vazio("Sem dias trabalhados no período.");return}
     w.ord.forEach(function(d,i){var a=w.av[i];if(a===null)return;var pc=Math.max(0,a)/Math.max(w.mx,1)*100;bar(NS[d]+" ("+c.wc[d]+(c.wc[d]===1?" dia":" dias")+")"+(i===w.bi?"  - melhor dia":""),brl(a),pc,i===w.bi?OK:BR)});
     vazio("Média de lucro por dia trabalhado (receitas menos despesas do dia).")})();
   sec("Receitas por origem");bars(c.por,c.r,OK);
   sec("Despesas por categoria");bars(c.cat,c.s,BAD);
+  sec("Contas pagas e manutenção");
+  (function(){var ks=Object.keys(c.pgo).sort(function(a,b){return c.pgo[b].v-c.pgo[a].v});
+    if(!ks.length){vazio("Nenhuma conta paga nem manutenção no período.");return}
+    ks.forEach(function(k){var x=c.pgo[k],pc=c.pgT>0?x.v/c.pgT*100:0;bar(x.n+" ("+origNome(x.o)+")",brl(x.v)+"  ("+pc.toFixed(0)+"%)",pc,BAD)});
+    kvr("Total pago",brl(c.pgT),BAD);
+    vazio("Saem do saldo, mas não entram no lucro nem nas metas.")})();
   sec("Manutenção no período");
   var S=c.S.slice().sort(function(a,b){return String(a.data).localeCompare(String(b.data))});
   if(!S.length)vazio("Nenhuma manutenção no período.");
@@ -1772,7 +2000,8 @@ function relPdf(c,ir){
   else{
     need(40);thead();
     L.forEach(function(e,i){
-      if(y-(e.ob&&!isR(e.tipo)?26:14)<MG+18){np();thead()}
+      var tlx=isR(e.tipo)?turnoLinha(e):"";
+      if(y-((e.ob&&!isR(e.tipo))||tlx?26:14)<MG+18){np();thead()}
       var g=isR(e.tipo),cat=info(e.tipo)[1];if(cat.length>28)cat=cat.slice(0,27)+"...";
       if(i%2)cur.push(prect(MG,y-4,W,14,[0.97,0.97,0.98]));
       cur.push(pop(MG+4,y,fmtBR(e.data),9));cur.push(pop(MG+66,y,g?"Receita":"Despesa",9,false,g?OK:BAD));cur.push(pop(MG+124,y,cat,9));
@@ -1780,6 +2009,7 @@ function relPdf(c,ir){
       cur.push(pop(PW-MG-4,y,(g?"+ ":"- ")+brl(e.valor),9,true,g?OK:BAD,true));
       y-=14;
       if(e.ob&&!g){cur.push(pop(MG+124,y,"Obs.: "+String(e.ob).slice(0,80),8,false,GR));y-=11}
+      if(tlx){cur.push(pop(MG+124,y,tlx,8,false,GR));y-=11}
     });
   }
   }
@@ -1866,7 +2096,7 @@ async function arqEscreve(){
   try{var w=await arqH.createWritable();await w.write(backupJSON());await w.close();arqEst="ok";marcaBackup();bultUI()}catch(e){arqEst="erro"}
   arqUI();
 }
-function agendaArq(){if(!arqH)return;clearTimeout(arqT);arqT=setTimeout(arqEscreve,3000)}
+function agendaArq(){agendaDrive();if(!arqH)return;clearTimeout(arqT);arqT=setTimeout(arqEscreve,3000)}
 function arqUI(){
   var bx=$("arqbox");if(!bx)return;
   if(!window.showSaveFilePicker){bx.style.display="none";return}
@@ -1922,7 +2152,8 @@ function render(){
     var pc=d>0?cats[c]/d*100:0;
     ch+='<div class="bar"><div class="l"><span>'+info(c)[2]+' '+esc(c)+'</span><span>'+brl(cats[c])+' · '+pc.toFixed(0)+'%</span></div><div class="b"><i style="width:'+pc+'%"></i></div></div>';
   });
-  $("cats").innerHTML=ch||'<div class="vazio">Sem despesas no mês.</div>';
+  var pgm={},pgmT=0;pagasPer(m+"-01",m+"-31").forEach(function(x){var kk=x.n+"|"+x.o;pgm[kk]=pgm[kk]||{n:x.n,o:x.o,ic:x.ic,v:0};pgm[kk].v+=x.v;pgmT+=x.v});
+  $("cats").innerHTML=(ch||'<div class="vazio">Sem despesas lançadas no mês.</div>')+(pgmT>0?'<div style="font-size:13px;font-weight:800;margin:14px 0 4px">✅ Contas pagas e manutenção (fora do lucro)</div>'+pagHtml(pgm,pgmT):"");
   $("det").innerHTML=
     allRec().map(function(x){return '<div class="kv"><span>'+esc(x[1])+'</span><b>'+brl(por[x[0]]||0)+'</b></div>'}).join("")+
     '<div class="kv"><span>Km rodados</span><b>'+k.toLocaleString("pt-BR")+' km</b></div>'+
@@ -1931,12 +2162,14 @@ function render(){
     '<div class="kv"><span>Ganho por hora</span><b>'+(hs>0?brl(r/hs):"-")+'</b></div>'+
     '<div class="kv"><span>Lucro por hora</span><b>'+(hs>0?brl(s/hs):"-")+'</b></div>'+
     '<div class="kv"><span>Corridas</span><b>'+(ncs>0?ncs:"-")+'</b></div><div class="kv"><span>Ganho por corrida</span><b>'+(ncs>0?brl(r/ncs):"-")+'</b></div>'+(function(){var cmd=custoMesDif(m),dx=cmd.has?difKV("Custos diários: previsto − lançado",cmd):'';var mm=metaMesM(m);if(!(mm.total>0))return dx;var f=mm.total-recMesMeta(m);return dx+'<div class="kv"><span>Meta do mês</span><b>'+brl(mm.total)+'</b></div><div class="kv"><span>'+(f>0.004?'Falta para a meta':'Meta batida (acima)')+'</span><b class="'+(f>0.004?'bad':'ok')+'">'+brl(Math.abs(f))+'</b></div>'})();
+  $("det").innerHTML+=kv("Contas pagas e manutenção",brl(cm),"bad")+kv("Saldo após contas",brl(s-cm),(s-cm)>=0?"ok":"bad");
+  $("cmpres").innerHTML=compHtml(compMes(m));
   metasUI(s,m,r);
   (function(){
     var hdr=document.querySelector("header"),pm=semPctMes(m),si=pm===null?null:semInfo(pm);
     hdr.className=si&&si.k!=="v"?"sem-"+si.k:"";
     $("semtxt").textContent=si?si.e+(semCfg().rit?" Ritmo do mês: ":" Meta do mês: ")+Math.round(pm)+"% ("+si.t+")":"";
-  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();
+  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();if(typeof gdUI==="function")gdUI();
   $("reprap").style.display=dados.length?"block":"none";$("reprap").textContent=repTxt();
 }
 
@@ -2437,6 +2670,7 @@ $("rde").onchange=$("rate").onchange=renderRel;
 $("edorig").onchange=function(){edOrig=this.value;renderEd()};
 $("edchips").onclick=function(e){var b=e.target.closest("[data-ek]");if(!b)return;var k=b.getAttribute("data-ek");if(edSel[k])delete edSel[k];else edSel[k]=1;renderEd()};
 $("edlimpa").onclick=function(){edSel={};renderEd()};
+$("gcpdf").onclick=function(){setSync("Gerando PDF…");try{var pr=rPeriodo();baixar("relatorio-gestao-custos-"+hoje()+".pdf",gcPdf(gcCalc(pr[0],pr[1])))}catch(e){setSync("⚠️ Não foi possível gerar o PDF")}};
 $("edpdf").onclick=function(){setSync("Gerando PDF…");try{baixar("relatorio-despesas-"+hoje()+".pdf",edPdf(edCalc()))}catch(e){setSync("⚠️ Não foi possível gerar o PDF")}};
 $("rpdf").onclick=function(){setSync("Gerando PDF…");try{baixar("relatorio-motorista-"+hoje()+".pdf",relPdf(relCalc()))}catch(e){setSync("⚠️ Não foi possível gerar o PDF")}};
 $("rtxt").onclick=function(){baixar("relatorio-"+hoje()+".txt",relTxt(relCalc()))};
@@ -2461,9 +2695,12 @@ $("bim").onclick=function(){$("fim").click()};
 $("fim").onchange=function(){
   var f=this.files[0];if(!f)return;
   var r=new FileReader();
-  r.onload=function(){
+  r.onload=function(){restauraTexto(r.result)};
+  r.readAsText(f);this.value="";
+};
+function restauraTexto(rtxt){
     try{
-      var l=JSON.parse(r.result),ent=Array.isArray(l)?l:l.dados;if(!Array.isArray(ent))throw 0;
+      var l=JSON.parse(rtxt),ent=Array.isArray(l)?l:l.dados;if(!Array.isArray(ent))throw 0;
       save(Array.from(new Set(mescla(ent))));migrar();
       if(!Array.isArray(l)){
         (l.servs||[]).forEach(function(x){
@@ -2485,10 +2722,298 @@ $("fim").onchange=function(){
         if(l.meta&&!meta.dia&&!meta.mes)meta={dia:+l.meta.dia||0,mes:+l.meta.mes||0,dias:+l.meta.dias||0,impdiv:l.meta.impdiv==="trab"?"trab":undefined,ini:/^\d{4}-\d{2}-\d{2}$/.test(l.meta.ini)?l.meta.ini:undefined,diasAt:+l.meta.diasAt>0?Math.round(+l.meta.diasAt):undefined,prop:l.meta.prop?1:undefined,semR:+l.meta.semR>0?Math.round(+l.meta.semR):undefined,semV:+l.meta.semV>0?Math.round(+l.meta.semV):undefined,semRit:l.meta.semRit?1:undefined};
         saveCats();cacheServ();fillMeta();
       }
-      render();setSync("✅ Backup restaurado");
-    }catch(e){setSync("⚠️ Arquivo de backup inválido")}
-  };
-  r.readAsText(f);this.value="";
+      render();setSync("✅ Backup restaurado");return true;
+    }catch(e){setSync("⚠️ Arquivo de backup inválido");return false}
+}
+
+/* ===== Backup no Google Drive (arquivo visível na pasta "Controle Financeiro Motorista") =====
+   Para ativar, cole abaixo o "ID do cliente" criado no Google Cloud (tipo: Aplicativo da Web). */
+var GD_CLIENT_ID="";
+var GD_ARQ="backup-controle-motorista.json",GD_PASTA="Controle Financeiro Motorista",GD_API="https://www.googleapis.com/drive/v3/files",GD_UP="https://www.googleapis.com/upload/drive/v3/files";
+var gdTok=null,gdExp=0,gdTC=null,gdCb=null,gdT=null,gdBusy=false,gdDeNovo=false,gdMsg="";
+function gdCfg(){try{return JSON.parse(localStorage.getItem("motorista_gdrive")||"{}")||{}}catch(e){return {}}}
+function gdSet(o){var c=Object.assign(gdCfg(),o);try{localStorage.setItem("motorista_gdrive",JSON.stringify(c))}catch(e){}return c}
+function gdTokOk(){return !!gdTok&&Date.now()<gdExp-60000}
+function gdHash(t){var h=5381;for(var i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return t.length+"-"+h}
+function gdVazio(){return !dados.length&&!servs.length}
+function gdPendente(){var c=gdCfg();return !!c.on&&!gdVazio()&&gdHash(backupJSON())!==c.h}
+function gdScript(){
+  return new Promise(function(ok,no){
+    if(window.google&&google.accounts&&google.accounts.oauth2)return ok();
+    var s=document.getElementById("gsiscr");
+    if(!s){s=document.createElement("script");s.id="gsiscr";s.src="https://accounts.google.com/gsi/client";s.async=true;document.head.appendChild(s)}
+    s.addEventListener("load",function(){ok()});s.addEventListener("error",function(){no(new Error("script"))});
+  });
+}
+function gdPrep(){
+  if(gdTC||!(window.google&&google.accounts&&google.accounts.oauth2))return !!gdTC;
+  gdTC=google.accounts.oauth2.initTokenClient({client_id:GD_CLIENT_ID,scope:"https://www.googleapis.com/auth/drive.file",
+    callback:function(r){var cb=gdCb;gdCb=null;if(r&&r.access_token){gdTok=r.access_token;gdExp=Date.now()+((+r.expires_in||3600)*1000);if(cb)cb(null)}else if(cb)cb(new Error((r&&r.error)||"negado"))},
+    error_callback:function(e){var cb=gdCb;gdCb=null;if(cb)cb(new Error((e&&e.type)||"janela"))}});
+  return true;
+}
+/* precisa ser chamada direto do toque do usuário (o Google só abre a janela assim) */
+function gdLogin(cb){
+  if(!gdPrep()){toast("Carregando o Google… toque de novo em instantes");gdScript().then(gdPrep).catch(function(){toast("⚠️ Sem conexão com o Google. Verifique a internet.")});return}
+  var c=gdCfg();gdCb=cb;
+  try{gdTC.requestAccessToken({prompt:c.on?"":"consent",login_hint:c.email||undefined})}catch(e){gdCb=null;cb(e)}
+}
+function gdErro(e){
+  var m=String(e&&e.message||e);
+  if(/popup|janela/.test(m))return "O celular bloqueou a janela do Google. Toque de novo e permita a janela.";
+  if(/negado|access_denied/.test(m))return "A permissão do Google não foi concedida.";
+  if(m==="401")return "A autorização do Google venceu. Toque em Enviar agora.";
+  if(/grande/.test(m))return "O backup passou de 5 MB (muitas fotos). Use Baixar backup.";
+  if(/Failed to fetch|NetworkError|network/i.test(m))return "Sem internet no momento. O app tenta de novo depois.";
+  return "Não foi possível falar com o Google Drive ("+m.slice(0,60)+").";
+}
+function gdApi(url,op){
+  op=op||{};op.headers=Object.assign({Authorization:"Bearer "+gdTok},op.headers||{});
+  return fetch(url,op).then(function(r){
+    if(r.status===401){gdTok=null;throw new Error("401")}
+    if(!r.ok)return r.text().then(function(t){throw new Error("HTTP "+r.status+(/notFound|not found/i.test(t)?" notFound":""))});
+    return r;
+  });
+}
+function gdBusca(q){return gdApi(GD_API+"?q="+encodeURIComponent(q)+"&orderBy=modifiedTime%20desc&pageSize=5&fields=files(id,name,modifiedTime)").then(function(r){return r.json()}).then(function(j){return (j.files||[])[0]||null})}
+async function gdPastaId(){
+  var c=gdCfg();
+  if(c.folderId){try{var j=await (await gdApi(GD_API+"/"+c.folderId+"?fields=id,trashed")).json();if(!j.trashed)return c.folderId}catch(e){if(String(e.message)==="401")throw e}}
+  var f=await gdBusca("mimeType='application/vnd.google-apps.folder' and name='"+GD_PASTA+"' and trashed=false"),id;
+  if(f)id=f.id;
+  else id=(await (await gdApi(GD_API+"?fields=id",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:GD_PASTA,mimeType:"application/vnd.google-apps.folder"})})).json()).id;
+  gdSet({folderId:id});return id;
+}
+function gdUp(metodo,id,meta,txt){
+  var b="motorista"+Date.now(),corpo="--"+b+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+b+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+txt+"\r\n--"+b+"--";
+  return gdApi(GD_UP+(id?"/"+id:"")+"?uploadType=multipart&fields=id,modifiedTime",{method:metodo,headers:{"Content-Type":"multipart/related; boundary="+b},body:corpo});
+}
+async function gdArquivo(pasta){
+  var c=gdCfg();if(c.fileId)return c.fileId;
+  var f=await gdBusca("name='"+GD_ARQ+"' and '"+pasta+"' in parents and trashed=false");
+  return f?f.id:null;
+}
+async function gdEnvia(manual){
+  if(!GD_CLIENT_ID||!gdCfg().on)return;
+  if(gdVazio()){if(manual)toast("Não há dados para enviar ainda.");return}
+  if(!gdTokOk()){gdUI();return}
+  if(gdBusy){gdDeNovo=true;return}
+  gdBusy=true;gdMsg="⏳ Enviando para o Google Drive…";gdUI();
+  try{
+    var txt=backupJSON();if(txt.length>4800000)throw new Error("grande");
+    var pasta=await gdPastaId(),id=await gdArquivo(pasta),r=null;
+    if(id){try{r=await gdUp("PATCH",id,{},txt)}catch(e){if(/404|notFound/.test(e.message)){gdSet({fileId:null});r=null}else throw e}}
+    if(!r)r=await gdUp("POST",null,{name:GD_ARQ,parents:[pasta],mimeType:"application/json"},txt);
+    var j=await r.json();
+    gdSet({fileId:j.id,last:Date.now(),h:gdHash(txt),err:""});marcaBackup();bultUI();gdMsg="";
+    if(manual)toast("☁️ Backup salvo no Google Drive");
+  }catch(e){gdMsg="";gdSet({err:String(e&&e.message)==="401"?"":gdErro(e)});if(manual)toast("⚠️ "+gdErro(e))}
+  gdBusy=false;gdUI();
+  if(gdDeNovo){gdDeNovo=false;agendaDrive()}
+}
+function agendaDrive(){
+  if(!GD_CLIENT_ID||!gdCfg().on)return;
+  clearTimeout(gdT);gdT=setTimeout(function(){if(gdTokOk())gdEnvia(false);else gdUI()},15000);
+}
+async function gdBaixa(){
+  var pasta=await gdPastaId(),id=await gdArquivo(pasta);if(!id)return null;
+  var meta=await (await gdApi(GD_API+"/"+id+"?fields=id,modifiedTime")).json();
+  var txt=await (await gdApi(GD_API+"/"+id+"?alt=media")).text();
+  gdSet({fileId:id});return {txt:txt,quando:meta.modifiedTime};
+}
+async function gdRestaura(auto){
+  try{
+    gdMsg="⏳ Buscando o backup no Google Drive…";gdUI();
+    var b=await gdBaixa();gdMsg="";
+    if(!b){gdUI();if(!auto)toast("Nenhum backup deste app foi encontrado no seu Google Drive.");return false}
+    var ok=restauraTexto(b.txt);
+    if(ok){gdSet({h:gdHash(backupJSON())});toast("☁️ Backup do Google Drive restaurado ("+new Date(b.quando).toLocaleDateString("pt-BR")+")")}
+    gdUI();return ok;
+  }catch(e){gdMsg="";gdUI();toast("⚠️ "+gdErro(e));return false}
+}
+function gdQuando(t){if(!t)return "";var d=new Date(t),h=new Date();return (d.toDateString()===h.toDateString()?"hoje":d.toLocaleDateString("pt-BR"))+" às "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}
+function gdUI(){
+  var bx=$("gdbox");if(!bx)return;
+  var c=gdCfg(),t=$("gdtx"),pend=c.on&&gdPendente();
+  $("gdpend").style.display=(c.on&&pend&&!gdTokOk()&&!gdBusy)?"block":"none";
+  if(!GD_CLIENT_ID){t.textContent="O backup no Google Drive ainda não foi configurado nesta versão do app.";$("gdon").style.display="none";$("gdacts").style.display="none";$("gdoff").style.display="none";return}
+  if(!c.on){
+    t.textContent="Guarde o backup automaticamente no seu próprio Google Drive, como um arquivo que você vê na pasta \""+GD_PASTA+"\". O app só tem acesso aos arquivos que ele mesmo cria: não vê nada além disso no seu Drive.";
+    $("gdon").style.display="block";$("gdacts").style.display="none";$("gdoff").style.display="none";return;
+  }
+  $("gdon").style.display="none";$("gdacts").style.display="grid";$("gdoff").style.display="block";
+  var l=["✅ Conectado"+(c.email?": "+c.email:"")];
+  l.push(c.last?"Último envio: "+gdQuando(c.last)+".":"Nenhum envio ainda.");
+  if(gdMsg)l.push(gdMsg);
+  else if(c.err)l.push("⚠️ "+c.err);
+  else if(pend)l.push(gdTokOk()?"Alterações novas: o envio sai sozinho em instantes.":"Há alterações que ainda não foram para o Drive. Toque em Enviar agora.");
+  else l.push("Tudo salvo no Drive.");
+  l.push("Enquanto o app estiver aberto, cada alteração vai sozinha para o Drive. Ao abrir o app de novo, o Google pede um toque para liberar o envio.");
+  t.innerHTML=l.map(esc).join("<br>");
+}
+function gdInit(){
+  if(!GD_CLIENT_ID)return gdUI();
+  gdScript().then(function(){gdPrep();gdUI()}).catch(function(){});
+  gdUI();
+}
+$("gdon").onclick=function(){
+  if(!navigator.onLine){toast("Conecte-se à internet para usar o Google Drive.");return}
+  gdLogin(async function(err){
+    if(err){toast("⚠️ "+gdErro(err));return}
+    try{var a=await (await gdApi("https://www.googleapis.com/drive/v3/about?fields=user(emailAddress)")).json();gdSet({on:1,email:(a.user&&a.user.emailAddress)||"",err:""})}catch(e){gdSet({on:1,err:""})}
+    toast("☁️ Google Drive conectado");gdUI();
+    if(gdVazio()){await gdRestaura(true)}else gdEnvia(true);
+  });
+};
+$("gdenv").onclick=function(){if(gdTokOk())gdEnvia(true);else gdLogin(function(err){if(err){toast("⚠️ "+gdErro(err));return}gdEnvia(true)})};
+$("gdpend").onclick=$("gdenv").onclick;
+$("gdres").onclick=function(){
+  var go=function(){gdRestaura(false)};
+  if(gdTokOk())go();else gdLogin(function(err){if(err){toast("⚠️ "+gdErro(err));return}go()});
+};
+$("gdoff").onclick=function(){
+  try{if(gdTok&&window.google&&google.accounts&&google.accounts.oauth2)google.accounts.oauth2.revoke(gdTok,function(){})}catch(e){}
+  gdTok=null;gdExp=0;gdSet({on:0,email:"",h:"",err:""});gdUI();toast("Google Drive desconectado. O arquivo continua no seu Drive.");
+};
+
+/* ===== Bloqueio do app (PIN e biometria) ===== */
+var lkEnt="",lkHid=0,lkBusy=false,lkBioOk=false,lkModo="criar",lkAberto=false,LK_LOCAL=typeof initLocal==="function";
+function lkCfg(){try{return JSON.parse(localStorage.getItem("motorista_lock")||"{}")||{}}catch(e){return {}}}
+function lkSave(c){try{localStorage.setItem("motorista_lock",JSON.stringify(c))}catch(e){}}
+function lkB64(buf){var a=new Uint8Array(buf),t="";for(var i=0;i<a.length;i++)t+=String.fromCharCode(a[i]);return btoa(t)}
+function lkUb64(s){var t=atob(s),a=new Uint8Array(t.length);for(var i=0;i<t.length;i++)a[i]=t.charCodeAt(i);return a}
+function lkRand(n){var a=new Uint8Array(n);crypto.getRandomValues(a);return a}
+async function lkHash(pin,salt){
+  if(window.crypto&&crypto.subtle){
+    var k=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveBits"]);
+    return lkB64(await crypto.subtle.deriveBits({name:"PBKDF2",salt:lkUb64(salt),iterations:150000,hash:"SHA-256"},k,256));
+  }
+  var h=5381,t=salt+"|"+pin;for(var j=0;j<20000;j++)for(var i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return "x"+h;
+}
+async function lkConfere(pin){var c=lkCfg();if(!c.on||!c.salt)return false;return (await lkHash(pin,c.salt))===c.hash}
+function lkEspera(){var c=lkCfg();return Math.max(0,Math.ceil(((+c.ate||0)-Date.now())/1000))}
+function lkDots(err){
+  var c=lkCfg(),n=c.len||4,h="";for(var i=0;i<n;i++)h+='<i class="'+(i<lkEnt.length?"on":"")+'"></i>';
+  var d=$("lkdots");d.innerHTML=h;d.className="lkd"+(err?" err":"");
+}
+function lkMostra(){
+  var c=lkCfg();if(!c.on)return;
+  lkAberto=true;lkEnt="";$("lkf").style.display="none";$("lkpad").style.display="grid";$("lkesq").style.display="inline-block";
+  var w=lkEspera();$("lkmsg").textContent=w>0?"Muitas tentativas. Aguarde "+w+" s.":"Digite seu PIN";
+  $("lkbio").style.visibility=c.bio?"visible":"hidden";
+  lkDots(false);$("lk").className="on";
+  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
+  if(c.bio&&w<=0)setTimeout(function(){lkBio(true)},250);
+}
+function lkLibera(){lkAberto=false;lkEnt="";$("lk").className="";var c=lkCfg();if(c.f||c.ate){delete c.f;delete c.ate;lkSave(c)}}
+async function lkDigita(k){
+  var c=lkCfg();if(!c.on||lkBusy)return;
+  if(k==="bio"){lkBio(false);return}
+  if(k==="del"){lkEnt=lkEnt.slice(0,-1);lkDots(false);return}
+  var w=lkEspera();if(w>0){$("lkmsg").textContent="Muitas tentativas. Aguarde "+w+" s.";return}
+  if(lkEnt.length>=(c.len||4))return;
+  lkEnt+=k;lkDots(false);
+  if(lkEnt.length<(c.len||4))return;
+  lkBusy=true;var ok=await lkConfere(lkEnt);lkBusy=false;
+  if(ok){lkLibera();return}
+  c=lkCfg();c.f=(+c.f||0)+1;
+  if(c.f>=5){var seg=Math.min(900,30*Math.pow(2,c.f-5));c.ate=Date.now()+seg*1000;$("lkmsg").textContent="PIN incorreto. Aguarde "+seg+" s para tentar de novo."}
+  else $("lkmsg").textContent="PIN incorreto. "+(5-c.f)+(5-c.f===1?" tentativa":" tentativas")+" antes de uma pausa.";
+  lkSave(c);lkEnt="";lkDots(true);
+}
+async function lkBioDisp(){try{return !!(window.PublicKeyCredential&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){return false}}
+async function lkBioCria(){
+  var cred=await navigator.credentials.create({publicKey:{challenge:lkRand(32),rp:{name:"Controle Financeiro Motorista"},user:{id:lkRand(16),name:"motorista",displayName:"Motorista"},
+    pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"discouraged"},timeout:60000,attestation:"none"}});
+  if(!cred)throw new Error("cancelado");
+  return lkB64(cred.rawId);
+}
+async function lkBio(auto){
+  var c=lkCfg();if(!c.bio)return;
+  try{
+    var a=await navigator.credentials.get({publicKey:{challenge:lkRand(32),allowCredentials:[{type:"public-key",id:lkUb64(c.bio)}],userVerification:"required",timeout:60000}});
+    if(a&&lkB64(a.rawId)===c.bio)lkLibera();
+  }catch(e){if(!auto)$("lkmsg").textContent="Não deu para usar a digital agora. Digite o PIN."}
+}
+function lkUI(){
+  var c=lkCfg(),t=$("lktx");if(!t)return;
+  if(!c.on){
+    var semBk=LK_LOCAL&&diasBackup()===null&&!(typeof gdCfg==="function"&&gdCfg().on);
+    t.innerHTML=esc("Peça um PIN de 4 a 6 números"+(lkBioOk?" (e, se quiser, a digital)":"")+" para abrir o app.")+"<br>"+esc(LK_LOCAL?"Se esquecer o PIN, os dados deste celular precisam ser apagados e restaurados de um backup (Google Drive ou arquivo).":"Nesta versão, os dados ficam na sua conta do Claude: o bloqueio evita espiadas rápidas neste aparelho.")+(semBk?"<br><b style=\"color:var(--bad)\">⚠️ Faça um backup antes de ativar.</b>":"");
+    $("lkon").style.display="block";$("lkacts").style.display="none";return;
+  }
+  t.textContent="✅ Ativado · PIN de "+(c.len||4)+" números"+(c.bio?" · digital ativa":"")+".";
+  $("lkon").style.display="none";$("lkacts").style.display="block";
+  $("lktm").value=String(c.tm==null?5:c.tm);
+  $("lkbiob").style.display=(lkBioOk||c.bio)?"":"none";$("lktroca").style.gridColumn=(lkBioOk||c.bio)?"":"1/-1";$("lkbiob").textContent=c.bio?"Desativar digital":"👆 Ativar digital";
+}
+function lkAbreSet(modo){
+  var c=lkCfg();lkModo=modo;
+  $("lkst").textContent=modo==="criar"?"Criar PIN":modo==="trocar"?"Trocar PIN":"Desligar o bloqueio";
+  $("lksi").textContent=modo==="desligar"?"Digite o PIN atual para desligar o bloqueio.":"Escolha um PIN de 4 a 6 números que você não esqueça.";
+  $("lkpaw").style.display=modo==="criar"?"none":"";$("lkpnw").style.display=$("lkprw").style.display=modo==="desligar"?"none":"";
+  $("lkbcw").style.display=(modo==="criar"&&lkBioOk)?"flex":"none";$("lkbc").checked=modo==="criar"&&lkBioOk;
+  ["lkpa","lkpn","lkpr"].forEach(function(i){$(i).value=""});$("lkserr").textContent="";$("lksok").disabled=false;
+  $("lksok").textContent=modo==="desligar"?"Desligar":"Salvar";$("ov10").className="on";
+}
+function lkInit(){
+  lkMostra();lkUI();
+  lkBioDisp().then(function(ok){lkBioOk=ok;lkUI()});
+}
+$("lkpad").onclick=function(e){var b=e.target.closest("[data-k]");if(b)lkDigita(b.getAttribute("data-k"))};
+document.addEventListener("keydown",function(e){if(!lkAberto||$("lkf").style.display==="block")return;if(/^\d$/.test(e.key))lkDigita(e.key);else if(e.key==="Backspace")lkDigita("del")});
+document.addEventListener("visibilitychange",function(){
+  var c=lkCfg();if(!c.on)return;
+  if(document.hidden){lkHid=Date.now();return}
+  var tm=c.tm==null?5:+c.tm;
+  if(!lkAberto&&lkHid&&tm>=0&&Date.now()-lkHid>=tm*60000)lkMostra();
+  lkHid=0;
+});
+$("lkesq").onclick=function(){
+  $("lkpad").style.display="none";$("lkesq").style.display="none";$("lkf").style.display="block";$("lkfi").value="";$("lkfok").disabled=true;
+  $("lkmsg").textContent="Esqueci o PIN";
+  $("lkftx").innerHTML=LK_LOCAL?"Para entrar sem o PIN, o app <b>apaga os dados deste celular</b>. Depois, em Ajustes, você restaura tudo pelo <b>Google Drive</b> ou por um <b>arquivo de backup</b>. Sem backup, os dados não voltam.<br>Digite <b>APAGAR</b> para confirmar.":"Seus dados ficam guardados na sua conta do Claude e <b>não serão apagados</b>. Confirmar remove o bloqueio deste aparelho; depois você pode criar um PIN novo em Ajustes.<br>Digite <b>REMOVER</b> para confirmar.";
+};
+$("lkfi").oninput=function(){$("lkfok").disabled=this.value.trim().toUpperCase()!==(LK_LOCAL?"APAGAR":"REMOVER")};
+$("lkfcx").onclick=function(){lkMostra()};
+$("lkfok").onclick=async function(){
+  if(this.disabled)return;this.disabled=true;
+  if(LK_LOCAL){
+    try{await idbClear("fotos");await idbClear("cfg");arqH=null;arqEst=""}catch(e){}
+    ["motorista_v1","motorista_cats","motorista_cfg","motorista_serv","motorista_ult_backup"].forEach(function(k){try{localStorage.removeItem(k)}catch(e){}});
+    dados=[];custom=[];customRec=[];recIc={};meta={dia:0,mes:0,dias:0};manut=[];servs=[];fil="todos";cat="uber";
+    turno=null;turnos=[];catPrev={};venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();
+  }
+  try{localStorage.removeItem("motorista_lock")}catch(e){}
+  lkLibera();render();aba(5);lkUI();
+  if(LK_LOCAL){try{arqUI();bultUI()}catch(e){}toast("Dados deste celular apagados. Restaure pelo Google Drive ou por um arquivo de backup.")}
+  else toast("Bloqueio removido. Seus dados continuam na sua conta do Claude.");
+};
+$("lkon").onclick=function(){lkAbreSet("criar")};
+$("lktroca").onclick=function(){lkAbreSet("trocar")};
+$("lkoff").onclick=function(){lkAbreSet("desligar")};
+$("lkscx").onclick=function(){$("ov10").className=""};
+$("ov10").onclick=function(e){if(e.target===$("ov10"))$("ov10").className=""};
+$("lktm").onchange=function(){var c=lkCfg();c.tm=+this.value;lkSave(c);toast("🔒 Ajuste do bloqueio salvo")};
+$("lkbiob").onclick=async function(){
+  var c=lkCfg();
+  if(c.bio){delete c.bio;lkSave(c);lkUI();toast("Digital desativada. O app vai pedir só o PIN.");return}
+  try{c.bio=await lkBioCria();lkSave(c);lkUI();toast("👆 Digital ativada")}catch(e){toast("Não foi possível ativar a digital neste aparelho.")}
+};
+$("lksok").onclick=async function(){
+  var err=function(t){$("lkserr").textContent=t},c=lkCfg(),pa=$("lkpa").value.trim(),pn=$("lkpn").value.trim(),pr=$("lkpr").value.trim();
+  if(lkModo!=="criar"){if(!(await lkConfere(pa))){err("PIN atual incorreto.");return}}
+  if(lkModo==="desligar"){try{localStorage.removeItem("motorista_lock")}catch(e){}$("ov10").className="";lkUI();toast("🔓 Bloqueio desligado");return}
+  if(!/^\d{4,6}$/.test(pn)){err("O PIN precisa ter de 4 a 6 números.");return}
+  if(pn!==pr){err("Os dois PINs não são iguais.");return}
+  if(/^(\d)\1+$/.test(pn)||"0123456789".indexOf(pn)>=0||"9876543210".indexOf(pn)>=0){err("Escolha um PIN menos óbvio (evite 1111 ou 1234).");return}
+  this.disabled=true;
+  var bio=c.bio||null;
+  if(lkModo==="criar"&&$("lkbc").checked){try{bio=await lkBioCria()}catch(e){bio=null;toast("A digital não foi ativada. Você pode tentar depois em Ajustes.")}}
+  var salt=lkB64(lkRand(16)),hash=await lkHash(pn,salt),n={on:1,salt:salt,hash:hash,len:pn.length,tm:c.tm==null?5:c.tm};
+  if(bio)n.bio=bio;
+  lkSave(n);$("ov10").className="";lkUI();this.disabled=false;
+  toast(lkModo==="criar"?"🔒 Bloqueio ativado":"🔒 PIN trocado");
 };
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();instEv=e;$("instbtn").style.display="block"});
 $("instbtn").onclick=async function(){if(!instEv)return;instEv.prompt();try{await instEv.userChoice}catch(e){}instEv=null;$("instbtn").style.display="none"};
@@ -2499,7 +3024,7 @@ $("instbtn").onclick=async function(){if(!instEv)return;instEv.prompt();try{awai
 })();
 if("serviceWorker" in navigator&&/^https?:/.test(location.protocol))window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
 window.onerror=function(m){setSync("⚠️ Erro: "+m)};
-load();loadCats();fillSels();aplicaMenu();loadCfg();iniContas();loadServ();migrar();fillMeta();fillPerfil();perfilUI();render();setSync("Carregando…");initLocal();
+lkInit();load();loadCats();fillSels();aplicaMenu();loadCfg();iniContas();loadServ();migrar();fillMeta();fillPerfil();perfilUI();render();setSync("Carregando…");initLocal();gdInit();
 </script>
 </body>
 </html>

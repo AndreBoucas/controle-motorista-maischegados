@@ -272,7 +272,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 23/10/2026 · v59</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 24/10/2026 · v60</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -2728,7 +2728,7 @@ function restauraTexto(rtxt){
 
 /* ===== Backup no Google Drive (arquivo visível na pasta "Controle Financeiro Motorista") =====
    Para ativar, cole abaixo o "ID do cliente" criado no Google Cloud (tipo: Aplicativo da Web). */
-var GD_CLIENT_ID="";
+var GD_CLIENT_ID="597405505311-kvn0k29osiafqakgs2enigmsqon7jk1d.apps.googleusercontent.com";
 var GD_ARQ="backup-controle-motorista.json",GD_PASTA="Controle Financeiro Motorista",GD_API="https://www.googleapis.com/drive/v3/files",GD_UP="https://www.googleapis.com/upload/drive/v3/files";
 var gdTok=null,gdExp=0,gdTC=null,gdCb=null,gdT=null,gdBusy=false,gdDeNovo=false,gdMsg="";
 function gdCfg(){try{return JSON.parse(localStorage.getItem("motorista_gdrive")||"{}")||{}}catch(e){return {}}}

@@ -272,7 +272,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 24/10/2026 · v61</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 24/10/2026 · v62</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -2983,8 +2983,11 @@ $("lkpad").onclick=function(e){var b=e.target.closest("[data-k]");if(b)lkDigita(
 document.addEventListener("keydown",function(e){if(!lkAberto||$("lkf").style.display==="block")return;if(/^\d$/.test(e.key))lkDigita(e.key);else if(e.key==="Backspace")lkDigita("del")});
 // Toque no app logo antes de sair = o próprio app abriu algo (câmera, galeria, compartilhar, janela do Google).
 var lkToque=0,lkExt=false,lkBioPend=false;
-document.addEventListener("pointerdown",function(){lkToque=Date.now()},true);
-document.addEventListener("click",function(){lkToque=Date.now()},true);
+// Só conta como "o app abriu algo" o toque nestes botões; qualquer outro toque antes de sair não impede o bloqueio.
+var LK_EXT="#sfoto,#sfoto2,label[for=sfoto],label[for=sfoto2],#fim,#bim,#bsh,#bxp,#csv,#gdon,#gdenv,#gdres,#gdpend,#edpdf,#gcpdf,#ipdf,#rpdf,a[href]";
+function lkMarca(e){try{if(e.target&&e.target.closest&&e.target.closest(LK_EXT))lkToque=Date.now()}catch(x){}}
+document.addEventListener("pointerdown",lkMarca,true);
+document.addEventListener("click",lkMarca,true);
 document.addEventListener("visibilitychange",function(){
   var c=lkCfg();if(!c.on)return;
   var tm=c.tm==null?5:+c.tm;

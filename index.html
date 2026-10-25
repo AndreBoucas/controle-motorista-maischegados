@@ -247,7 +247,7 @@ nav button.on b{font-weight:800}
     <button class="pb" id="lkon" style="margin-top:0">Criar PIN</button>
     <div id="lkacts" style="display:none">
       <label style="display:block;font-size:12px;color:var(--mut);margin:4px 0">Pedir o PIN de novo</label>
-      <select id="lktm" class="fsel" style="width:100%"><option value="-1">Só ao abrir o app</option><option value="1">Após 1 minuto fora do app</option><option value="5">Após 5 minutos fora do app</option><option value="15">Após 15 minutos fora do app</option><option value="30">Após 30 minutos fora do app</option></select>
+      <select id="lktm" class="fsel" style="width:100%"><option value="0">Sempre que sair do app (até minimizando)</option><option value="-1">Só ao abrir o app</option><option value="1">Após 1 minuto fora do app</option><option value="5">Após 5 minutos fora do app</option><option value="15">Após 15 minutos fora do app</option><option value="30">Após 30 minutos fora do app</option></select>
       <div class="bk" style="margin-top:10px"><button id="lkbiob">👆 Ativar digital</button><button id="lktroca">Trocar PIN</button></div>
       <button id="lkoff" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--bad);font-size:14px;font-weight:700">Desligar o bloqueio</button>
     </div></div>
@@ -272,7 +272,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 24/10/2026 · v60</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 24/10/2026 · v61</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -424,7 +424,8 @@ nav button.on b{font-weight:800}
     <div id="mpWrap"><label>Tempo em pausa (min)</label><input type="number" inputmode="numeric" min="0" id="mpaus" placeholder="0"></div>
   </div>
   <div class="f" id="fuelWrap" style="display:none;margin-top:10px">
-    <div><label>Litros abastecidos</label><input type="number" inputmode="decimal" step="0.01" id="flit" placeholder="0"></div>
+    <div style="grid-column:1/-1"><label>Tipo de combustível</label><div class="chips" id="fcb" style="justify-content:flex-start"><button type="button" class="chip" data-cb="etanol">Etanol</button><button type="button" class="chip" data-cb="gasolina">Gasolina</button><button type="button" class="chip" data-cb="gnv">GNV</button><button type="button" class="chip" data-cb="eletrico">⚡ Elétrico</button></div></div>
+    <div><label id="flitl">Litros abastecidos</label><input type="number" inputmode="decimal" step="0.01" id="flit" placeholder="0"></div>
     <div><label>Odômetro (km)</label><input type="number" inputmode="numeric" id="fodo" placeholder="Km do painel"></div>
   </div>
   <div class="f" id="obsWrap" style="margin-top:10px"><div style="grid-column:1/-1"><label>Observação (opcional)</label><input id="obs" maxlength="120" placeholder="Ex: almoço com cliente, troca de pneu, mercado..."></div></div>
@@ -768,7 +769,7 @@ function detLanc(e,g){
     if(l3.length)o+='<small>💵 '+l3.join(" · ")+'</small>';
   }else{
     if(e.ob)o+='<small>📝 '+esc(String(e.ob).slice(0,120))+'</small>';
-    if(e.l)o+='<small>⛽ '+e.l.toLocaleString("pt-BR")+' L'+(e.valor>0?' · '+brl(e.valor/e.l)+'/L':'')+(fuelInfo[e.id]?' · '+fmt1(fuelInfo[e.id].kml)+' km/L':'')+'</small>';
+    if(e.l){var fu=fuelU(e.cb);o+='<small>'+(e.cb==="eletrico"?"⚡ ":"⛽ ")+(FUEL[e.cb]?esc(fuelN(e.cb))+' · ':'')+e.l.toLocaleString("pt-BR")+' '+fu+(e.valor>0?' · '+brl(e.valor/e.l)+'/'+fu:'')+(fuelInfo[e.id]?' · '+fmt1(fuelInfo[e.id].kml)+' km/'+fu:'')+'</small>'}
     if(e.o>0)o+='<small>📟 Odômetro '+(e.o|0).toLocaleString("pt-BR")+' km</small>';
   }
   return o;
@@ -820,31 +821,47 @@ function fillSels(){
   function op(a){return a.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>'}).join("")+'<option value="__outro">➕ Outro…</option>'}
   vFillSel();
 }
+var FUEL={etanol:["Etanol","L","Litros abastecidos"],gasolina:["Gasolina","L","Litros abastecidos"],gnv:["GNV","m³","m³ abastecidos"],eletrico:["Elétrico","kWh","kWh carregados"]},fcb="";
+function fuelN(cb){return FUEL[cb]?FUEL[cb][0]:"Sem tipo"}
+function fuelU(cb){return FUEL[cb]?FUEL[cb][1]:"L"}
+function fcbSet(v){
+  fcb=FUEL[v]?v:"";
+  [].forEach.call(document.querySelectorAll("#fcb [data-cb]"),function(b){b.className="chip"+(b.getAttribute("data-cb")===fcb?" on":"")});
+  $("flitl").textContent=fcb?FUEL[fcb][2]:"Quantidade abastecida";
+  $("flit").placeholder=fcb?"0 "+FUEL[fcb][1]:"0";
+}
 function fuelCalc(){
-  var L=dados.filter(function(e){return e.tipo==="Abastecimento"&&e.l>0&&e.o>0}).sort(function(a,b){return a.o-b.o||a.id-b.id}),it=[],km=0,lt=0,vl=0,map={};
+  var L=dados.filter(function(e){return e.tipo==="Abastecimento"&&e.l>0&&e.o>0}).sort(function(a,b){return a.o-b.o||a.id-b.id}),it=[],km=0,lt=0,vl=0,map={},tp={};
   for(var i=1;i<L.length;i++){
     var p=L[i-1],c=L[i],d=c.o-p.o;
-    if(d>0){var x={id:c.id,data:c.data,l:c.l,o:c.o,valor:c.valor,km:d,kml:d/c.l,cpk:c.valor/d};it.push(x);map[c.id]=x;km+=d;lt+=c.l;vl+=c.valor}
+    if(d>0){var cb=c.cb||"",x={id:c.id,data:c.data,l:c.l,o:c.o,valor:c.valor,km:d,kml:d/c.l,cpk:c.valor/d,cb:cb};it.push(x);map[c.id]=x;km+=d;lt+=c.l;vl+=c.valor;
+      var t=tp[cb]||(tp[cb]={km:0,q:0,n:0});t.km+=d;t.q+=c.l;t.n++}
   }
-  return {it:it,map:map,kml:lt>0?km/lt:0,cpk:km>0?vl/km:0};
+  for(var k in tp)tp[k].kml=tp[k].q>0?tp[k].km/tp[k].q:0;
+  return {it:it,map:map,tp:tp,kml:lt>0?km/lt:0,cpk:km>0?vl/km:0};
 }
 function renderFuel(){
   var f=fuelCalc(),all=dados.filter(function(e){return e.tipo==="Abastecimento"&&e.l>0}),h="";
-  if(!all.length){$("fuelres").innerHTML='<div style="font-size:13px;color:var(--mut);line-height:1.5">Ao lançar um abastecimento (Despesa → Abastecimento), informe os litros e o odômetro. Com dois abastecimentos, o app calcula o consumo e o custo por km.</div>';return}
-  var tl=0,tv=0;all.forEach(function(e){tl+=e.l;tv+=e.valor});
-  h+=kv("Abastecimentos registrados",String(all.length))+kv("Preço médio por litro",brl(tv/tl));
+  if(!all.length){$("fuelres").innerHTML='<div style="font-size:13px;color:var(--mut);line-height:1.5">Ao lançar um abastecimento (Despesa → Abastecimento), escolha o combustível (etanol, gasolina, GNV ou elétrico) e informe a quantidade e o odômetro. Com dois abastecimentos, o app calcula o consumo e o custo por km.</div>';return}
+  var pr={},ord=["etanol","gasolina","gnv","eletrico",""];
+  all.forEach(function(e){var k=FUEL[e.cb]?e.cb:"",t=pr[k]||(pr[k]={q:0,v:0,n:0});t.q+=e.l;t.v+=e.valor;t.n++});
+  var tipos=ord.filter(function(k){return pr[k]}),varios=tipos.length>1;
+  h+=kv("Abastecimentos registrados",String(all.length)+(varios?" ("+tipos.map(function(k){return fuelN(k)+" "+pr[k].n}).join(" · ")+")":(tipos[0]?" · "+fuelN(tipos[0]):"")));
+  tipos.forEach(function(k){h+=kv("Preço médio"+(varios||k?" · "+fuelN(k):""),brl(pr[k].v/pr[k].q)+"/"+fuelU(k))});
   if(f.it.length){
     var last=f.it[f.it.length-1];
-    h+=kv("Consumo médio",fmt1(f.kml)+" km/L")+kv("Último abastecimento",fmt1(last.kml)+" km/L")+kv("Custo de combustível por km",brl(f.cpk));
-    if(f.it.length>=3){
-      var dif=(last.kml-f.kml)/f.kml*100;
-      if(dif<=-15)h+='<div style="font-size:12px;margin-top:8px;color:var(--bad);line-height:1.4">⚠️ O último abastecimento rendeu '+Math.abs(dif).toFixed(0)+'% menos que a média. Vale checar a calibragem dos pneus, o filtro de ar e o estilo de condução.</div>';
-      else if(dif>=15)h+='<div style="font-size:12px;margin-top:8px;color:var(--ok);line-height:1.4">👍 O último abastecimento rendeu '+dif.toFixed(0)+'% mais que a média.</div>';
+    ord.forEach(function(k){var t=f.tp[k];if(t&&t.n)h+=kv("Consumo médio"+(varios||k?" · "+fuelN(k):""),fmt1(t.kml)+" km/"+fuelU(k))});
+    h+=kv("Último abastecimento",fmt1(last.kml)+" km/"+fuelU(last.cb)+(varios?" ("+fuelN(last.cb)+")":""))+kv("Custo de combustível por km",brl(f.cpk));
+    var tl=f.tp[last.cb];
+    if(tl&&tl.n>=3){
+      var dif=(last.kml-tl.kml)/tl.kml*100;
+      if(dif<=-15)h+='<div style="font-size:12px;margin-top:8px;color:var(--bad);line-height:1.4">⚠️ O último abastecimento rendeu '+Math.abs(dif).toFixed(0)+'% menos que a média'+(varios?' de '+esc(fuelN(last.cb)):'')+'. Vale checar a calibragem dos pneus, o filtro de ar e o estilo de condução.</div>';
+      else if(dif>=15)h+='<div style="font-size:12px;margin-top:8px;color:var(--ok);line-height:1.4">👍 O último abastecimento rendeu '+dif.toFixed(0)+'% mais que a média'+(varios?' de '+esc(fuelN(last.cb)):'')+'.</div>';
     }
     h+='<div style="font-size:12px;color:var(--mut);margin:12px 0 2px">Últimos abastecimentos</div>';
-    f.it.slice(-5).reverse().forEach(function(x){h+=kv(fmtBR(x.data),fmt1(x.kml)+" km/L · "+brl(x.cpk)+"/km")});
-  }else h+='<div style="font-size:12px;color:var(--mut);margin-top:8px">Registre mais um abastecimento com odômetro para ver o consumo (km/L).</div>';
-  h+='<div style="font-size:11px;color:var(--mut);margin-top:8px">O cálculo considera tanque cheio em cada abastecimento.</div>';
+    f.it.slice(-5).reverse().forEach(function(x){h+=kv(fmtBR(x.data)+(varios||x.cb?" · "+fuelN(x.cb):""),fmt1(x.kml)+" km/"+fuelU(x.cb)+" · "+brl(x.cpk)+"/km")});
+  }else h+='<div style="font-size:12px;color:var(--mut);margin-top:8px">Registre mais um abastecimento com odômetro para ver o consumo.</div>';
+  h+='<div style="font-size:11px;color:var(--mut);margin-top:8px;line-height:1.4">O cálculo considera tanque cheio (ou bateria carregada) em cada abastecimento: os km rodados desde o abastecimento anterior entram no consumo do combustível que você colocou. Etanol e gasolina em litros (km/L), GNV em m³ (km/m³) e elétrico em kWh (km/kWh).</div>';
   $("fuelres").innerHTML=h;
 }
 function dIso(t){var p=String(t).split("-");return new Date(+p[0],+p[1]-1,+p[2])}
@@ -2245,13 +2262,13 @@ function repTxt(){var u=ultimo();return u?"🔁 Repetir último: "+info(u.tipo)[
 function fillRep(){
   var u=ultimo();if(!u)return;
   cat=u.tipo;setModo(isR(u.tipo)?"r":"d");
-  $("valor").value=u.valor;$("kmin").value=u.km||"";$("hin").value=u.h||"";$("hini").value="";$("ncor").value="";$("hfim").value="";$("npaus").value="";$("mpaus").value="";$("obs").value="";$("flit").value=u.l||"";$("fodo").value="";
+  $("valor").value=u.valor;$("kmin").value=u.km||"";$("hin").value=u.h||"";$("hini").value="";$("ncor").value="";$("hfim").value="";$("npaus").value="";$("mpaus").value="";$("obs").value="";$("flit").value=u.l||"";$("fodo").value="";fcbSet(u.cb||"");
   $("err").textContent="";toast("🔁 Último lançamento copiado. Ajuste o que precisar e salve.");
 }
 var editId=null,exArm=false,dupOk=false;
 function abrir(e){
   editId=e?e.id:null;exArm=false;dupOk=false;
-  $("data").value=e?e.data:hoje();$("data").max=hoje();$("valor").value=e?e.valor:"";$("kmin").value=e&&e.km?e.km:"";$("hin").value=e&&e.h?e.h:"";$("hini").value=e&&e.hi?e.hi:"";$("ncor").value=e&&e.nc>0?(e.nc|0):"";$("hfim").value=e&&e.hf?e.hf:"";$("npaus").value=e&&e.np>0?(e.np|0):(e&&e.hf&&e.np===0?0:"");$("mpaus").value=e&&e.mp>0?(e.mp|0):"";$("flit").value=e&&e.l?e.l:"";$("fodo").value=e&&e.o?e.o:"";$("obs").value=e&&e.ob?String(e.ob).slice(0,120):"";
+  $("data").value=e?e.data:hoje();$("data").max=hoje();$("valor").value=e?e.valor:"";$("kmin").value=e&&e.km?e.km:"";$("hin").value=e&&e.h?e.h:"";$("hini").value=e&&e.hi?e.hi:"";$("ncor").value=e&&e.nc>0?(e.nc|0):"";$("hfim").value=e&&e.hf?e.hf:"";$("npaus").value=e&&e.np>0?(e.np|0):(e&&e.hf&&e.np===0?0:"");$("mpaus").value=e&&e.mp>0?(e.mp|0):"";$("flit").value=e&&e.l?e.l:"";$("fodo").value=e&&e.o?e.o:"";fcbSet(e&&e.cb||"");$("obs").value=e&&e.ob?String(e.ob).slice(0,120):"";
   $("err").textContent="";$("sv").textContent=e?"Salvar alterações":"Salvar";
   $("ex").style.display=e?"block":"none";$("ex").textContent="Excluir lançamento";
   if(e){cat=e.tipo;setModo(isR(e.tipo)?"r":"d")}else setModo("r");
@@ -2325,17 +2342,19 @@ $("chips").onclick=function(e){
   if(c==="__novar"){$("novaIn").placeholder="Nome da nova origem (ex: Frete)";$("novaIn").value="";icFill();$("icwrap").style.display="block";$("novaBox").style.display="flex";$("novaIn").focus();return}
   cat=c;chips();
 };
+$("fcb").onclick=function(e){var b=e.target.closest("[data-cb]");if(!b)return;fcbSet(b.getAttribute("data-cb"));$("err").textContent="";try{$("flit").focus()}catch(x){}};
 $("sv").onclick=function(){
   var v=parseFloat($("valor").value);
   if(!(v>0)){$("err").textContent="Digite um valor maior que zero.";return}
   var d=$("data").value||hoje(),km=modo==="r"?(parseFloat($("kmin").value)||0):0,h=modo==="r"?(parseFloat($("hin").value)||0):0,hi=modo==="r"?$("hini").value:"",nc=modo==="r"?Math.max(0,parseInt($("ncor").value)||0):0,hf=modo==="r"?$("hfim").value:"",np=modo==="r"?Math.max(0,parseInt($("npaus").value)||0):0,mp=modo==="r"?Math.max(0,parseInt($("mpaus").value)||0):0,ob=modo==="d"?$("obs").value.trim().slice(0,120):"",fc=modo==="d"&&cat==="Abastecimento",lit=fc?(parseFloat($("flit").value)||0):0,od=fc?(parseInt($("fodo").value)||0):0,ms=[d.slice(0,7)];
+  if(fc&&!fcb){$("err").textContent="Escolha o tipo de combustível: Etanol, Gasolina, GNV ou Elétrico.";$("fcb").scrollIntoView({block:"center"});return}
   if(d>hoje()){$("err").textContent="A data não pode ser futura. Hoje é "+fmtBR(hoje())+" (data do aparelho).";return}
   var dd1=dados.some(function(x){return x.data===d&&x.tipo===cat&&!isR(x.tipo)&&Math.abs(x.valor-v)<0.005}),dd2=servs.some(function(x){return x.data===d&&Math.abs((x.valor||0)-v)<0.005});
   if(!editId&&modo==="d"&&!dupOk&&(dd1||dd2)){dupOk=true;$("err").textContent=dd1?"Já existe um lançamento igual neste dia ("+info(cat)[1]+" "+brl(v)+"). Toque em Salvar de novo se for outro gasto.":"Já existe uma manutenção de "+brl(v)+" neste dia, e ela já conta nas despesas. Toque em Salvar de novo se for outro gasto.";return}
   if(editId){
     var e=dados.filter(function(x){return x.id===editId})[0];
-    if(e){ms.push(e.data.slice(0,7));e.tipo=cat;e.valor=v;e.km=km;e.h=h;e.hi=hi;e.hf=hf;e.np=np;e.mp=mp;e.nc=nc;e.l=lit;e.o=od;if(modo==="d")e.ob=ob;e.data=d}
-  }else dados.push({id:Date.now(),tipo:cat,valor:v,km:km,h:h,hi:hi,hf:hf,np:np,mp:mp,nc:nc,l:lit,o:od,ob:ob,data:d});
+    if(e){ms.push(e.data.slice(0,7));e.tipo=cat;e.valor=v;e.km=km;e.h=h;e.hi=hi;e.hf=hf;e.np=np;e.mp=mp;e.nc=nc;e.l=lit;e.o=od;if(fc)e.cb=fcb;else delete e.cb;if(modo==="d")e.ob=ob;e.data=d}
+  }else dados.push(Object.assign({id:Date.now(),tipo:cat,valor:v,km:km,h:h,hi:hi,hf:hf,np:np,mp:mp,nc:nc,l:lit,o:od,ob:ob,data:d},fc?{cb:fcb}:{}));
   save(Array.from(new Set(ms)));
   if(fc&&od>0&&od>(odoAtual()||0)){perfil.odo=od;perfil.odoTs=Date.now();saveCats();fillPerfil()}
   var p=d.split("-");cur=new Date(+p[0],+p[1]-1,1);fechar();render();
@@ -2896,14 +2915,14 @@ function lkDots(err){
   var c=lkCfg(),n=c.len||4,h="";for(var i=0;i<n;i++)h+='<i class="'+(i<lkEnt.length?"on":"")+'"></i>';
   var d=$("lkdots");d.innerHTML=h;d.className="lkd"+(err?" err":"");
 }
-function lkMostra(){
+function lkMostra(semBio){
   var c=lkCfg();if(!c.on)return;
   lkAberto=true;lkEnt="";$("lkf").style.display="none";$("lkpad").style.display="grid";$("lkesq").style.display="inline-block";
   var w=lkEspera();$("lkmsg").textContent=w>0?"Muitas tentativas. Aguarde "+w+" s.":"Digite seu PIN";
   $("lkbio").style.visibility=c.bio?"visible":"hidden";
   lkDots(false);$("lk").className="on";
   try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
-  if(c.bio&&w<=0)setTimeout(function(){lkBio(true)},250);
+  if(c.bio&&w<=0&&!semBio)setTimeout(function(){lkBio(true)},250);
 }
 function lkLibera(){lkAberto=false;lkEnt="";$("lk").className="";var c=lkCfg();if(c.f||c.ate){delete c.f;delete c.ate;lkSave(c)}}
 async function lkDigita(k){
@@ -2962,12 +2981,22 @@ function lkInit(){
 }
 $("lkpad").onclick=function(e){var b=e.target.closest("[data-k]");if(b)lkDigita(b.getAttribute("data-k"))};
 document.addEventListener("keydown",function(e){if(!lkAberto||$("lkf").style.display==="block")return;if(/^\d$/.test(e.key))lkDigita(e.key);else if(e.key==="Backspace")lkDigita("del")});
+// Toque no app logo antes de sair = o próprio app abriu algo (câmera, galeria, compartilhar, janela do Google).
+var lkToque=0,lkExt=false,lkBioPend=false;
+document.addEventListener("pointerdown",function(){lkToque=Date.now()},true);
+document.addEventListener("click",function(){lkToque=Date.now()},true);
 document.addEventListener("visibilitychange",function(){
   var c=lkCfg();if(!c.on)return;
-  if(document.hidden){lkHid=Date.now();return}
   var tm=c.tm==null?5:+c.tm;
-  if(!lkAberto&&lkHid&&tm>=0&&Date.now()-lkHid>=tm*60000)lkMostra();
-  lkHid=0;
+  if(document.hidden){
+    lkHid=Date.now();lkExt=lkHid-lkToque<2500;
+    if(tm===0&&!lkExt&&!lkAberto){lkMostra(true);lkBioPend=true}
+    return;
+  }
+  var fora=lkHid?Date.now()-lkHid:0;
+  if(!lkAberto&&lkHid&&tm>=0&&fora>=tm*60000&&!(lkExt&&fora<5*60000)){lkMostra(true);lkBioPend=true}
+  if(lkBioPend&&lkAberto&&c.bio&&lkEspera()<=0)setTimeout(function(){if(lkAberto)lkBio(true)},300);
+  lkBioPend=false;lkHid=0;lkExt=false;
 });
 $("lkesq").onclick=function(){
   $("lkpad").style.display="none";$("lkesq").style.display="none";$("lkf").style.display="block";$("lkfi").value="";$("lkfok").disabled=true;

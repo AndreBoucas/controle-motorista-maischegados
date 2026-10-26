@@ -250,12 +250,16 @@ nav button.on b{font-weight:800}
   <div class="st" id="ajcard"><h3>❓ Manual do app</h3><div style="font-size:12px;color:var(--mut);line-height:1.45">Como usar cada tela e o que significa cada campo. Em qualquer tela, o botão ❓ ao lado do título abre a parte certa do manual.</div><button class="pb" id="ajb2">Abrir o manual</button></div>
   <div class="st" id="cadcard"><h3>👤 Meu cadastro</h3>
     <label>Nome do usuário</label><input id="cnome" maxlength="40" autocomplete="name" placeholder="Seu nome">
+    <div class="two2"><div><label for="ccpf">CPF</label><input id="ccpf" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00"></div>
+    <div><label for="cnasc">Data de nascimento</label><input id="cnasc" type="date" min="1900-01-01"></div></div>
+    <label for="crg">Identidade (RG)</label><input id="crg" maxlength="25" autocomplete="off" placeholder="Ex: 12.345.678-90 SSP/BA">
+    <div id="cerr" style="font-size:12px;color:var(--bad);margin-top:6px;min-height:0"></div>
     <label>Veículo</label><input id="cveic" maxlength="40" placeholder="Ex: Chevrolet Onix 2020">
     <div class="two2"><div><label>Placa</label><input id="cplaca" maxlength="8" autocapitalize="characters" autocomplete="off" placeholder="ABC1D23"></div>
     <div><label>Odômetro atual (km)</label><input id="codo" type="number" inputmode="numeric" min="0" placeholder="Ex: 85000"></div></div>
     <div id="codoinfo" style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4"></div>
     <button class="pb" id="csv">Salvar cadastro</button>
-    <div style="font-size:11px;color:var(--mut);margin-top:8px">Nome, veículo e placa aparecem no topo de todas as telas.</div></div>
+    <div style="font-size:11px;color:var(--mut);margin-top:8px;line-height:1.4">Nome, veículo e placa aparecem no topo de todas as telas. O CPF identifica você em todos os relatórios e PDFs. CPF, identidade e data de nascimento ficam guardados só neste aparelho e nos seus backups.</div></div>
   <div class="st"><h3>Minhas categorias</h3><div id="clist"></div>
     <div id="cedit" style="display:none;gap:8px;margin-top:10px"><input id="cin" maxlength="30"><button class="pb" id="cok" style="width:auto;margin:0;padding:0 16px">OK</button></div></div>
   <div class="st" id="menucard"><h3>🧭 Estilo do menu</h3>
@@ -297,7 +301,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 25/10/2026 · v66</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 25/10/2026 · v67</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -1303,7 +1307,7 @@ function pdfDoc(sub,tit){
   o.rect=function(x,dy,w,h,col){cur.push(prect(x,y+dy,w,h,col))};
   o.down=function(n){y-=n};
   np();
-  var pf=[];if(perfil.nome)pf.push("Motorista: "+perfil.nome);if(perfil.veic)pf.push("Veículo: "+perfil.veic);if(perfil.placa)pf.push("Placa: "+perfil.placa);
+  var pf=[];if(perfil.nome)pf.push("Motorista: "+perfil.nome);if(perfil.veic)pf.push("Veículo: "+perfil.veic);if(perfil.cpf)pf.push("CPF: "+cpfFmt(perfil.cpf));if(perfil.placa)pf.push("Placa: "+perfil.placa);
   var pl=pf.length?pdfWrap(pf.join("    |    "),10,W-40):[],bh=78+(pl.length?10+pl.length*13:0);
   cur.push(prect(0,PH-bh,PW,bh,BR));
   cur.push(pop(MG,PH-38,tit||"Relatório de Despesas",20,true,[1,1,1]));
@@ -1586,8 +1590,14 @@ function gcPdf(g){
   d.sec("Reservas");resv(g.R,"Nenhuma reserva no período.");
   return d.fim();
 }
-function perfilLimpa(o){o=o&&typeof o==="object"?o:{};return {nome:String(o.nome||"").slice(0,40),veic:String(o.veic||"").slice(0,40),placa:String(o.placa||"").toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,8),odo:Math.max(0,Math.round(+o.odo||0)),odoTs:Math.max(0,Math.round(+o.odoTs||0))}}
-function fillPerfil(){$("cnome").value=perfil.nome;$("cveic").value=perfil.veic;$("cplaca").value=perfil.placa;$("codo").value=odoAtual()!==null?Math.round(odoAtual()):"";odoInfo()}
+function cpfOk(v){
+  var d=String(v||"").replace(/\D/g,"");if(d.length!==11||/^(\d)\1{10}$/.test(d))return false;
+  for(var t=9;t<11;t++){var s=0;for(var i=0;i<t;i++)s+=+d[i]*(t+1-i);var r=s*10%11%10;if(r!==+d[t])return false}
+  return true;
+}
+function cpfFmt(v){var d=String(v||"").replace(/\D/g,"").slice(0,11);return d.replace(/^(\d{3})(\d)/,"$1.$2").replace(/^(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d{1,2})$/,".$1-$2")}
+function perfilLimpa(o){o=o&&typeof o==="object"?o:{};return {nome:String(o.nome||"").slice(0,40),veic:String(o.veic||"").slice(0,40),placa:String(o.placa||"").toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,8),cpf:cpfOk(o.cpf)?String(o.cpf).replace(/\D/g,""):"",rg:String(o.rg||"").slice(0,25),nasc:/^\d{4}-\d{2}-\d{2}$/.test(o.nasc||"")?o.nasc:"",odo:Math.max(0,Math.round(+o.odo||0)),odoTs:Math.max(0,Math.round(+o.odoTs||0))}}
+function fillPerfil(){$("cnome").value=perfil.nome;$("ccpf").value=cpfFmt(perfil.cpf||"");$("crg").value=perfil.rg||"";$("cnasc").value=perfil.nasc||"";$("cnasc").max=hoje();$("cerr").textContent="";$("cveic").value=perfil.veic;$("cplaca").value=perfil.placa;$("codo").value=odoAtual()!==null?Math.round(odoAtual()):"";odoInfo()}
 function perfilUI(){
   var vazio=!perfil.nome&&!perfil.veic&&!perfil.placa;
   $("idn").textContent=vazio?"👤 Toque aqui para fazer seu cadastro":(perfil.nome?"👤 "+perfil.nome:"");
@@ -1937,7 +1947,7 @@ function renderRel(){
   renderEd();renderGC();
 }
 function relTxt(c){
-  var t=["RELATÓRIO DO MOTORISTA","Período: "+relLbl(c)].concat(perfil.nome?["Motorista: "+perfil.nome]:[],perfil.veic?["Veículo: "+perfil.veic]:[],perfil.placa?["Placa: "+perfil.placa]:[],[""]).concat(["Receitas: "+brl(c.r),"Despesas: "+brl(c.s),"Lucro: "+brl(c.l),
+  var t=["RELATÓRIO DO MOTORISTA","Período: "+relLbl(c)].concat(perfil.nome?["Motorista: "+perfil.nome]:[],perfil.cpf?["CPF: "+cpfFmt(perfil.cpf)]:[],perfil.veic?["Veículo: "+perfil.veic]:[],perfil.placa?["Placa: "+perfil.placa]:[],[""]).concat(["Receitas: "+brl(c.r),"Despesas: "+brl(c.s),"Lucro: "+brl(c.l),
     "Dias trabalhados: "+c.nd,"Km rodados: "+c.k,"Lucro por km: "+(c.k>0?brl(c.l/c.k):"-"),"Horas trabalhadas: "+(c.hs>0?c.hs:"-"),"","RECEITAS POR ORIGEM"]);
   Object.keys(c.por).forEach(function(k){t.push("- "+info(k)[1]+": "+brl(c.por[k]))});
   t.push("","DESPESAS POR CATEGORIA");
@@ -1965,7 +1975,7 @@ function relPdf(c,ir){
   function vazio(t){need(16);cur.push(pop(MG,y,t,10,false,GR));y-=16}
   function bars(o,tot,col){var ks=Object.keys(o).sort(function(a,b){return o[b]-o[a]});if(!ks.length)vazio("Sem dados no período.");ks.forEach(function(k){var pc=tot>0?o[k]/tot*100:0;bar(info(k)[1],brl(o[k])+"  ("+pc.toFixed(0)+"%)",pc,col)})}
   np();
-  var pf=[];if(perfil.nome)pf.push("Motorista: "+perfil.nome);if(perfil.veic)pf.push("Veículo: "+perfil.veic);if(perfil.placa)pf.push("Placa: "+perfil.placa);
+  var pf=[];if(perfil.nome)pf.push("Motorista: "+perfil.nome);if(perfil.veic)pf.push("Veículo: "+perfil.veic);if(perfil.cpf)pf.push("CPF: "+cpfFmt(perfil.cpf));if(perfil.placa)pf.push("Placa: "+perfil.placa);
   var pl=pf.length?pdfWrap(pf.join("    |    "),10,W-40):[],bh=78+(pl.length?10+pl.length*13:0);
   cur.push(prect(0,PH-bh,PW,bh,BR));
   cur.push(pop(MG,PH-38,ir?"Resumo Anual - Imposto de Renda":"Relatório do Motorista",20,true,[1,1,1]));
@@ -2402,8 +2412,13 @@ $("fil").onchange=function(){fil=this.value;render()};
 $("gd").onclick=function(){gmodo="d";$("gd").className="on";$("gs").className="";render()};
 $("gs").onclick=function(){gmodo="s";$("gs").className="on";$("gd").className="";render()};
 $("cplaca").oninput=function(){var v=this.value.toUpperCase().replace(/[^A-Z0-9-]/g,"");if(v!==this.value)this.value=v};
+$("ccpf").oninput=function(){var p=this.selectionStart===this.value.length;this.value=cpfFmt(this.value);$("cerr").textContent=""};
 $("csv").onclick=function(){
-  perfil=perfilLimpa({nome:$("cnome").value.trim(),veic:$("cveic").value.trim(),placa:$("cplaca").value.trim(),odo:$("codo").value,odoTs:Date.now()});
+  var cp=$("ccpf").value.replace(/\D/g,""),na=$("cnasc").value;
+  if(cp&&!cpfOk(cp)){$("cerr").textContent="CPF inválido. Confira os números.";$("ccpf").focus();return}
+  if(na&&(na>hoje()||na<"1900-01-01")){$("cerr").textContent="Data de nascimento inválida.";return}
+  $("cerr").textContent="";
+  perfil=perfilLimpa({cpf:cp,rg:$("crg").value.trim(),nasc:na,nome:$("cnome").value.trim(),veic:$("cveic").value.trim(),placa:$("cplaca").value.trim(),odo:$("codo").value,odoTs:Date.now()});
   fillPerfil();saveCats();perfilUI();toast("✅ Cadastro salvo");
 };
 $("ident").onclick=function(){aba(5)};
@@ -3250,7 +3265,7 @@ function ajSecoes(){
     f("Resumo anual (Imposto de Renda)","Levantamento do ano em PDF para levar ao contador. O app não calcula imposto.")+
     f("Exportar","⬇️ Relatório completo em PDF ou ⬇️ Resumo em texto, para mandar por WhatsApp ou e-mail.")},
   {k:"ajustes",tab:5,t:"⚙️ Ajustes",b:
-    f("👤 Meu cadastro","Nome, veículo e placa aparecem no topo das telas e nos PDFs. O <b>odômetro atual</b> é atualizado sozinho pelos km lançados e pelos abastecimentos; corrija quando quiser.")+
+    f("👤 Meu cadastro","Nome, veículo e placa aparecem no topo das telas e nos PDFs. O <b>CPF</b> identifica você em todos os relatórios e PDFs; o app confere se ele é válido. <b>Identidade (RG)</b> e <b>data de nascimento</b> ficam no cadastro. O <b>odômetro atual</b> é atualizado sozinho pelos km lançados e pelos abastecimentos; corrija quando quiser.")+
     f("Minhas categorias","Ícones e nomes das categorias que você criou.")+
     f("🧭 Estilo do menu","<b>Barra de baixo</b>, <b>Misto</b> (recomendado: principais na barra e ☰ com todos) ou <b>Só gaveta lateral</b>. Vale só neste aparelho.")+
     f("📲 Instalar no celular","Coloca o ícone na tela inicial e faz o app abrir em tela cheia e sem internet.")+

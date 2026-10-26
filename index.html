@@ -215,7 +215,7 @@ nav button.on b{font-weight:800}
     <div id="stot" style="font-size:12px;color:var(--mut);margin:10px 0 2px"></div>
     <div id="slist"></div></div>
   <div class="st"><h3>Lembretes por km</h3><div id="odoline" style="font-size:13px;margin-bottom:8px"></div><div id="mlist"></div>
-    <label id="mtit">Novo lembrete</label><input id="mnome" maxlength="30" placeholder="Ex: Troca de óleo">
+    <label id="mlbl" for="mnome">Novo lembrete</label><input id="mnome" maxlength="30" placeholder="Ex: Troca de óleo">
     <label>A cada quantos km?</label><input id="mkm" type="number" inputmode="decimal" placeholder="Ex: 10000">
     <label id="mbl">Última vez feito (km) — opcional</label><input id="mbase" type="number" inputmode="decimal" placeholder="Km da última troca">
     <button class="pb" id="madd">Adicionar lembrete</button>
@@ -272,7 +272,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 24/10/2026 · v62</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 25/10/2026 · v63</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -2571,7 +2571,7 @@ $("msv").onclick=function(){
   fillMeta();saveCats();render();toast("✅ Metas salvas"+(dia>1&&d>0?" (mês atual com "+da+" dias de trabalho)":""));
 };
 var medit=null,mbaseOrig="";
-function mReset(){medit=null;mbaseOrig="";$("mnome").value="";$("mkm").value="";$("mbase").value="";$("mtit").textContent="Novo lembrete";$("madd").textContent="Adicionar lembrete";$("mcx").style.display="none"}
+function mReset(){medit=null;mbaseOrig="";$("mnome").value="";$("mkm").value="";$("mbase").value="";$("mlbl").textContent="Novo lembrete";$("madd").textContent="Adicionar lembrete";$("mcx").style.display="none"}
 $("mlist").onclick=function(ev){
   var b=ev.target.closest("button");if(!b)return;
   var f=b.getAttribute("data-mf"),d=b.getAttribute("data-md"),e=b.getAttribute("data-me");
@@ -2579,8 +2579,8 @@ $("mlist").onclick=function(ev){
     var x=manut.filter(function(y){return String(y.id)===e})[0];if(!x)return;
     medit=x.id;$("mnome").value=x.nome;$("mkm").value=x.cada;
     var okSrc=x.src===(perfil.odo>0?"odo":"app");$("mbase").value=okSrc?Math.round(x.base):"";mbaseOrig=$("mbase").value;
-    $("mtit").textContent="Editar lembrete";$("madd").textContent="Salvar alterações";$("mcx").style.display="block";
-    try{$("mtit").scrollIntoView({block:"center"})}catch(z){}
+    $("mlbl").textContent="Editar lembrete";$("madd").textContent="Salvar alterações";$("mcx").style.display="block";
+    try{$("mlbl").scrollIntoView({block:"center"})}catch(z){}
     return;
   }
   if(f){manut.forEach(function(x){if(String(x.id)===f){x.base=kmRef();x.src=perfil.odo>0?"odo":"app"}});mdArm=null;saveCats();render()}
@@ -2782,7 +2782,7 @@ function gdErro(e){
   if(/popup|janela/.test(m))return "O celular bloqueou a janela do Google. Toque de novo e permita a janela.";
   if(/negado|access_denied/.test(m))return "A permissão do Google não foi concedida.";
   if(m==="401")return "A autorização do Google venceu. Toque em Enviar agora.";
-  if(/grande/.test(m))return "O backup passou de 5 MB (muitas fotos). Use Baixar backup.";
+  if(/grande/.test(m))return "O backup passou de 5 MB. Use Baixar backup.";
   if(/Failed to fetch|NetworkError|network/i.test(m))return "Sem internet no momento. O app tenta de novo depois.";
   return "Não foi possível falar com o Google Drive ("+m.slice(0,60)+").";
 }
@@ -2803,6 +2803,45 @@ async function gdPastaId(){
   else id=(await (await gdApi(GD_API+"?fields=id",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:GD_PASTA,mimeType:"application/vnd.google-apps.folder"})})).json()).id;
   gdSet({folderId:id});return id;
 }
+var GD_FT="foto-nota-";
+function gdSemFotos(){var o=JSON.parse(backupJSON());(o.servs||[]).forEach(function(x){delete x.foto});return JSON.stringify(o)}
+function gdUpBin(metodo,id,meta,blob){
+  var b="motorista"+Date.now(),corpo=new Blob(["--"+b+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+b+"\r\nContent-Type: image/jpeg\r\n\r\n",blob,"\r\n--"+b+"--"]);
+  return gdApi(GD_UP+(id?"/"+id:"")+"?uploadType=multipart&fields=id",{method:metodo,headers:{"Content-Type":"multipart/related; boundary="+b},body:corpo});
+}
+function urlBlob(u){var s=atob(u.split(",")[1]),a=new Uint8Array(s.length);for(var i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return new Blob([a],{type:"image/jpeg"})}
+function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).replace(/^data:[^,]*,/,"data:image/jpeg;base64,"))};r.onerror=function(){no(r.error)};r.readAsDataURL(b)})}
+// Envia só as fotos novas ou trocadas; apaga do Drive as fotos de manutenções excluídas.
+async function gdFotos(pasta){
+  var ft=gdCfg().ft||{},vivas={},tot=servs.filter(function(x){return fotoOk(x.foto)}).length,n=0;
+  for(var i=0;i<servs.length;i++){
+    var x=servs[i];if(!fotoOk(x.foto))continue;
+    var k=String(x.id),h=gdHash(x.foto),r=null;vivas[k]=1;n++;
+    if(ft[k]&&ft[k].h===h)continue;
+    gdMsg="⏳ Enviando fotos das notas ("+n+" de "+tot+")…";gdUI();
+    if(ft[k]&&ft[k].f){try{r=await gdUpBin("PATCH",ft[k].f,{},urlBlob(x.foto))}catch(e){if(!/404|notFound/.test(e.message))throw e}}
+    if(!r)r=await gdUpBin("POST",null,{name:GD_FT+k+".jpg",parents:[pasta],mimeType:"image/jpeg"},urlBlob(x.foto));
+    ft[k]={f:(await r.json()).id,h:h};gdSet({ft:ft});
+  }
+  for(var q in ft)if(!vivas[q]){try{await gdApi(GD_API+"/"+ft[q].f,{method:"DELETE"})}catch(e){if(String(e.message)==="401")throw e}delete ft[q];gdSet({ft:ft})}
+  gdMsg="⏳ Enviando para o Google Drive…";gdUI();
+}
+// Na restauração, baixa as fotos que o backup indica e junta ao arquivo.
+async function gdJuntaFotos(txt){
+  var o;try{o=JSON.parse(txt)}catch(e){return txt}
+  var falta=(o.servs||[]).filter(function(x){return x&&x.temFoto&&!fotoOk(x.foto)});
+  if(!falta.length)return txt;
+  var pasta=await gdPastaId(),mp={},tk="",ft=gdCfg().ft||{};
+  do{var j=await (await gdApi(GD_API+"?q="+encodeURIComponent("'"+pasta+"' in parents and name contains '"+GD_FT+"' and trashed=false")+"&pageSize=1000&fields=nextPageToken,files(id,name)"+(tk?"&pageToken="+encodeURIComponent(tk):""))).json();
+    (j.files||[]).forEach(function(f){mp[f.name]=f.id});tk=j.nextPageToken||""}while(tk);
+  for(var i=0;i<falta.length;i++){
+    var x=falta[i],fid=mp[GD_FT+x.id+".jpg"];if(!fid)continue;
+    gdMsg="⏳ Baixando fotos das notas ("+(i+1)+" de "+falta.length+")…";gdUI();
+    try{var u=await blobUrl(await (await gdApi(GD_API+"/"+fid+"?alt=media")).blob());if(fotoOk(u)){x.foto=u;ft[String(x.id)]={f:fid,h:gdHash(u)}}}
+    catch(e){if(String(e.message)==="401")throw e}
+  }
+  gdSet({ft:ft});return JSON.stringify(o);
+}
 function gdUp(metodo,id,meta,txt){
   var b="motorista"+Date.now(),corpo="--"+b+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+b+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+txt+"\r\n--"+b+"--";
   return gdApi(GD_UP+(id?"/"+id:"")+"?uploadType=multipart&fields=id,modifiedTime",{method:metodo,headers:{"Content-Type":"multipart/related; boundary="+b},body:corpo});
@@ -2819,12 +2858,13 @@ async function gdEnvia(manual){
   if(gdBusy){gdDeNovo=true;return}
   gdBusy=true;gdMsg="⏳ Enviando para o Google Drive…";gdUI();
   try{
-    var txt=backupJSON();if(txt.length>4800000)throw new Error("grande");
-    var pasta=await gdPastaId(),id=await gdArquivo(pasta),r=null;
+    var full=backupJSON(),txt=gdSemFotos();if(txt.length>4800000)throw new Error("grande");
+    var pasta=await gdPastaId();await gdFotos(pasta);
+    var id=await gdArquivo(pasta),r=null;
     if(id){try{r=await gdUp("PATCH",id,{},txt)}catch(e){if(/404|notFound/.test(e.message)){gdSet({fileId:null});r=null}else throw e}}
     if(!r)r=await gdUp("POST",null,{name:GD_ARQ,parents:[pasta],mimeType:"application/json"},txt);
     var j=await r.json();
-    gdSet({fileId:j.id,last:Date.now(),h:gdHash(txt),err:""});marcaBackup();bultUI();gdMsg="";
+    gdSet({fileId:j.id,last:Date.now(),h:gdHash(full),err:""});marcaBackup();bultUI();gdMsg="";
     if(manual)toast("☁️ Backup salvo no Google Drive");
   }catch(e){gdMsg="";gdSet({err:String(e&&e.message)==="401"?"":gdErro(e)});if(manual)toast("⚠️ "+gdErro(e))}
   gdBusy=false;gdUI();
@@ -2845,6 +2885,7 @@ async function gdRestaura(auto){
     gdMsg="⏳ Buscando o backup no Google Drive…";gdUI();
     var b=await gdBaixa();gdMsg="";
     if(!b){gdUI();if(!auto)toast("Nenhum backup deste app foi encontrado no seu Google Drive.");return false}
+    b.txt=await gdJuntaFotos(b.txt);gdMsg="";
     var ok=restauraTexto(b.txt);
     if(ok){gdSet({h:gdHash(backupJSON())});toast("☁️ Backup do Google Drive restaurado ("+new Date(b.quando).toLocaleDateString("pt-BR")+")")}
     gdUI();return ok;
@@ -2857,7 +2898,7 @@ function gdUI(){
   $("gdpend").style.display=(c.on&&pend&&!gdTokOk()&&!gdBusy)?"block":"none";
   if(!GD_CLIENT_ID){t.textContent="O backup no Google Drive ainda não foi configurado nesta versão do app.";$("gdon").style.display="none";$("gdacts").style.display="none";$("gdoff").style.display="none";return}
   if(!c.on){
-    t.textContent="Guarde o backup automaticamente no seu próprio Google Drive, como um arquivo que você vê na pasta \""+GD_PASTA+"\". O app só tem acesso aos arquivos que ele mesmo cria: não vê nada além disso no seu Drive.";
+    t.textContent="Guarde o backup automaticamente no seu próprio Google Drive, como um arquivo que você vê na pasta \""+GD_PASTA+"\". As fotos das notas vão junto, como imagens na mesma pasta. O app só tem acesso aos arquivos que ele mesmo cria: não vê nada além disso no seu Drive.";
     $("gdon").style.display="block";$("gdacts").style.display="none";$("gdoff").style.display="none";return;
   }
   $("gdon").style.display="none";$("gdacts").style.display="grid";$("gdoff").style.display="block";
@@ -2892,7 +2933,7 @@ $("gdres").onclick=function(){
 };
 $("gdoff").onclick=function(){
   try{if(gdTok&&window.google&&google.accounts&&google.accounts.oauth2)google.accounts.oauth2.revoke(gdTok,function(){})}catch(e){}
-  gdTok=null;gdExp=0;gdSet({on:0,email:"",h:"",err:""});gdUI();toast("Google Drive desconectado. O arquivo continua no seu Drive.");
+  gdTok=null;gdExp=0;gdSet({on:0,email:"",h:"",err:"",ft:{}});gdUI();toast("Google Drive desconectado. O arquivo continua no seu Drive.");
 };
 
 /* ===== Bloqueio do app (PIN e biometria) ===== */

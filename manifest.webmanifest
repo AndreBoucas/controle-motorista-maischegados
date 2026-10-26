@@ -1,6 +1,6 @@
 {
-  "name": "Controle Financeiro Motorista APP",
-  "short_name": "Controle Financeiro Motorista APP",
+  "name": "Gestão Financeira",
+  "short_name": "Gestão Financeira",
   "description": "Controle de ganhos, gastos, metas, manutenção e relatórios para motoristas de aplicativo.",
   "id": "./",
   "start_url": "./",

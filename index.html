@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Controle Financeiro Motorista APP</title>
+<title>Gestão Financeira</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#00a88f">
 <link rel="icon" href="icon-192.png?v=24">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=24">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Controle Financeiro Motorista APP">
+<meta name="apple-mobile-web-app-title" content="Gestão Financeira">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{--hd:#00a88f;--hd2:#00907a;--bg:#f2f4f5;--card:#fff;--tx:#1f2933;--mut:#7b8794;--bd:#e4e7eb;--ok:#00a86b;--bad:#e5484d;--in:#f2f4f5;
@@ -129,12 +129,31 @@ nav button.on b{font-weight:800}
 .f input{width:100%;padding:12px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx)}
 #sv,#ssv{width:100%;margin-top:16px;padding:15px;border:0;border-radius:12px;background:var(--hd);color:#fff;font-size:16px;font-weight:700}
 #cx,#scx,#zcx,#d4cx,#ic5cx,#d6cx,#s7cx,#s8cx,#s9cx,#lkscx{width:100%;margin-top:6px;padding:12px;border:0;background:none;color:var(--mut);font-size:15px}
+.mtitw{position:relative}.mtitw .mtit{padding-right:48px}
+#ajbt{position:absolute;right:20px;top:4px;width:36px;height:36px;border:0;border-radius:50%;background:var(--in);font-size:17px;line-height:36px;padding:0}
+#ajd{display:none;position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#ajd.on{display:block}
+#ajin{max-width:680px;margin:0 auto;padding:12px 14px calc(30px + env(safe-area-inset-bottom,0px))}
+.ajhd{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);padding:8px 0 10px;z-index:1}
+.ajhd b{font-size:19px}
+#ajx{border:0;background:var(--in);color:var(--tx);border-radius:50%;width:38px;height:38px;font-size:18px}
+#ajq{width:100%;padding:12px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);margin-bottom:10px}
+.ajd{background:var(--card);border:1px solid var(--bd);border-radius:12px;margin-bottom:10px}
+.ajd summary{padding:14px;font-weight:800;font-size:16px;cursor:pointer;list-style:none}
+.ajd summary::-webkit-details-marker{display:none}
+.ajd summary:after{content:"▾";float:right;color:var(--mut)}.ajd[open] summary:after{content:"▴"}
+.ajb{padding:0 14px 12px;font-size:14px;line-height:1.5}
+.ajf{padding:8px 0;border-top:1px solid var(--bd)}.ajf b{display:block;font-size:14px}.ajf span{color:var(--mut);font-size:13.5px}
+.ajf span b{display:inline;color:var(--tx)}
+.ajs{margin:12px 0 2px;font-weight:800;color:var(--hd);font-size:14px}
+.ajc{background:var(--in);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:13.5px;line-height:1.5}
+.ajo{margin:6px 0;padding-left:20px}.ajo li{margin:4px 0}
 </style>
 </head>
 <body>
 <div id="lk"><div class="lkb">
   <div class="lkic">🔒</div>
-  <div class="lkt">Controle Financeiro Motorista APP</div>
+  <div class="lkt">Gestão Financeira</div>
   <div class="lkm" id="lkmsg">Digite seu PIN</div>
   <div class="lkd" id="lkdots"></div>
   <div class="lkpad" id="lkpad">
@@ -150,6 +169,11 @@ nav button.on b{font-weight:800}
     <button class="pb" id="lkfok" disabled style="background:var(--bad)">Confirmar</button>
     <button id="lkfcx" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--mut);font-size:15px">Voltar</button>
   </div>
+</div></div>
+<div id="ajd" role="dialog" aria-label="Manual do app"><div id="ajin">
+  <div class="ajhd"><b>❓ Manual do app</b><button id="ajx" aria-label="Fechar o manual">✕</button></div>
+  <input id="ajq" type="search" placeholder="Buscar no manual (ex: meta, backup, combustível)" aria-label="Buscar no manual">
+  <div id="ajl"></div>
 </div></div>
 <div id="app">
 <div id="ident"><span id="idn"></span><span id="idv"></span><span id="idp"></span></div>
@@ -167,7 +191,7 @@ nav button.on b{font-weight:800}
   <div class="box"><div class="ic" style="background:rgba(0,168,107,.15)">⬆️</div><div><small>Receitas · Do dia</small><b class="ok" id="recD">R$ 0,00</b></div></div>
   <div class="box"><div class="ic" style="background:rgba(229,72,77,.15)">⬇️</div><div><small>Despesas · Do dia</small><b class="bad" id="desD">R$ 0,00</b></div></div>
 </div>
-<div id="mtit" class="mtit">🏠 Início</div>
+<div class="mtitw"><div id="mtit" class="mtit">🏠 Início</div><button id="ajbt" aria-label="Ajuda desta tela">❓</button></div>
 <div id="p1"><button id="gdpend" style="display:none;width:calc(100% - 28px);margin:0 14px 10px;padding:12px;border:1px solid var(--hd);border-radius:12px;background:var(--card);color:var(--hd);font-size:14px;font-weight:700">☁️ Toque para salvar o backup no Google Drive</button><div id="metas"></div><div id="banner"></div><div class="st" id="turnoBox" style="margin-bottom:10px"></div>
 <div style="margin:0 14px 10px"><button class="pb" id="reprap" style="margin-top:0;background:var(--card);color:var(--tx);border:1px solid var(--bd);display:none"></button></div>
 <div style="margin:0 14px 10px"><select id="fil" class="fsel"></select></div><div class="sec" id="lista"></div></div>
@@ -223,6 +247,7 @@ nav button.on b{font-weight:800}
     <div class="k" style="font-size:11px;color:var(--mut);margin-top:8px">Com o odômetro cadastrado em Ajustes, a contagem usa a quilometragem real do carro. Sem ele, usa só os km lançados nas receitas. ✏️ edita o nome, o intervalo e o km da última vez.</div></div>
 </div>
 <div id="p5" style="display:none">
+  <div class="st" id="ajcard"><h3>❓ Manual do app</h3><div style="font-size:12px;color:var(--mut);line-height:1.45">Como usar cada tela e o que significa cada campo. Em qualquer tela, o botão ❓ ao lado do título abre a parte certa do manual.</div><button class="pb" id="ajb2">Abrir o manual</button></div>
   <div class="st" id="cadcard"><h3>👤 Meu cadastro</h3>
     <label>Nome do usuário</label><input id="cnome" maxlength="40" autocomplete="name" placeholder="Seu nome">
     <label>Veículo</label><input id="cveic" maxlength="40" placeholder="Ex: Chevrolet Onix 2020">
@@ -252,7 +277,7 @@ nav button.on b{font-weight:800}
       <button id="lkoff" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--bad);font-size:14px;font-weight:700">Desligar o bloqueio</button>
     </div></div>
   <div class="st"><h3>Backup</h3>
-    <div style="font-size:12px;color:var(--mut);margin-bottom:8px;line-height:1.4">Seus dados ficam só neste aparelho. O backup é o seu seguro: guarde o arquivo no Google Drive, no WhatsApp ou no e-mail.</div>
+    <div style="font-size:12px;color:var(--mut);margin-bottom:8px;line-height:1.4">Seus dados ficam guardados neste aparelho. O backup é o seu seguro: guarde o arquivo no Google Drive, no WhatsApp ou no e-mail.</div>
     <div class="bk"><button id="bxp">⬇️ Baixar backup</button><button id="bsh">📤 Compartilhar</button></div>
     <button id="bim" class="pb" style="background:var(--in);color:var(--tx)">⬆️ Restaurar de um arquivo</button>
     <input type="file" id="fim" accept=".json,application/json" style="display:none">
@@ -272,7 +297,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 25/10/2026 · v63</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 25/10/2026 · v66</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -394,7 +419,7 @@ nav button.on b{font-weight:800}
 <button id="nmenu"><span>☰</span><b>Menu</b></button>
 </nav>
 <button id="menufab" aria-label="Abrir menu">☰</button>
-<div id="gav"><div id="gavp"><div class="gh">Controle Financeiro Motorista APP</div><div id="gavl"></div></div></div>
+<div id="gav"><div id="gavp"><div class="gh">Gestão Financeira</div><div id="gavl"></div></div></div>
 
 <div id="ov"><div id="sh">
   <div class="tabs"><button id="tr" class="on r">Receita</button><button id="td" class="d">Despesa</button></div>
@@ -1287,7 +1312,7 @@ function pdfDoc(sub,tit){
   y=PH-bh;
   o.fim=function(){
     var n=pages.length;
-    pages.forEach(function(pg,i){pg.push(pop(MG,24,"Controle Financeiro Motorista APP",8,false,GR));pg.push(pop(PW-MG,24,"Página "+(i+1)+" de "+n,8,false,GR,true))});
+    pages.forEach(function(pg,i){pg.push(pop(MG,24,"Gestão Financeira",8,false,GR));pg.push(pop(PW-MG,24,"Página "+(i+1)+" de "+n,8,false,GR,true))});
     var out="%PDF-1.4\n%\xe2\xe3\xcf\xd3\n",offs=[],no=0;
     function add(body){no++;offs[no]=out.length;out+=no+" 0 obj\n"+body+"\nendobj\n"}
     var kids=[];for(var i=0;i<n;i++)kids.push((5+2*i)+" 0 R");
@@ -2031,7 +2056,7 @@ function relPdf(c,ir){
   }
   }
   var n=pages.length;
-  pages.forEach(function(pg,i){pg.push(pop(MG,24,"Controle Financeiro Motorista APP",8,false,GR));pg.push(pop(PW-MG,24,"Página "+(i+1)+" de "+n,8,false,GR,true))});
+  pages.forEach(function(pg,i){pg.push(pop(MG,24,"Gestão Financeira",8,false,GR));pg.push(pop(PW-MG,24,"Página "+(i+1)+" de "+n,8,false,GR,true))});
   var out="%PDF-1.4\n%\xe2\xe3\xcf\xd3\n",offs=[],no=0;
   function add(body){no++;offs[no]=out.length;out+=no+" 0 obj\n"+body+"\nendobj\n"}
   var kids=[];for(var i=0;i<n;i++)kids.push((5+2*i)+" 0 R");
@@ -2057,7 +2082,7 @@ function zShow(n){
   zStep=n;clearInterval(zTimer);
   var m=$("zm"),ok=$("zok");
   $("zi").style.display="none";$("zb").style.display="none";ok.disabled=false;$("zcx").style.display="";ok.style.background="";
-  if(n===1){$("zt").textContent="⚠️ Zerar todos os dados?";m.textContent="Isso apaga TODOS os lançamentos, manutenções (com as fotos das notas), metas, categorias e lembretes, deste aparelho. Não dá para desfazer. O backup automático em arquivo será desativado para não sobrescrever sua cópia. Recomendamos baixar um backup antes.";$("zb").style.display="block";ok.textContent="Continuar (1 de 3)"}
+  if(n===1){$("zt").textContent="⚠️ Zerar todos os dados?";m.textContent="Isso apaga TODOS os lançamentos, manutenções (com as fotos das notas), metas, categorias e lembretes, deste aparelho. Não dá para desfazer. O backup automático em arquivo será desativado e o envio para o Google Drive fica pausado, para não sobrescrever suas cópias. Recomendamos baixar um backup antes.";$("zb").style.display="block";ok.textContent="Continuar (1 de 3)"}
   else if(n===2){$("zt").textContent="Confirmação 2 de 3";m.textContent="Para continuar, digite ZERAR no campo abaixo.";$("zi").style.display="block";$("zi").value="";ok.disabled=true;ok.textContent="Continuar (2 de 3)"}
   else if(n===3){
     $("zt").textContent="Confirmação 3 de 3";m.textContent="Última chance. Depois de tocar em apagar, tudo será removido definitivamente e o app ficará vazio.";
@@ -2077,7 +2102,7 @@ async function zApagar(){
   ["motorista_v1","motorista_cats","motorista_cfg","motorista_serv","motorista_ult_backup"].forEach(function(k){try{localStorage.removeItem(k)}catch(e){}});
   dados=[];custom=[];customRec=[];recIc={};meta={dia:0,mes:0,dias:0};manut=[];servs=[];fil="todos";cat="uber";
   turno=null;turnos=[];catPrev={};venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();render();aba(1);
-  arqUI();bultUI();setSync("💾 Dados salvos neste aparelho");
+  gdPausa();arqUI();bultUI();gdUI();setSync("💾 Dados salvos neste aparelho");
   zShow(4);
 }
 function backupJSON(){return JSON.stringify({v:2,dados:dados,servs:servs,meta:meta,manut:manut,cats:custom,recs:customRec,icons:recIc,perfil:perfil,venc:venc,contas:contas,turnos:turnos,catPrev:catPrev})}
@@ -2097,7 +2122,7 @@ async function baixar(nome,dado){
 async function compartilhar(nome,texto){
   try{
     var f=new File([texto],nome,{type:"application/json"});
-    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Backup do Controle Financeiro Motorista APP"});marcaBackup();setSync("📤 Backup compartilhado");return true}
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Backup do Gestão Financeira"});marcaBackup();setSync("📤 Backup compartilhado");return true}
   }catch(e){if(e&&e.name==="AbortError")return true}
   return false;
 }
@@ -2741,21 +2766,24 @@ function restauraTexto(rtxt){
         if(l.meta&&!meta.dia&&!meta.mes)meta={dia:+l.meta.dia||0,mes:+l.meta.mes||0,dias:+l.meta.dias||0,impdiv:l.meta.impdiv==="trab"?"trab":undefined,ini:/^\d{4}-\d{2}-\d{2}$/.test(l.meta.ini)?l.meta.ini:undefined,diasAt:+l.meta.diasAt>0?Math.round(+l.meta.diasAt):undefined,prop:l.meta.prop?1:undefined,semR:+l.meta.semR>0?Math.round(+l.meta.semR):undefined,semV:+l.meta.semV>0?Math.round(+l.meta.semV):undefined,semRit:l.meta.semRit?1:undefined};
         saveCats();cacheServ();fillMeta();
       }
+      if(typeof gdCfg==="function"&&gdCfg().rest)gdSet({rest:0});
       render();setSync("✅ Backup restaurado");return true;
     }catch(e){setSync("⚠️ Arquivo de backup inválido");return false}
 }
 
-/* ===== Backup no Google Drive (arquivo visível na pasta "Controle Financeiro Motorista") =====
+/* ===== Backup no Google Drive (arquivo visível na pasta "Gestão Financeira") =====
    Para ativar, cole abaixo o "ID do cliente" criado no Google Cloud (tipo: Aplicativo da Web). */
 var GD_CLIENT_ID="597405505311-kvn0k29osiafqakgs2enigmsqon7jk1d.apps.googleusercontent.com";
-var GD_ARQ="backup-controle-motorista.json",GD_PASTA="Controle Financeiro Motorista",GD_API="https://www.googleapis.com/drive/v3/files",GD_UP="https://www.googleapis.com/upload/drive/v3/files";
+var GD_ARQ="backup-controle-motorista.json",GD_PASTA="Gestão Financeira",GD_PASTA_ANT="Controle Financeiro Motorista",GD_API="https://www.googleapis.com/drive/v3/files",GD_UP="https://www.googleapis.com/upload/drive/v3/files";
 var gdTok=null,gdExp=0,gdTC=null,gdCb=null,gdT=null,gdBusy=false,gdDeNovo=false,gdMsg="";
 function gdCfg(){try{return JSON.parse(localStorage.getItem("motorista_gdrive")||"{}")||{}}catch(e){return {}}}
 function gdSet(o){var c=Object.assign(gdCfg(),o);try{localStorage.setItem("motorista_gdrive",JSON.stringify(c))}catch(e){}return c}
 function gdTokOk(){return !!gdTok&&Date.now()<gdExp-60000}
 function gdHash(t){var h=5381;for(var i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return t.length+"-"+h}
+var gdArm=false;
+function gdPausa(){if(gdCfg().on){gdSet({rest:1,h:""});clearTimeout(gdT)}}
 function gdVazio(){return !dados.length&&!servs.length}
-function gdPendente(){var c=gdCfg();return !!c.on&&!gdVazio()&&gdHash(backupJSON())!==c.h}
+function gdPendente(){var c=gdCfg();return !!c.on&&!c.rest&&!gdVazio()&&gdHash(backupJSON())!==c.h}
 function gdScript(){
   return new Promise(function(ok,no){
     if(window.google&&google.accounts&&google.accounts.oauth2)return ok();
@@ -2798,7 +2826,7 @@ function gdBusca(q){return gdApi(GD_API+"?q="+encodeURIComponent(q)+"&orderBy=mo
 async function gdPastaId(){
   var c=gdCfg();
   if(c.folderId){try{var j=await (await gdApi(GD_API+"/"+c.folderId+"?fields=id,trashed")).json();if(!j.trashed)return c.folderId}catch(e){if(String(e.message)==="401")throw e}}
-  var f=await gdBusca("mimeType='application/vnd.google-apps.folder' and name='"+GD_PASTA+"' and trashed=false"),id;
+  var f=await gdBusca("mimeType='application/vnd.google-apps.folder' and name='"+GD_PASTA+"' and trashed=false")||await gdBusca("mimeType='application/vnd.google-apps.folder' and name='"+GD_PASTA_ANT+"' and trashed=false"),id;
   if(f)id=f.id;
   else id=(await (await gdApi(GD_API+"?fields=id",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:GD_PASTA,mimeType:"application/vnd.google-apps.folder"})})).json()).id;
   gdSet({folderId:id});return id;
@@ -2854,6 +2882,11 @@ async function gdArquivo(pasta){
 async function gdEnvia(manual){
   if(!GD_CLIENT_ID||!gdCfg().on)return;
   if(gdVazio()){if(manual)toast("Não há dados para enviar ainda.");return}
+  if(gdCfg().rest){
+    if(!manual)return;
+    if(!gdArm){gdArm=true;setTimeout(function(){gdArm=false},8000);toast("⚠️ Isso substitui o backup que está no Drive pelos dados deste celular. Toque de novo para confirmar.");return}
+    gdArm=false;gdSet({rest:0});
+  }
   if(!gdTokOk()){gdUI();return}
   if(gdBusy){gdDeNovo=true;return}
   gdBusy=true;gdMsg="⏳ Enviando para o Google Drive…";gdUI();
@@ -2905,6 +2938,7 @@ function gdUI(){
   var l=["✅ Conectado"+(c.email?": "+c.email:"")];
   l.push(c.last?"Último envio: "+gdQuando(c.last)+".":"Nenhum envio ainda.");
   if(gdMsg)l.push(gdMsg);
+  else if(c.rest)l.push("⏸️ Envio automático pausado: os dados deste celular foram apagados, e o backup no Drive continua guardado. Toque em Restaurar do Drive para trazer tudo de volta. Se quiser começar do zero, toque em Enviar agora para substituir o backup do Drive.");
   else if(c.err)l.push("⚠️ "+c.err);
   else if(pend)l.push(gdTokOk()?"Alterações novas: o envio sai sozinho em instantes.":"Há alterações que ainda não foram para o Drive. Toque em Enviar agora.");
   else l.push("Tudo salvo no Drive.");
@@ -2983,7 +3017,7 @@ async function lkDigita(k){
 }
 async function lkBioDisp(){try{return !!(window.PublicKeyCredential&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){return false}}
 async function lkBioCria(){
-  var cred=await navigator.credentials.create({publicKey:{challenge:lkRand(32),rp:{name:"Controle Financeiro Motorista"},user:{id:lkRand(16),name:"motorista",displayName:"Motorista"},
+  var cred=await navigator.credentials.create({publicKey:{challenge:lkRand(32),rp:{name:"Gestão Financeira"},user:{id:lkRand(16),name:"motorista",displayName:"Motorista"},
     pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"discouraged"},timeout:60000,attestation:"none"}});
   if(!cred)throw new Error("cancelado");
   return lkB64(cred.rawId);
@@ -3056,6 +3090,7 @@ $("lkfok").onclick=async function(){
     ["motorista_v1","motorista_cats","motorista_cfg","motorista_serv","motorista_ult_backup"].forEach(function(k){try{localStorage.removeItem(k)}catch(e){}});
     dados=[];custom=[];customRec=[];recIc={};meta={dia:0,mes:0,dias:0};manut=[];servs=[];fil="todos";cat="uber";
     turno=null;turnos=[];catPrev={};venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();
+    try{gdPausa();gdUI()}catch(e){}
   }
   try{localStorage.removeItem("motorista_lock")}catch(e){}
   lkLibera();render();aba(5);lkUI();
@@ -3098,6 +3133,160 @@ $("instbtn").onclick=async function(){if(!instEv)return;instEv.prompt();try{awai
 if("serviceWorker" in navigator&&/^https?:/.test(location.protocol))window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
 window.onerror=function(m){setSync("⚠️ Erro: "+m)};
 lkInit();load();loadCats();fillSels();aplicaMenu();loadCfg();iniContas();loadServ();migrar();fillMeta();fillPerfil();perfilUI();render();setSync("Carregando…");initLocal();gdInit();
+/* ===== Manual do app (Ajuda) ===== */
+function ajLocal(){return typeof LK_LOCAL!=="undefined"?LK_LOCAL:typeof initLocal==="function"}
+function ajSecoes(){
+  var L=ajLocal();
+  function c(t){return '<div class="ajc">'+t+'</div>'}
+  function f(n,t){return '<div class="ajf"><b>'+n+'</b><span>'+t+'</span></div>'}
+  return [
+  {k:"comeco",t:"🚀 Primeiros passos",b:
+    '<ol class="ajo"><li><b>Instale o app</b> no celular (Ajustes → 📲 Instalar no celular). Ele abre em tela cheia e funciona sem internet.</li>'+
+    '<li><b>Preencha o cadastro</b> (Ajustes → 👤 Meu cadastro): nome, veículo, placa e odômetro.</li>'+
+    '<li><b>Defina a meta</b> (🎯 Metas): quanto você quer de lucro no mês e quantos dias pretende trabalhar.</li>'+
+    '<li><b>Lance tudo no dia a dia</b> pelo botão <b>+</b> do Início: as receitas de cada plataforma e as despesas (combustível, almoço…).</li>'+
+    '<li><b>Cadastre os custos fixos</b> na 💼 Gestão de Custos (seguro, IPVA, férias) e as contas de casa em 💸 Despesas.</li>'+
+    '<li><b>Faça backup</b> (Ajustes → Backup). '+(L?'Seus dados ficam só neste celular: sem backup, eles se perdem se o celular quebrar, for roubado ou trocado.':'Nesta versão os dados ficam na sua conta do Claude; o backup em arquivo é uma cópia extra.')+'</li></ol>'+
+    c('💡 Em cada tela, o botão <b>❓</b> ao lado do título abre direto a parte do manual daquela tela.')},
+  {k:"inicio",tab:1,t:"🏠 Início",b:
+    f("‹ Mês ›","Troca o mês mostrado na tela. Tudo abaixo segue esse mês.")+
+    f("Saldo do mês","Receitas − despesas − contas pagas e manutenção do mês. A linha embaixo mostra quanto das contas pagas e da manutenção já foi descontado.")+
+    f("Cor do topo","Segue o 🚦 Semáforo da meta (em 🎯 Metas): vermelho, amarelo ou verde, conforme a parte da meta do mês que você já alcançou.")+
+    f("Receitas · Mensal","Soma das receitas lançadas no mês.")+
+    f("Despesas · Mensal","Despesas lançadas no mês + contas pagas + manutenção.")+
+    f("‹ Dia › e Hoje","Escolhe o dia dos quadros “Do dia”. O botão Hoje volta para a data de hoje.")+
+    f("Receitas / Despesas · Do dia","Totais do dia escolhido.")+
+    f("⏱️ Turno","Toque em ▶ Iniciar ao começar a trabalhar. O cronômetro conta o tempo, com pausa se precisar, e ⏹ Encerrar fecha o turno. Em Últimos turnos, ＋ lançar horas abre uma receita com as horas, o início, o fim e as pausas já preenchidos: só falta o valor.")+
+    f("Filtro da lista","Mostra só uma origem (Uber, 99…), só as despesas ou só as contas pagas.")+
+    f("Lista de lançamentos","Agrupada por dia. Toque num lançamento para editar ou excluir. Contas pagas aparecem com ✅ Pago.")+
+    f("Avisos","Aparecem no Início: manutenção faltando 300 km ou menos (ou atrasada), contas perto do vencimento e backup atrasado.")+
+    f("Botão +","Abre o lançamento de receita ou despesa.")},
+  {k:"lanc",tab:1,t:"➕ Lançar receita ou despesa",b:
+    c('Toque no <b>+</b> do Início e escolha <b>Receita</b> ou <b>Despesa</b>. Digite o valor e escolha a origem ou a categoria.')+
+    '<div class="ajs">Receita</div>'+
+    f("Valor","Quanto você recebeu. Obrigatório.")+
+    f("Origem","Uber, 99, inDrive, Particular… Em ➕ você cria uma origem nova (ex: Frete) e escolhe o ícone.")+
+    f("Data","Dia do ganho. Não aceita data futura.")+
+    f("Km rodados","Opcional. Usado no lucro por km, no consumo e nos lembretes de manutenção.")+
+    f("Horas trabalhadas","Opcional. Usado no ganho por hora.")+
+    f("Início e fim do turno","Opcional. Mostra o horário do turno nos relatórios.")+
+    f("Corridas no dia","Quantidade de corridas. Usado no ganho por corrida.")+
+    f("Pausas e tempo em pausa","Quantas pausas você fez e quantos minutos ficou parado.")+
+    '<div class="ajs">Despesa</div>'+
+    f("Valor","Quanto você gastou. Obrigatório.")+
+    f("Categoria","Almoço, Lanche, Abastecimento, Supermercado, Lavagem de carro… Em ➕ você cria uma categoria nova. As que você criou podem ser apagadas em 🗑 Excluir esta categoria.")+
+    f("Data","Dia do gasto. Não aceita data futura.")+
+    f("Observação","Opcional, até 120 caracteres (ex: almoço com cliente).")+
+    f("Tipo de combustível","Só no Abastecimento: Etanol, Gasolina, GNV ou ⚡ Elétrico. É obrigatório escolher.")+
+    f("Quantidade","Litros (etanol e gasolina), m³ (GNV) ou kWh (elétrico).")+
+    f("Odômetro","Km do painel na hora de abastecer. Atualiza o odômetro do cadastro e permite calcular o consumo (km/L, km/m³ ou km/kWh).")+
+    c('🔁 <b>Repetir último</b> copia o último lançamento para você só ajustar e salvar.<br>⚠️ Se já existir um gasto igual no mesmo dia, o app avisa. Toque em Salvar de novo se for outro gasto.<br>🔧 Manutenção não se lança aqui: use a tela 🔧 Manutenção, senão o valor conta duas vezes.')},
+  {k:"resumo",tab:2,t:"📊 Resumo",b:
+    f("📊 Painel do dia","Gráfico de barras por dia do mês: Lucro, Receitas, Despesas, Km ou Corridas. Toque numa barra para ver os números do dia. A linha tracejada é a meta do dia.")+
+    f("Receitas x Despesas","Comparação por dia ou por semana.")+
+    f("Despesas por categoria","Para onde foi o dinheiro no mês.")+
+    f("Detalhes","Indicadores do mês: km rodados, horas, dias trabalhados, ganho por hora, lucro por km, ganho por corrida e outros.")+
+    f("📈 Comparação com o mês anterior","Compara o mês atual com o mesmo número de dias do mês passado. ▲ e ▼ mostram se melhorou ou piorou.")+
+    f("⛽ Consumo de combustível","Preço médio e consumo de cada combustível, custo de combustível por km e os últimos abastecimentos. Precisa de dois abastecimentos com odômetro e considera tanque cheio (ou bateria carregada).")},
+  {k:"metas",tab:3,t:"🎯 Metas",b:
+    f("Meta do mês (R$)","Quanto você quer de lucro no mês.")+
+    f("Dias de trabalho por mês","Quantos dias você costuma trabalhar. Com a meta do mês e os dias, a meta por dia é calculada sozinha (meta ÷ dias).")+
+    f("Dias de trabalho neste mês","Aparece quando você começa no meio do mês: quantos dias ainda vai trabalhar neste mês.")+
+    f("No mês atual","<b>Meta cheia nos dias restantes</b>: a meta inteira do mês dividida pelos dias que faltam. <b>Proporcional</b>: só a parte da meta que corresponde aos dias que faltam.")+
+    f("Meta por dia (R$)","Calculada sozinha quando há meta do mês e dias. Sem os dias, digite aqui.")+
+    f("Meta do dia","Sua meta por dia + custos do dia + parcela dos custos anuais e reservas. Muda sozinha quando você lança um custo.")+
+    f("🚦 Semáforo da meta","<b>Vermelho abaixo de (%)</b> e <b>Verde a partir de (%)</b> definem as cores; no meio fica amarelo. <b>Considerar o ritmo do mês</b> compara com os dias que já passaram, em vez do mês inteiro.")+
+    f("🧾 Custos anuais e reservas na meta","<b>Só o valor do dia</b>: a parcela entra na meta do dia, e a meta do mês continua a sua. <b>Reserva completa</b>: soma na meta do mês e na do dia.")},
+  {k:"manut",tab:4,t:"🔧 Manutenção",b:
+    '<div class="ajs">Trocas e serviços</div>'+
+    f("+ Registrar Manutenção","Abre o registro de uma troca ou serviço.")+
+    f("Data","Dia do serviço.")+
+    f("Peça / serviço trocado","Escolha na lista ou digite outro (ex: troca de óleo, pneu).")+
+    f("Local da troca e Mecânico","Opcionais. Ficam na lista para os próximos registros.")+
+    f("Valor","Opcional. O valor entra no saldo do mês e nos relatórios. Não lance de novo como despesa.")+
+    f("📷 Tirar foto / 🖼️ Galeria","Foto da nota fiscal. Toque na miniatura para ver em tela cheia."+(L?" As fotos entram no backup em arquivo e no Google Drive.":""))+
+    '<div class="ajs">Lembretes por km</div>'+
+    f("Nome","Ex: Troca de óleo.")+
+    f("A cada quantos km?","Intervalo da troca (ex: 10000).")+
+    f("Última vez feito (km)","Opcional: o km do painel na última troca.")+
+    c('Com o odômetro cadastrado em Ajustes, a contagem usa a quilometragem real do carro. Sem ele, usa só os km lançados nas receitas. Quando estiver perto, o aviso aparece no Início. ✏️ edita o lembrete.')},
+  {k:"despesas",tab:7,t:"💸 Despesas (contas de casa)",b:
+    c('Para contas de casa e pessoais: aluguel, luz, água, celular, financiamento. <b>Elas não entram na meta</b>: só saem do saldo quando você marca como pagas.')+
+    f("+ Nova despesa","Cadastra uma conta.")+
+    f("Nome e Ícone","Como a conta aparece na lista.")+
+    f("Valor (R$)","Valor da conta.")+
+    f("Dia do vencimento","Dia do mês em que vence. Contas perto do vencimento aparecem nos avisos do Início.")+
+    f("Observação do mês","Opcional: referência da conta, em que foi gasto…")+
+    f("Periodicidade","<b>Todo mês</b>, <b>Uma vez por ano</b> (escolha o mês do vencimento) ou <b>Parcelada</b> (mês da 1ª parcela e número de parcelas).")+
+    f("Repetir este valor nos meses seguintes","Marque se o valor é sempre o mesmo. Desmarque quando o valor muda todo mês (ex: luz).")+
+    f("Pago neste mês e Data do pagamento","Marca a conta como paga. O valor sai do Saldo do mês na data do pagamento.")+
+    f("📅 Próximas","Contas anuais e parceladas que não vencem neste mês. Toque para editar.")},
+  {k:"gestao",tab:8,t:"💼 Gestão de Custos",b:
+    c('Organiza os custos do trabalho para a <b>meta do dia</b> mostrar quanto você precisa faturar de verdade. Tem 4 abas: Custos diários, Custos mensais, Custos anuais e Reservas.')+
+    '<div class="ajs">📌 Onde lançar cada coisa (para não contar duas vezes)</div>'+
+    '<ul class="ajo"><li>Gastos do dia (almoço, combustível): só no <b>+ → Despesa</b> do Início.</li><li>Pagos uma vez por ano (IPVA, licenciamento, vistoria do GNV): só em <b>Custos anuais</b>.</li><li>Todo mês (seguro, cooperativa): só em <b>Custos mensais</b>.</li><li>Férias e folgas: só em <b>Reservas</b>.</li><li>Contas de casa: só em <b>💸 Despesas</b>.</li><li>Peças e serviços do carro: só em <b>🔧 Manutenção</b>.</li><li>O mesmo nome não pode existir em dois lugares.</li></ul>'+
+    '<div class="ajs">🍽️ Custos diários</div>'+
+    f("Lista","As categorias de despesa do dia a dia, com o que você lançou. A Gestão só lê os lançamentos do Início.")+
+    f("Previsto por dia","Opcional. Por categoria, a meta do dia usa o maior entre o previsto e o lançado, nunca a soma. Ao editar: <b>Usar a média</b> dos últimos dias ou <b>Não prever</b>.")+
+    f("➕ Novo custo diário","Nome (ex: Pedágio), ícone e previsto por dia.")+
+    '<div class="ajs">🗓️ Custos mensais</div>'+
+    f("Cadastro","Nome e valor do custo que se repete todo mês. O valor do dia entra na meta diária.")+
+    f("Pagar e ✅ Pago","Toque em Pagar quando pagar: o valor sai do Saldo do mês na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.")+
+    '<div class="ajs">📅 Custos anuais e 🏖️ Reservas</div>'+
+    f("Valor total e Diluir em (meses)","O valor é dividido em parcelas mensais iguais, em reais inteiros, começando neste mês. A última parcela ajusta os centavos.")+
+    f("Embutir na meta diária","Marcado, a parcela do mês entra na meta do dia.")+
+    f("💰 Parcela do mês / Reserva do mês","Quanto separar neste mês. Toque em <b>Separar</b> para informar o valor guardado (o mês todo ou o valor do dia).")+
+    f("🔄 e ✏️","🔄 recomeça a diluição por mais um período. ✏️ edita.")+
+    f("Composição da meta diária","Mostra a conta da meta de hoje: sua meta por dia + custos do dia + custos anuais e reservas.")},
+  {k:"relat",tab:6,t:"📄 Relatórios",b:
+    f("Período","Este mês, Mês passado, Últimos 30 dias, Este ano ou Personalizado (De / Até). Todas as partes da tela seguem esse período.")+
+    f("Resumo","Receitas, despesas lançadas, lucro, dias trabalhados, melhor dia, km, horas, ganho por hora e por corrida. No fim: contas pagas e manutenção e o <b>saldo após contas</b>, que é o mesmo número do Saldo do Início.")+
+    f("Desempenho por dia da semana","Lucro médio em cada dia da semana, para ver quais dias rendem mais.")+
+    f("Receitas por origem / Despesas por categoria","Quanto veio de cada plataforma e para onde foi o dinheiro.")+
+    f("✅ Contas pagas e manutenção","Contas de casa, custos mensais e manutenções pagos no período.")+
+    f("📈 Comparação com o mês anterior","Aparece nos períodos Este mês e Mês passado.")+
+    f("🧾 Relatório de despesas","Escolha a origem (corrida, casa ou todas) e, se quiser, toque nas categorias para filtrar. Baixa em PDF.")+
+    f("💼 Relatório da Gestão de Custos","Previsto × lançado dos custos diários, custos mensais pagos e parcelas separadas, em PDF.")+
+    f("Resumo anual (Imposto de Renda)","Levantamento do ano em PDF para levar ao contador. O app não calcula imposto.")+
+    f("Exportar","⬇️ Relatório completo em PDF ou ⬇️ Resumo em texto, para mandar por WhatsApp ou e-mail.")},
+  {k:"ajustes",tab:5,t:"⚙️ Ajustes",b:
+    f("👤 Meu cadastro","Nome, veículo e placa aparecem no topo das telas e nos PDFs. O <b>odômetro atual</b> é atualizado sozinho pelos km lançados e pelos abastecimentos; corrija quando quiser.")+
+    f("Minhas categorias","Ícones e nomes das categorias que você criou.")+
+    f("🧭 Estilo do menu","<b>Barra de baixo</b>, <b>Misto</b> (recomendado: principais na barra e ☰ com todos) ou <b>Só gaveta lateral</b>. Vale só neste aparelho.")+
+    f("📲 Instalar no celular","Coloca o ícone na tela inicial e faz o app abrir em tela cheia e sem internet.")+
+    f("🔒 Bloqueio do app","<b>Criar PIN</b> de 4 a 6 números (e, se o celular tiver, a digital ou o rosto). <b>Pedir o PIN de novo</b>: sempre que sair do app, só ao abrir ou depois de 1, 5, 15 ou 30 minutos fora. Ao tirar foto da nota ou compartilhar, o app não pede o PIN se você voltar em até 5 minutos. Depois de 5 erros, o app espera 30 s, e a espera dobra a cada novo erro.")+
+    f("Esqueci o PIN",L?"Na tela do PIN, toque em Esqueci o PIN e digite APAGAR: os dados <b>deste celular</b> são apagados e você restaura pelo Google Drive ou por um arquivo de backup.":"Na tela do PIN, toque em Esqueci o PIN e digite REMOVER: o bloqueio sai e os dados continuam na sua conta do Claude.")+
+    f("⬇️ Baixar backup / 📤 Compartilhar","Gera o arquivo de backup (com as fotos das notas). Guarde no Drive, no WhatsApp ou no e-mail.")+
+    f("⬆️ Restaurar de um arquivo","Traz de volta os dados de um backup. Os lançamentos que já existem no app não são duplicados.")+
+    (L?f("🗂️ Backup automático em arquivo","No Chrome do computador: escolha um arquivo e o app grava nele sozinho a cada alteração.")+
+      f("☁️ Backup no Google Drive","<b>Conectar ao Google Drive</b> salva o backup sozinho, a cada alteração, na pasta Gestão Financeira do seu Drive (as fotos vão como imagens na mesma pasta). Ao abrir o app de novo, o Google pede um toque para liberar o envio. <b>Restaurar do Drive</b> traz tudo para um celular novo. O app só vê os arquivos que ele mesmo criou.")+
+      f("Depois de apagar os dados","Depois de Zerar ou de Esqueci o PIN, o envio para o Drive fica pausado para não apagar o backup de lá. Toque em Restaurar do Drive, ou em Enviar agora duas vezes para começar do zero."):"")+
+    f("🗑️ Zerar todos os dados","Apaga lançamentos, manutenções (com fotos), metas, categorias e lembretes. Não dá para desfazer: baixe um backup antes.")},
+  {k:"duvidas",t:"❔ Dúvidas comuns",b:
+    f("Por que o Saldo do Início é diferente do Lucro dos Relatórios?","O <b>Lucro</b> é receitas − despesas lançadas. O <b>Saldo</b> também desconta as contas pagas e a manutenção. No fim do Resumo dos Relatórios, o <b>saldo após contas</b> é igual ao Saldo do Início.")+
+    f("Lancei a manutenção como despesa também. E agora?","Exclua o lançamento da despesa: a manutenção já entra no saldo pela tela 🔧 Manutenção.")+
+    f("O consumo de combustível não aparece","São precisos dois abastecimentos com odômetro, e o app considera tanque cheio em cada um.")+
+    f("Troquei de celular","Instale o app no celular novo e restaure: "+(L?"conecte o Google Drive (ele restaura sozinho) ou use ⬆️ Restaurar de um arquivo.":"use ⬆️ Restaurar de um arquivo, se precisar.")+"")+
+    f("Funciona sem internet?","Sim. Só o Google Drive precisa de internet"+(L?"; os envios pendentes saem quando a conexão voltar.":"."))}
+  ];
+}
+var AJ_TAB={1:"inicio",2:"resumo",3:"metas",4:"manut",5:"ajustes",6:"relat",7:"despesas",8:"gestao"};
+function ajNorm(t){return String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")}
+function ajRender(abrirK){
+  var q=ajNorm($("ajq").value.trim()),S=ajSecoes(),h="",n=0;
+  S.forEach(function(s){
+    var txt=ajNorm(s.t+" "+s.b.replace(/<[^>]+>/g," "));
+    if(q&&txt.indexOf(q)<0)return;n++;
+    h+='<details class="ajd" id="aj-'+s.k+'"'+((q||s.k===abrirK)?" open":"")+'><summary>'+s.t+'</summary><div class="ajb">'+s.b+'</div></details>';
+  });
+  $("ajl").innerHTML=h||'<div class="ajc">Nada encontrado para essa busca.</div>';
+  if(abrirK&&!q){var e=$("aj-"+abrirK);if(e)setTimeout(function(){e.scrollIntoView({block:"start"})},30)}
+}
+function ajAbre(k){$("ajq").value="";ajRender(k||"");$("ajd").className="on";$("ajd").scrollTop=0}
+$("ajx").onclick=function(){$("ajd").className=""};
+$("ajq").oninput=function(){ajRender("")};
+$("ajb2").onclick=function(){ajAbre("comeco")};
+$("ajbt").onclick=function(){ajAbre(AJ_TAB[modAtual]||"comeco")};
 </script>
 </body>
 </html>

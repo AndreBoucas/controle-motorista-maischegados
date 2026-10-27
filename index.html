@@ -47,7 +47,7 @@ header.sem-r{background:#d64545}header.sem-a{background:#d99100}
 .bar{margin:10px 0}.bar .l{display:flex;justify-content:space-between;font-size:13px}
 .bar .b{height:8px;background:var(--in);border-radius:4px;margin-top:5px;overflow:hidden}.bar .b i{display:block;height:100%;background:var(--bad);border-radius:4px}
 .kv{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--bd);font-size:14px}.kv:first-of-type{border-top:0}
-.mk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;flex:none}.mk.u{background:#000;color:#fff;font-size:11px}.mk.n{background:#ffd400;color:#000;font-size:14px}.mk.i{background:#c1f11d;color:#000;font-size:8px;letter-spacing:-.3px}.chip .mk{width:22px;height:22px;display:inline-grid;vertical-align:middle;margin-right:4px}.chip .mk.u{font-size:8px}.chip .mk.n{font-size:10px}.chip .mk.i{font-size:6px}
+.mk{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;flex:none}.mk.u{background:#000;color:#fff;font-size:11px}.mk.n{background:#ffd400;color:#000;font-size:14px}.mk.i{background:#c1f11d;color:#000;font-size:8px;letter-spacing:-.3px}.chip .mk{width:22px;height:22px;display:inline-grid;vertical-align:middle;margin-right:4px}.chip .mk.u{font-size:8px}.chip .mk.n{font-size:10px}.chip .mk.i{font-size:6px}.mk.g{background:#5a1aa8;color:#fff;font-size:12px;letter-spacing:-.3px}.chip .mk.g{font-size:8px}
 #catsel,.fsel,.f select{width:100%;padding:13px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx)}
 .hint{font-size:11px;color:var(--mut);text-align:center;padding-top:10px}
 #ex,#sex{display:none;width:100%;margin-top:8px;padding:14px;border:1px solid var(--bad);border-radius:12px;background:none;color:var(--bad);font-size:15px;font-weight:700}
@@ -301,7 +301,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 26/10/2026 · v68</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 26/10/2026 · v72</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -564,8 +564,8 @@ nav button.on b{font-weight:800}
 <div id="vw"><img id="vwi" alt="Foto da nota"></div>
 <script>
 var KEY="motorista_v1",dados=[],cur=new Date(),modo="r",cat="uber";
-var REC=[["uber","Uber","🟦"],["99","99","🟨"],["indrive","inDrive","🟩"],["particular","Particular","💵"]];
-var DES=[["Almoço","Almoço","🍽️"]];
+var REC=[["uber","Uber","🟦"],["99","99","🟨"],["indrive","inDrive","🟩"],["go","GO","🟪"],["particular","Particular","💵"]];
+var DES=[["Almoço","Almoço","🍽️"],["Abastecimento","Abastecimento","⛽"]];
 function $(i){return document.getElementById(i)}
 var idb=null,arqH=null,arqT=null,arqEst="",instEv=null;
 function idbOpen(){return new Promise(function(ok,no){
@@ -615,7 +615,7 @@ function brl(n){return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"
 function p2(n){return String(n).padStart(2,"0")}
 function hoje(){var d=new Date();return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())}
 function mk(){return cur.getFullYear()+"-"+p2(cur.getMonth()+1)}
-function isR(t){return t==="uber"||t==="99"||t==="indrive"||t==="particular"||customRec.indexOf(t)>=0}
+function isR(t){return t==="uber"||t==="99"||t==="indrive"||t==="go"||t==="particular"||customRec.indexOf(t)>=0}
 function migraGC(){
   var ch=false;
   contas.filter(function(c){return c.ref!=null}).forEach(function(c){
@@ -668,12 +668,15 @@ function migrar(){
   var ch=false,ms=[];
   customRec=customRec.filter(function(n){if(String(n).toLowerCase()==="indrive"){ch=true;return false}return true});
   dados.forEach(function(e){if(typeof e.tipo==="string"&&e.tipo!=="indrive"&&e.tipo.toLowerCase()==="indrive"){e.tipo="indrive";ms.push(e.data.slice(0,7));ch=true}});
+  var goN=/^(go|edrive go|e-drive go|go motorista|go para motorista)$/;
+  customRec=customRec.filter(function(n){if(goN.test(String(n).trim().toLowerCase())){delete recIc[n];ch=true;return false}return true});
+  dados.forEach(function(e){if(typeof e.tipo==="string"&&e.tipo!=="go"&&goN.test(e.tipo.trim().toLowerCase())){e.tipo="go";ms.push(e.data.slice(0,7));ch=true}});
   dados.forEach(function(e){if(e.tipo==="Combustível"){e.tipo="Abastecimento";ms.push(e.data.slice(0,7));ch=true}else if(e.tipo==="Lavagem"){e.tipo="Lavagem de carro";ms.push(e.data.slice(0,7));ch=true}});
   DES.forEach(function(d){var b=d[0];
     custom=custom.filter(function(n){if(String(n).toLowerCase()===b.toLowerCase()){ch=true;return false}return true});
     dados.forEach(function(e){if(typeof e.tipo==="string"&&e.tipo!==b&&e.tipo.toLowerCase()===b.toLowerCase()){e.tipo=b;ms.push(e.data.slice(0,7));ch=true}});
   });
-  [["Lanche","🥪"],["Abastecimento","⛽"],["Supermercado","🛒"],["Lavagem de carro","🧽"]].forEach(function(a){
+  [["Lanche","🥪"],["Supermercado","🛒"],["Lavagem de carro","🧽"]].forEach(function(a){
     var n=a[0];if(custom.indexOf(n)>=0)return;
     if(dados.some(function(e){return e.tipo===n})||(+catPrev[n]>0)){custom.push(n);if(!recIc[n])recIc[n]=a[1];ch=true}
   });
@@ -684,6 +687,7 @@ function migrar(){
 }
 var ICONS=[["💼","Trabalho"],["🚕","Corrida"],["🚗","Carro"],["🛵","Moto"],["📱","Aplicativo/Celular"],["💵","Dinheiro"],["💰","Bônus"],["🎁","Gorjeta"],["🚚","Frete"],["📦","Encomenda"],["🤝","Parceria"],["🧑‍💼","Cliente fixo"],["⛽","Combustível"],["🍔","Alimentação"],["🔧","Manutenção"],["🧽","Lavagem"],["🛣️","Pedágio"],["🅿️","Estacionamento"],["🛡️","Seguro"],["📄","Documentos/Impostos"],["🏦","Parcela/Financiamento"],["🧾","Conta"],["🏷️","Etiqueta"],["⭐","Outro"]];
 var ICONBANK=[
+{g:"Plataformas de mobilidade",l:[["🟦","plataforma azul uber"],["🟨","plataforma amarela 99"],["🟩","plataforma verde indrive"],["🟥","plataforma vermelha"],["🟧","plataforma laranja"],["🟪","plataforma roxa"],["🟫","plataforma marrom"],["⬛","plataforma preta"],["⬜","plataforma branca"],["🔵","plataforma azul"],["🟡","plataforma amarela"],["🟢","plataforma verde"],["🔴","plataforma vermelha"],["🟠","plataforma laranja"],["🟣","plataforma roxa"],["⚫","plataforma preta"],["🚖","táxi corrida plataforma"],["🚘","carro corrida plataforma"],["🏍️","moto mototáxi plataforma"],["🛵","moto entrega plataforma"],["🚐","van fretamento plataforma"],["👩","mulheres motorista plataforma"],["📲","aplicativo plataforma"]]},
 {g:"Alimentação",l:[["🍽️","almoço jantar refeição prato"],["🥪","lanche sanduíche"],["🍔","hambúrguer fast food"],["🍕","pizza"],["🌭","cachorro quente"],["🥗","salada"],["🍝","massa macarrão"],["🍗","frango"],["🥩","carne açougue"],["🐟","peixe"],["🍞","padaria pão"],["🥐","padaria café da manhã"],["🍰","doce sobremesa bolo"],["🍦","sorvete"],["☕","café"],["🥤","bebida refrigerante suco"],["🍺","cerveja bar"],["🍷","vinho"],["🛒","supermercado mercado compras"],["🍎","fruta hortifruti"],["🥕","verdura legume"],["🧃","suco"],["🍫","chocolate doce"],["🍿","pipoca"]]},
 {g:"Transporte",l:[["⛽","abastecimento combustível posto gasolina"],["🚗","carro"],["🚕","táxi corrida"],["🚙","carro suv"],["🛵","moto"],["🏍️","moto"],["🚌","ônibus"],["🚆","trem metrô"],["🚲","bicicleta"],["🛣️","pedágio estrada"],["🅿️","estacionamento"],["🔧","manutenção oficina"],["🛞","pneu"],["🧽","lavagem de carro lava rápido"],["🔋","bateria"],["🛢️","óleo"],["🚚","frete caminhão"],["📦","encomenda entrega"],["✈️","viagem avião"],["⛴️","balsa barco"],["🚨","multa"],["🧰","ferramentas"]]},
 {g:"Casa e contas",l:[["🏠","casa aluguel"],["💡","luz energia"],["🚿","água"],["🔥","gás"],["📱","celular"],["📶","internet wifi"],["📺","tv streaming assinatura"],["🧾","conta boleto"],["📄","documentos impostos ipva"],["🛡️","seguro"],["🏦","banco parcela financiamento"],["💳","cartão"],["🧹","limpeza"],["🛋️","móveis"],["🔨","reforma"],["🔑","chave imóvel"]]},
@@ -704,7 +708,7 @@ function icGrade(){
 function cleanIc(v){return typeof v==="string"&&v.length>0&&v.length<=8&&!/[<>&"'`]/.test(v)?v:"💼"}
 function icFill(){var v=modo==="r"?"💼":"🏷️";$("icsel").value=v;$("icprev").textContent=v;$("icown").value=""}
 function allRec(){return REC.concat(customRec.map(function(n){return [n,n,cleanIc(recIc[n])]}))}
-function em(t,e){return t==='uber'?'<span class="mk u">Uber</span>':t==='99'?'<span class="mk n">99</span>':t==='indrive'?'<span class="mk i">inDrive</span>':e}
+function em(t,e){return t==='uber'?'<span class="mk u">Uber</span>':t==='99'?'<span class="mk n">99</span>':t==='indrive'?'<span class="mk i">inDrive</span>':t==='go'?'<span class="mk g">GO</span>':e}
 var custom=[],customRec=[],recIc={},icSel="💼",turno=null,turnos=[],tdArm=false,venc=[],fixos=[],contas=null,d6={},vedit=null,vdArm=null,fxArm=null,fuelInfo={},perfil={nome:"",veic:"",placa:"",odo:0,odoTs:0},meta={dia:0,mes:0,dias:0},manut=[],servs=[],editS=null,exS=false,fotoAtual=null,fil="todos",gmodo="d",mdArm=null,cdArm=null,ceOld=null;
 function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function loadCats(){try{var r=localStorage.getItem("motorista_cats");custom=r?JSON.parse(r):[]}catch(e){custom=[]}}
@@ -1824,7 +1828,7 @@ function metasUI(s,m,rec){
   $("metas").innerHTML=h;
 }
 function popFil(){
-  var o=[["todos","Todos os lançamentos"],["uber","Só Uber"],["99","Só 99"],["indrive","Só inDrive"],["particular","Só Particular"],["__d","Todas as despesas"],["__c","Contas pagas e manutenção"]].concat(customRec.map(function(n){return [n,"Só "+n]})).concat(allDes().map(function(x){return [x[0],"Despesa: "+x[1]]}));
+  var o=[["todos","Todos os lançamentos"],["uber","Só Uber"],["99","Só 99"],["indrive","Só inDrive"],["go","Só GO"],["particular","Só Particular"],["__d","Todas as despesas"],["__c","Contas pagas e manutenção"]].concat(customRec.map(function(n){return [n,"Só "+n]})).concat(allDes().map(function(x){return [x[0],"Despesa: "+x[1]]}));
   var vs={};allDes().forEach(function(x){vs[x[0]]=1});dados.forEach(function(e){if(!isR(e.tipo)&&!vs[e.tipo]){vs[e.tipo]=1;o.push([e.tipo,"Despesa: "+e.tipo])}});
   $("fil").innerHTML=o.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]===fil?' selected':'')+'>'+esc(x[1])+'</option>'}).join("");
 }
@@ -2194,7 +2198,7 @@ function render(){
     if(e.data!==ult){h+='<div class="dia">'+diaTxt(e.data)+'</div>';ult=e.data}
     if(e.sint){h+='<div class="it" data-sg="'+e.o+'" data-sid="'+(e.sid||"")+'"><div class="ic" style="background:rgba(229,72,77,.15)">'+e.ic+'</div><div class="t">'+esc(e.n)+'<small>✅ Pago · '+(e.o==="mensal"?"Custos mensais":e.o==="manut"?"Manutenção":"Despesas (casa)")+'</small></div><b class="bad">-'+brl(e.v)+'</b></div>';return}
     var i=info(e.tipo),g=isR(e.tipo);
-    h+='<div class="it" data-id="'+e.id+'">'+(e.tipo==="uber"||e.tipo==="99"||e.tipo==="indrive"?em(e.tipo):'<div class="ic" style="background:'+(g?'rgba(0,168,107,.15)':'rgba(229,72,77,.15)')+'">'+i[2]+'</div>')+
+    h+='<div class="it" data-id="'+e.id+'">'+(e.tipo==="uber"||e.tipo==="99"||e.tipo==="indrive"||e.tipo==="go"?em(e.tipo):'<div class="ic" style="background:'+(g?'rgba(0,168,107,.15)':'rgba(229,72,77,.15)')+'">'+i[2]+'</div>')+
        '<div class="t">'+esc(i[1])+detLanc(e,g)+'</div>'+
        '<b class="'+(g?'ok':'bad')+'">'+(g?'':'-')+brl(e.valor)+'</b></div>';
   });
@@ -2248,6 +2252,7 @@ function refreshUI(){
 }
 function d4Fecha(){$("ov4").className=""}
 function askDel(k,n){
+  if(k==="d"&&DES.some(function(x){return x[0]===n})){toast("🔒 \""+n+"\" é uma categoria fixa do app e não pode ser apagada.");return}
   var us=dados.filter(function(e){return e.tipo===n});
   d4={k:k,n:n,arm:false};
   $("d4t").textContent='Apagar "'+n+'"?';
@@ -2770,7 +2775,7 @@ function restauraTexto(rtxt){
         });
         (l.recs||[]).forEach(function(n){if(typeof n==="string"&&customRec.indexOf(n)<0)customRec.push(n)});
         if(l.icons&&typeof l.icons==="object")Object.keys(l.icons).forEach(function(k){if(!recIc[k]&&typeof l.icons[k]==="string")recIc[k]=l.icons[k]});
-        (l.cats||[]).forEach(function(n){if(typeof n==="string"&&custom.indexOf(n)<0)custom.push(n)});
+        (l.cats||[]).forEach(function(n){if(typeof n==="string"&&custom.indexOf(n)<0&&!DES.some(function(x){return x[0].toLowerCase()===n.toLowerCase()}))custom.push(n)});
         (l.manut||[]).forEach(function(mm){if(mm&&mm.id&&!manut.some(function(y){return y.id===mm.id}))manut=manut.concat([mm])});
         if(l.perfil&&!perfil.nome&&!perfil.veic&&!perfil.placa){perfil=perfilLimpa(l.perfil);fillPerfil();perfilUI()}
         if(l.catPrev&&typeof l.catPrev==="object")Object.keys(l.catPrev).forEach(function(k){if(+l.catPrev[k]>0&&catPrev[k]==null)catPrev[k]=+l.catPrev[k]});
@@ -3179,8 +3184,8 @@ function ajSecoes(){
   {k:"lanc",tab:1,t:"➕ Lançar receita ou despesa",b:
     c('Toque no <b>+</b> do Início e escolha <b>Receita</b> ou <b>Despesa</b>. Digite o valor e escolha a origem ou a categoria.')+
     '<div class="ajs">Receita</div>'+
-    f("Valor","Quanto você recebeu. Obrigatório.")+
-    f("Origem","Uber, 99, inDrive, Particular… Em ➕ você cria uma origem nova (ex: Frete) e escolhe o ícone.")+
+    f("Valor","Quanto você recebeu. Obrigatório. Digite só os números, com os centavos: 5000 vira R$ 50,00 e 12550 vira R$ 125,50.")+
+    f("Origem","Uber, 99, inDrive, GO, Particular… Em ➕ você cria uma origem nova (ex: Frete) e escolhe o ícone.")+
     f("Data","Dia do ganho. Não aceita data futura.")+
     f("Km rodados","Opcional. Usado no lucro por km, no consumo e nos lembretes de manutenção.")+
     f("Horas trabalhadas","Opcional. Usado no ganho por hora.")+
@@ -3188,8 +3193,8 @@ function ajSecoes(){
     f("Corridas no dia","Quantidade de corridas. Usado no ganho por corrida.")+
     f("Pausas e tempo em pausa","Quantas pausas você fez e quantos minutos ficou parado.")+
     '<div class="ajs">Despesa</div>'+
-    f("Valor","Quanto você gastou. Obrigatório.")+
-    f("Categoria","Almoço, Lanche, Abastecimento, Supermercado, Lavagem de carro… Em ➕ você cria uma categoria nova. As que você criou podem ser apagadas em 🗑 Excluir esta categoria.")+
+    f("Valor","Quanto você gastou. Obrigatório. Digite só os números, com os centavos (ex: 3590 = R$ 35,90).")+
+    f("Categoria","Almoço, Lanche, Abastecimento, Supermercado, Lavagem de carro… Em ➕ você cria uma categoria nova. <b>Almoço</b> e <b>Abastecimento</b> são fixas e não podem ser apagadas. As que você criou podem ser apagadas em 🗑 Excluir esta categoria.")+
     f("Data","Dia do gasto. Não aceita data futura.")+
     f("Observação","Opcional, até 120 caracteres (ex: almoço com cliente).")+
     f("Tipo de combustível","Só no Abastecimento: Etanol, Gasolina, GNV ou ⚡ Elétrico. É obrigatório escolher.")+
@@ -3302,6 +3307,35 @@ $("ajx").onclick=function(){$("ajd").className=""};
 $("ajq").oninput=function(){ajRender("")};
 $("ajb2").onclick=function(){ajAbre("comeco")};
 $("ajbt").onclick=function(){ajAbre(AJ_TAB[modAtual]||"comeco")};
+
+/* ===== Campos de dinheiro no formato da moeda (digita só números: 5000 → 50,00) ===== */
+var MOEDA_IDS=["valor","sval","d6v","s7v","s8v","cdp","vtot","mmes","mdia"];
+function moedaFmt(c){var s=String(c);while(s.length<3)s="0"+s;var i=s.slice(0,-2).replace(/^0+(?=\d)/,""),d=s.slice(-2);return i.replace(/\B(?=(\d{3})+(?!\d))/g,".")+","+d}
+function moedaCampo(el){
+  var D=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value"),ult="";
+  try{el.type="text"}catch(e){}
+  el.setAttribute("inputmode","numeric");el.setAttribute("autocomplete","off");el.removeAttribute("step");el.removeAttribute("min");
+  function limpa(t){return String(t).replace(/\D/g,"").replace(/^0+(?=\d)/,"").slice(0,11)}
+  function fim(){try{var n=D.get.call(el).length;el.setSelectionRange(n,n)}catch(e){}}
+  function mostra(d){var t=d===""?"":moedaFmt(+d);D.set.call(el,t);ult=t;if(document.activeElement===el)fim()}
+  el.addEventListener("input",function(){
+    var nv=D.get.call(el),d=limpa(nv);
+    if(nv.length<ult.length&&d===limpa(ult))d=d.slice(0,-1);
+    mostra(d);
+  },true);
+  el.addEventListener("focus",function(){setTimeout(fim,0)});
+  el.addEventListener("click",fim);
+  Object.defineProperty(el,"value",{configurable:true,
+    get:function(){var d=D.get.call(el).replace(/\D/g,"");return d===""?"":String(+d/100)},
+    set:function(v){
+      if(v===""||v==null){D.set.call(el,"");ult="";return}
+      var n=typeof v==="number"?v:(/,/.test(v)?parseFloat(String(v).replace(/\./g,"").replace(",",".")):parseFloat(v));
+      if(!isFinite(n)){D.set.call(el,"");ult="";return}
+      mostra(String(Math.round(Math.abs(n)*100)));
+    }});
+  var t0=D.get.call(el);if(t0)el.value=t0;
+}
+MOEDA_IDS.forEach(function(i){var e=$(i);if(e)moedaCampo(e)});
 </script>
 </body>
 </html>

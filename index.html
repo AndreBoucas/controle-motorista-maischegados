@@ -301,7 +301,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 26/10/2026 · v72</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 28/10/2026 · v73</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -976,7 +976,7 @@ function abrirS8(n){
   $("s8v").value=catPrev[n]>0?catPrev[n]:"";$("ov8").className="on";
 }
 function renderGcSum(){
-  var hd=hoje(),hm=hd.slice(0,7),md=metaDiaD(hd),dvv=impModo()==="trab"?diasTrab():diasDoMes(hm),an=0,rs=0,mn=0;
+  var hd=hoje(),hm=hd.slice(0,7),md=metaDiaD(hd),dvv=diasTrab(hm),an=0,rs=0,mn=0;
   venc.forEach(function(v){if(v.emb===false)return;var x=planoReserva(v).filter(function(p){return p.m===hm})[0];if(x){if(v.cat==="R")rs+=x.valor;else if(v.cat==="M")mn+=x.valor;else an+=x.valor}});
   $("gcsum").innerHTML=kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos mensais",brl(mn/dvv))+kv("+ Custos anuais",brl(an/dvv))+kv("+ Reservas",brl(rs/dvv))+kv("= Meta de hoje",brl(md.total),"ok")+(function(){var it=custoDiaDet(hd).it;return it.length?'<div style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.5">Custos do dia por categoria: '+it.map(function(x){return esc(info(x.n)[1])+' '+brl(x.u)+' ('+(x.l>=x.p&&x.l>0?'lançado':'previsto')+')'}).join(' · ')+'</div>':''})()+difLinha("Custos de hoje",custoDiaDet(hd))+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Os custos do dia entram inteiros: por categoria, valem o maior entre o previsto e o lançado hoje (nunca a soma dos dois). A meta compara com as receitas do dia, e o lucro do dia (receitas − custos) aparece no Início.</div>';
 }
@@ -990,7 +990,7 @@ var s7={};
 function abrirS7(id,m){
   var v=venc.filter(function(x){return String(x.id)===String(id)})[0];if(!v)return;
   var px=planoReserva(v).filter(function(p){return p.m===m})[0];if(!px){toast("Sem parcela neste mês");return}
-  var d=r2(px.valor/px.dias),sp=Math.min(px.valor,sepAtualV(v,m));
+  var d=r2(impDiaV(px.valor,m)),sp=Math.min(px.valor,sepAtualV(v,m));
   s7={id:v.id,m:m,plan:px.valor,dia:d};
   $("s7t").textContent=v.nome;
   $("s7i").textContent=(v.cat==="R"?"Reserva":"Parcela")+" de "+mesTxt(m)+": "+brl(px.valor)+(d>0?" · valor do dia: "+brl(d):"")+". Separado até agora: "+brl(sp)+".";
@@ -1005,17 +1005,17 @@ function vCalcUI(){
   var t=parseFloat($("vtot").value)||0,emb=$("vemb").checked;
   if(M){
     var fm=t>0?planoReserva({cat:"M",vt:t,ini:hoje()})[0]:null;
-    $("vprev").textContent=t>0?"Todo mês "+brl(t)+", a partir deste mês. "+(emb&&fm?"Valor do dia na meta diária: + "+brl(impDiaV(fm.valor,fm.m))+" por dia ("+(impModo()==="trab"?"parcela ÷ "+diasTrab(fm.m)+" dias trabalhados":"parcela ÷ "+diasDoMes(fm.m)+" dias do mês")+").":"Fora da meta diária."):"Informe o valor mensal.";
+    $("vprev").textContent=t>0?"Todo mês "+brl(t)+", a partir deste mês. "+(emb&&fm?"Valor do dia na meta diária: + "+brl(impDiaV(fm.valor,fm.m))+" por dia ("+"parcela ÷ "+diasTrab(fm.m)+" dias trabalhados"+").":"Fora da meta diária."):"Informe o valor mensal.";
     $("vplan").textContent="";return;
   }
   if(!vdiasMan)$("vdias").value=12;
   var n=Math.min(36,parseInt($("vdias").value)||0);
   var pl=(t>0&&n>0)?planoReserva({vt:t,per:n,ini:hoje()}):[],tp=0;pl.forEach(function(x){tp+=x.valor});
   var f0=pl[0],d0=f0?impDiaV(f0.valor,f0.m):0;
-  $("vprev").textContent=(t>0&&n>0)?"= "+brl(t/n)+" por mês, em "+n+(n===1?" mês":" meses")+", começando já neste mês. "+(emb&&f0?"Valor do dia na meta diária: + "+brl(d0)+" por dia ("+(impModo()==="trab"?"parcela ÷ "+diasTrab(f0.m)+" dias trabalhados":"parcela ÷ "+diasDoMes(f0.m)+" dias do mês")+").":"Fora da meta diária."):"Informe o valor total e o período em meses (padrão: 12).";
+  $("vprev").textContent=(t>0&&n>0)?"= "+brl(t/n)+" por mês, em "+n+(n===1?" mês":" meses")+", começando já neste mês. "+(emb&&f0?"Valor do dia na meta diária: + "+brl(d0)+" por dia ("+"parcela ÷ "+diasTrab(f0.m)+" dias trabalhados"+").":"Fora da meta diária."):"Informe o valor total e o período em meses (padrão: 12).";
   $("vplan").textContent=pl.length?"Parcelas: "+pl.map(function(x){return mesTxt(x.m).replace(/ de .*/,"").slice(0,3)+" "+brl(x.valor)+(emb?" (+ "+brl(impDiaV(x.valor,x.m))+"/dia)":"")}).join(" · ")+" — total "+brl(r2(tp)):"";
 }
-function impDiaV(valor,m){return impModo()==="trab"?valor/diasTrab(m):valor/diasDoMes(m)}
+function impDiaV(valor,m){return valor/diasTrab(m)}
 function vMetaTxt(v){
   if(v.emb===false)return "fora da meta";
   var pl=planoReserva(v),hm=hoje().slice(0,7),x=pl.filter(function(p){return p.m===hm})[0];
@@ -1629,7 +1629,7 @@ function lancMesMeta(m){var f=desdeIni(m),t=0;dados.forEach(function(e){if(e.dat
 function metaMesBase(m){m=m||hoje().slice(0,7);if(ehMesIni(m)&&meta.prop)return (meta.mes||0)*diasTrab(m)/meta.dias;return meta.mes||0}
 function diasDoMes(m){return new Date(+m.slice(0,4),+m.slice(5,7),0).getDate()}
 function impModo(){return meta.impdiv==="trab"?"trab":"mes"}
-function impDia(m){var r=reservasMes(m);return impModo()==="trab"?r/diasTrab(m):r/diasDoMes(m)}
+function impDia(m){return reservasMes(m)/diasTrab(m)}
 function nomeOnde(n,ign){
   var k=nomeNorm(n);ign=ign||{};
   if(allRec().concat(allDes()).some(function(x){return nomeNorm(x[1])===k&&x[0]!==ign.cat}))return "uma categoria de lançamento";
@@ -1724,12 +1724,12 @@ function custoMesDet(m){
   return tot;
 }
 function metaDiaD(d){var m=d.slice(0,7),b=metaDiaBase(m),cd=custoDiaDet(d).tot,ar=impDia(m);return {base:b,cd:cd,ar:ar,total:b+cd+ar}}
-function metaMesM(m){var b=metaMesBase(m),cd=custoMesDet(m),ar=impModo()==="trab"?reservasMes(m):impDia(m)*diasTrab(m);return {base:b,cd:cd,ar:ar,total:b+cd+ar}}
+function metaMesM(m){var b=metaMesBase(m),cd=custoMesDet(m),ar=impModo()==="trab"?reservasMes(m):0;return {base:b,cd:cd,ar:ar,total:b+cd+ar}}
 function metaMes(){return metaMesM(mk()).total}
 function metaDiaBase(m){m=m||hoje().slice(0,7);return meta.dias>0&&meta.mes>0?metaMesBase(m)/diasTrab(m):(meta.dia||0)}
 function metaDia(){return metaDiaD(hoje()).total}
 function renderImp(){
-  var hd=hoje(),hm=hd.slice(0,7),dm=diasDoMes(hm),dt=diasTrab(),modo=impModo(),dv=modo==="trab"?dt:dm,h="",tot=0,fut=[],fora=[],n=0;
+  var hd=hoje(),hm=hd.slice(0,7),dm=diasDoMes(hm),dt=diasTrab(),modo=impModo(),dv=dt,h="",tot=0,fut=[],fora=[],n=0;
   $("impdiv").value=modo;
   venc.slice().sort(function(a,b){return String(a.nome).localeCompare(String(b.nome))}).forEach(function(v){
     var pl=planoReserva(v);if(!pl.length)return;
@@ -1741,7 +1741,7 @@ function renderImp(){
   if(!n)h='<div style="font-size:13px;color:var(--mut);line-height:1.5;margin-bottom:6px">Nenhum custo anual ou reserva sendo diluído neste mês.</div>';
   var md=metaDiaD(hd),mm=metaMesM(hm);
   h+='<div style="border-top:1px solid var(--bd);margin-top:6px"></div>'+kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos anuais e reservas (valor do dia)",brl(md.ar))+kv("= Meta de hoje",brl(md.total),"ok")+kv("Meta do mês",brl(mm.total))+difLinha("Custos de hoje",custoDiaDet(hd));
-  h+='<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Custos do dia: por categoria, o maior valor entre o previsto e o que você lançou hoje, inteiro e sem somar os dois. '+(modo==="trab"?"Anuais e reservas: parcela do mês ÷ "+dt+" dias trabalhados.":"Anuais e reservas: parcela do mês ÷ "+dm+" dias do mês.")+' A meta compara com as receitas do dia.</div>';
+  h+='<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Custos do dia: por categoria, o maior valor entre o previsto e o que você lançou hoje, inteiro e sem somar os dois. '+"Anuais e reservas: parcela do mês ÷ "+dt+" dias trabalhados, para a parcela inteira ser separada nos dias em que você trabalha. "+(modo==="trab"?"Reserva completa: a meta do mês soma as parcelas ("+brl(reservasMes(hm))+").":"Só o valor do dia: a meta do mês continua a sua; as parcelas entram só na meta de cada dia.")+' A meta compara com as receitas do dia.</div>';
   if(fut.length)h+='<div style="font-size:12px;color:var(--mut);margin-top:8px;line-height:1.4">Próximos a entrar na meta: '+fut.join(" · ")+'.</div>';
   if(fora.length)h+='<div style="font-size:12px;color:var(--mut);margin-top:4px;line-height:1.4">Fora da meta (opção desmarcada): '+fora.map(esc).join(", ")+'.</div>';
   $("impres").innerHTML=h;
@@ -2592,7 +2592,7 @@ $("diaant").onclick=function(){moveDia(-1)};$("diaprox").onclick=function(){move
 $("diahoje").onclick=function(){diaSel=hoje();cur=new Date(+diaSel.slice(0,4),+diaSel.slice(5,7)-1,1);render()};
 $("pdant").onclick=function(){var p=pdDia.split("-"),d=new Date(+p[0],+p[1]-1,+p[2]-1);if(iso(d).slice(0,7)===mk()){pdDia=iso(d);diaSel=pdDia;render()}};
 $("pdprox").onclick=function(){var p=pdDia.split("-"),d=new Date(+p[0],+p[1]-1,+p[2]+1);if(iso(d).slice(0,7)===mk()){pdDia=iso(d);diaSel=pdDia;render()}};
-$("impdiv").onchange=function(){meta=Object.assign({},meta,{impdiv:this.value==="trab"?"trab":undefined});saveCats();render();toast("✅ Impostos: "+(this.value==="trab"?"reserva completa":"só o valor do dia"))};
+$("impdiv").onchange=function(){meta=Object.assign({},meta,{impdiv:this.value==="trab"?"trab":undefined});saveCats();render();toast("✅ Custos anuais e reservas: "+(this.value==="trab"?"reserva completa (meta do mês + "+brl(reservasMes(hoje().slice(0,7)))+")":"só o valor do dia (meta do mês continua a sua)"))};
 $("semr").onchange=$("semv").onchange=$("semrit").onchange=function(){
   var r=Math.min(99,Math.max(1,parseInt($("semr").value)||50)),v=Math.min(200,Math.max(2,parseInt($("semv").value)||61));
   if(v<=r)v=r+1;
@@ -3216,7 +3216,7 @@ function ajSecoes(){
     f("Meta por dia (R$)","Calculada sozinha quando há meta do mês e dias. Sem os dias, digite aqui.")+
     f("Meta do dia","Sua meta por dia + custos do dia + parcela dos custos anuais e reservas. Muda sozinha quando você lança um custo.")+
     f("🚦 Semáforo da meta","<b>Vermelho abaixo de (%)</b> e <b>Verde a partir de (%)</b> definem as cores; no meio fica amarelo. <b>Considerar o ritmo do mês</b> compara com os dias que já passaram, em vez do mês inteiro.")+
-    f("🧾 Custos anuais e reservas na meta","<b>Só o valor do dia</b>: a parcela entra na meta do dia, e a meta do mês continua a sua. <b>Reserva completa</b>: soma na meta do mês e na do dia.")},
+    f("🧾 Custos anuais e reservas na meta","Nas duas opções, o valor do dia é a parcela do mês ÷ dias de trabalho do mês, para a parcela inteira ser separada nos dias em que você trabalha. <b>Só o valor do dia</b>: a meta do mês continua a sua. <b>Reserva completa</b>: a meta do mês também soma as parcelas. A conta aparece logo abaixo da opção e muda na hora.")},
   {k:"manut",tab:4,t:"🔧 Manutenção",b:
     '<div class="ajs">Trocas e serviços</div>'+
     f("+ Registrar Manutenção","Abre o registro de uma troca ou serviço.")+

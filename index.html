@@ -211,16 +211,18 @@ nav button.on b{font-weight:800}
 </div>
 <div id="p3" style="display:none">
   <div class="st"><h3>Metas de lucro</h3>
-    <div class="two2"><div><label>Meta do mês (R$)</label><input id="mmes" type="number" inputmode="decimal"></div>
+    <div class="two2"><div><label for="mmes">Meta do mês cheio (R$)</label><input id="mmes" type="number" inputmode="decimal"></div>
     <div><label>Dias de trabalho por mês</label><input id="mdias" type="number" inputmode="numeric" min="1" max="31" placeholder="Ex: 22"></div></div>
     <div id="mmeswrap" style="display:none">
       <div id="mini" style="font-size:12px;color:var(--tx);background:var(--in);border-radius:10px;padding:10px;line-height:1.5;margin-top:8px"></div>
       <div class="two2"><div><label>Dias de trabalho neste mês</label><input id="mdiasat" type="number" inputmode="numeric" min="1" placeholder="Restantes"></div>
       <div><label>No mês atual</label><select id="mprop" class="fsel"><option value="0">Meta cheia nos dias restantes</option><option value="1">Proporcional aos dias restantes</option></select></div></div>
     </div>
-    <label>Meta por dia (R$)</label><input id="mdia" type="number" inputmode="decimal">
+    <div id="mnow" style="display:none;margin-top:10px;padding:12px;border-radius:10px;border:2px solid var(--hd);background:var(--card);font-size:14px;line-height:1.5"></div>
+    <label for="mdia">Meta por dia no mês cheio (R$)</label><input id="mdia" type="number" inputmode="decimal">
     <div id="mhint" style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.4"></div>
     <div id="fatnec" style="margin-top:10px"></div>
+    <div id="msuj" style="display:none;font-size:12px;color:var(--bad);font-weight:700;margin-top:8px;text-align:center">⚠️ Alterações ainda não salvas. Toque em Salvar metas para valer.</div>
     <button class="pb" id="msv">Salvar metas</button></div>
   <div class="st" id="semcard"><h3>🚦 Semáforo da meta</h3>
     <div style="font-size:12px;color:var(--mut);line-height:1.4;margin-bottom:6px">A cor do topo do app e as barras de meta mudam conforme a porcentagem da meta do mês que você já conquistou.</div>
@@ -301,7 +303,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 28/10/2026 · v73</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 28/10/2026 · v74</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -1749,7 +1751,7 @@ function renderImp(){
 var mAtMan=false;
 function metaUI(){
   var hm=hoje(),dia=+hm.slice(8,10),dm=diasDoMes(hm.slice(0,7)),rs=dm-dia+1,mes=parseFloat($("mmes").value)||0,d=parseInt($("mdias").value)||0,auto=mes>0&&d>0;
-  var ini0=(meta.ini&&meta.ini.slice(0,7)===hm.slice(0,7)&&meta.mes>0)?meta.ini:hm,dia0=+ini0.slice(8,10),rs0=dm-dia0+1,mid=dia0>1&&d>0;
+  var ant=metaAntiga(hm),ini0=ant?hm.slice(0,7)+"-01":(meta.ini&&meta.ini.slice(0,7)===hm.slice(0,7)&&meta.mes>0)?meta.ini:hm,dia0=+ini0.slice(8,10),rs0=dm-dia0+1,mid=dia0>1&&d>0;
   $("mdia").disabled=auto;if(auto)$("mdia").value=r2(mes/d);
   $("mmeswrap").style.display=mid?"":"none";
   var mx=Math.max(1,Math.min(rs0,d||rs0)),da=0;
@@ -1766,6 +1768,22 @@ function metaUI(){
     if(mid&&da>0)t+=$("mprop").value==="1"?" Mês atual: meta proporcional "+brl(mes*da/d)+" em "+da+" dias = "+brl(mes/d)+" por dia.":" Mês atual: "+brl(mes)+" ÷ "+da+" dias restantes = "+brl(mes/da)+" por dia.";
   }else t="Informe a meta do mês e os dias de trabalho para a meta por dia ser calculada automaticamente. Sem os dias, digite a meta por dia.";
   $("mhint").textContent=t;
+  var nw=$("mnow");
+  if(auto&&mid&&da>0&&d<=dm){
+    var prop=$("mprop").value==="1",mt=prop?mes*da/d:mes;
+    nw.innerHTML='📌 <b>Neste mês ('+esc(mesTxt(hm.slice(0,7)))+')</b>: '+(prop?'meta proporcional ':'meta cheia ')+'<b>'+brl(mt)+'</b> em <b>'+da+(da===1?' dia':' dias')+'</b> = <b>'+brl(mt/da)+' por dia</b>.<br><span style="font-size:12px;color:var(--mut)">A partir do mês que vem: '+brl(mes)+' em '+d+' dias = '+brl(mes/d)+' por dia. Custos do dia, anuais e reservas somam por cima.</span>';
+    nw.style.display="block";
+  }else nw.style.display="none";
+  $("msuj").style.display=metaSuja(mid,da)?"block":"none";
+}
+function metaAntiga(hm){return meta.mes>0&&(!meta.ini||meta.ini.slice(0,7)<hm.slice(0,7))}
+function metaSuja(mid,da){
+  var mes=parseFloat($("mmes").value)||0,d=parseInt($("mdias").value)||0,dia=parseFloat($("mdia").value)||0;
+  if(!mes&&!d&&!dia&&!meta.mes&&!meta.dia)return false;
+  if(Math.abs(mes-(meta.mes||0))>0.004||d!==(meta.dias||0))return true;
+  if(!(mes>0&&d>0)&&Math.abs(dia-(meta.dia||0))>0.004)return true;
+  if(mid&&meta.mes>0&&!metaAntiga(hoje())){if(($("mprop").value==="1")!==!!meta.prop)return true;if(da>0&&da!==(meta.diasAt||0))return true}
+  return false;
 }
 function fillMeta(){
   $("mmes").value=meta.mes||"";$("mdias").value=meta.dias||"";
@@ -2599,11 +2617,11 @@ $("semr").onchange=$("semv").onchange=$("semrit").onchange=function(){
   meta=Object.assign({},meta,{semR:r,semV:v,semRit:$("semrit").checked?1:undefined});
   saveCats();semUI();render();toast("🚦 Semáforo atualizado");
 };
-$("mdiasat").oninput=function(){mAtMan=true;metaUI()};
+$("mdiasat").oninput=function(){mAtMan=true;metaUI()};$("mdia").oninput=metaUI;
 $("mprop").onchange=metaUI;
 $("msv").onclick=function(){
   var hm=hoje(),hmm=hm.slice(0,7),dm=diasDoMes(hmm),d=parseInt($("mdias").value)||0,mes=parseFloat($("mmes").value)||0,erro="";
-  var ini=(meta.ini&&meta.ini.slice(0,7)===hmm&&meta.mes>0)?meta.ini:hm,dia=+ini.slice(8,10),rs=dm-dia+1,mx=Math.max(1,Math.min(rs,d||rs)),da=parseInt($("mdiasat").value)||0;
+  var ant=metaAntiga(hm),ini=ant?(meta.ini||hmm+"-01"):(meta.ini&&meta.ini.slice(0,7)===hmm&&meta.mes>0)?meta.ini:hm,dia=ant?1:+ini.slice(8,10),rs=dm-dia+1,mx=Math.max(1,Math.min(rs,d||rs)),da=parseInt($("mdiasat").value)||0;
   if(d>dm)erro="Este mês tem "+dm+" dias. Os dias de trabalho por mês não podem passar de "+dm+".";
   if(!erro&&dia>1&&d>0){
     if(da<1)da=Math.max(1,Math.min(mx,Math.round(d*rs/dm)));
@@ -3209,11 +3227,11 @@ function ajSecoes(){
     f("📈 Comparação com o mês anterior","Compara o mês atual com o mesmo número de dias do mês passado. ▲ e ▼ mostram se melhorou ou piorou.")+
     f("⛽ Consumo de combustível","Preço médio e consumo de cada combustível, custo de combustível por km e os últimos abastecimentos. Precisa de dois abastecimentos com odômetro e considera tanque cheio (ou bateria carregada).")},
   {k:"metas",tab:3,t:"🎯 Metas",b:
-    f("Meta do mês (R$)","Quanto você quer de lucro no mês.")+
+    f("Meta do mês cheio (R$)","Quanto você quer de lucro num mês inteiro. Esse valor não muda com as opções: elas só ajustam o mês em que você começou.")+
     f("Dias de trabalho por mês","Quantos dias você costuma trabalhar. Com a meta do mês e os dias, a meta por dia é calculada sozinha (meta ÷ dias).")+
     f("Dias de trabalho neste mês","Aparece quando você começa no meio do mês: quantos dias ainda vai trabalhar neste mês.")+
-    f("No mês atual","<b>Meta cheia nos dias restantes</b>: a meta inteira do mês dividida pelos dias que faltam. <b>Proporcional</b>: só a parte da meta que corresponde aos dias que faltam.")+
-    f("Meta por dia (R$)","Calculada sozinha quando há meta do mês e dias. Sem os dias, digite aqui.")+
+    f("No mês atual","<b>Meta cheia nos dias restantes</b>: a meta inteira do mês dividida pelos dias que faltam. <b>Proporcional</b>: só a parte da meta que corresponde aos dias que faltam. O quadro 📌 <b>Neste mês</b> mostra o resultado na hora. Toque em <b>Salvar metas</b> para valer: enquanto não salvar, aparece o aviso de alterações não salvas.")+
+    f("Meta por dia no mês cheio (R$)","Calculada sozinha quando há meta do mês e dias. Sem os dias, digite aqui.")+
     f("Meta do dia","Sua meta por dia + custos do dia + parcela dos custos anuais e reservas. Muda sozinha quando você lança um custo.")+
     f("🚦 Semáforo da meta","<b>Vermelho abaixo de (%)</b> e <b>Verde a partir de (%)</b> definem as cores; no meio fica amarelo. <b>Considerar o ritmo do mês</b> compara com os dias que já passaram, em vez do mês inteiro.")+
     f("🧾 Custos anuais e reservas na meta","Nas duas opções, o valor do dia é a parcela do mês ÷ dias de trabalho do mês, para a parcela inteira ser separada nos dias em que você trabalha. <b>Só o valor do dia</b>: a meta do mês continua a sua. <b>Reserva completa</b>: a meta do mês também soma as parcelas. A conta aparece logo abaixo da opção e muda na hora.")},

@@ -114,9 +114,9 @@ nav button.on{background:rgba(0,168,143,.17);color:var(--hd)}
 nav button.on b{font-weight:800}
 .mtit{margin:0 14px 10px;padding:10px 14px;border-left:4px solid var(--hd);background:var(--card);border-radius:10px;font-size:16px;font-weight:800}
 #fab{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom,0px));right:16px;width:58px;height:58px;border-radius:50%;background:var(--hd);color:#fff;border:4px solid var(--bg);font-size:30px;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:5}
-#ov,#ov2,#ov3,#ov4,#ov5,#ov6,#ov7,#ov8,#ov9,#ov10{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10;align-items:flex-end;justify-content:center}
-#ov.on,#ov2.on,#ov3.on,#ov4.on,#ov5.on,#ov6.on,#ov7.on,#ov8.on,#ov9.on,#ov10.on{display:flex}
-#sh,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7,#sh8,#sh9,#sh10{background:var(--card);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow-y:auto}
+#ov,#ov2,#ov3,#ov4,#ov5,#ov6,#ov7,#ov8,#ov9,#ov10,#ov11{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10;align-items:flex-end;justify-content:center}
+#ov.on,#ov2.on,#ov3.on,#ov4.on,#ov5.on,#ov6.on,#ov7.on,#ov8.on,#ov9.on,#ov10.on,#ov11.on{display:flex}
+#sh,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7,#sh8,#sh9,#sh10,#sh11{background:var(--card);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow-y:auto}
 .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tabs button{padding:11px;border:0;border-radius:10px;background:var(--in);color:var(--mut);font-weight:700;font-size:15px}
 .tabs button.on.r{background:var(--ok);color:#fff}.tabs button.on.d{background:var(--bad);color:#fff}
@@ -169,6 +169,31 @@ nav button.on b{font-weight:800}
     <button class="pb" id="lkfok" disabled style="background:var(--bad)">Confirmar</button>
     <button id="lkfcx" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--mut);font-size:15px">Voltar</button>
   </div>
+</div></div>
+<div id="ov11"><div id="sh11">
+  <b style="font-size:17px">🚗 Aluguel do veículo</b>
+  <div class="f">
+    <div style="grid-column:1/-1"><label for="alloc">Locadora (opcional)</label><input id="alloc" maxlength="30" placeholder="Ex: Kovi, Localiza, Movida"></div>
+    <div><label for="alv">Valor de cada pagamento (R$)</label><input id="alv" type="number" inputmode="decimal" placeholder="0,00"></div>
+    <div><label for="alper">Periodicidade</label><select id="alper" class="fsel" style="width:100%"><option value="7">Semanal (a cada 7 dias)</option><option value="14">Quinzenal (a cada 14 dias)</option><option value="15">Quinzenal (a cada 15 dias)</option><option value="M">Mensal (todo mês)</option></select></div>
+    <div style="grid-column:1/-1"><label for="alini">Data do próximo pagamento</label><input id="alini" type="date"></div>
+  </div>
+  <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:10px 0 4px;color:var(--tx)"><input type="checkbox" id="alemb" checked style="width:22px;height:22px"> Entra na meta do dia</label>
+  <div id="alprev" style="font-size:12px;color:var(--mut);line-height:1.45;background:var(--in);border-radius:10px;padding:10px;margin-top:6px"></div>
+  <div style="font-size:13px;font-weight:800;margin:14px 0 0">Limite de km (opcional)</div>
+  <div class="f" style="margin-top:6px">
+    <div><label for="alkm">Km por período de pagamento</label><input id="alkm" type="number" inputmode="numeric" min="0" placeholder="Ex: 1500"></div>
+    <div><label for="alkx">Valor do km excedente (R$)</label><input id="alkx" type="number" inputmode="decimal" placeholder="0,00"></div>
+  </div>
+  <div style="font-size:13px;font-weight:800;margin:14px 0 0">Caução (opcional)</div>
+  <div class="f" style="margin-top:6px">
+    <div><label for="alcau">Valor da caução (R$)</label><input id="alcau" type="number" inputmode="decimal" placeholder="0,00"></div>
+    <div><label for="alcaud">Paga em</label><input id="alcaud" type="date"></div>
+  </div>
+  <div id="alerr" style="color:var(--bad);font-size:13px;text-align:center;margin-top:8px"></div>
+  <button class="pb" id="alok">Salvar</button>
+  <button id="alrmv" style="width:100%;margin-top:6px;padding:10px;border:0;background:none;color:var(--bad);font-size:14px;font-weight:700">Remover aluguel</button>
+  <button id="alcx" style="width:100%;margin-top:2px;padding:10px;border:0;background:none;color:var(--mut);font-size:15px">Cancelar</button>
 </div></div>
 <div id="ajd" role="dialog" aria-label="Manual do app"><div id="ajin">
   <div class="ajhd"><b>❓ Manual do app</b><button id="ajx" aria-label="Fechar o manual">✕</button></div>
@@ -303,7 +328,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 28/10/2026 · v74</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 28/10/2026 · v75</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -358,6 +383,9 @@ nav button.on b{font-weight:800}
     <div class="tg" id="gctab"><button data-g="D" class="on">Custos diários</button><button data-g="M">Custos mensais</button><button data-g="A">Custos anuais</button><button data-g="R">Reservas</button></div>
     <div style="font-size:12px;color:var(--mut);margin:2px 0 6px">Composição da meta diária (hoje)</div>
     <div id="gcsum"></div></div>
+  <div class="st" id="alcard"><h3>🚗 Aluguel do veículo</h3><div id="altx"></div>
+    <button class="pb" id="alnovo">Cadastrar aluguel</button>
+    <div id="alacts" style="display:none;margin-top:10px"><button id="aled" class="pb" style="background:var(--in);color:var(--tx)">✏️ Editar aluguel</button></div></div>
   <details class="st" id="gcreg"><summary style="font-weight:800;cursor:pointer">📌 Regras para não duplicar</summary>
     <div style="font-size:13px;line-height:1.55;margin-top:8px">
       <b>1. Gastos do dia</b> (almoço, lanche, combustível…): lance só em <b>Início → + → Despesa</b>. A Gestão apenas lê esses lançamentos. Por categoria, a meta do dia usa o <b>maior</b> entre o previsto e o lançado, nunca a soma dos dois.<br>
@@ -565,6 +593,7 @@ nav button.on b{font-weight:800}
 </div></div>
 <div id="vw"><img id="vwi" alt="Foto da nota"></div>
 <script>
+var AL_PER={"7":["Semanal","a cada 7 dias",7],"14":["Quinzenal","a cada 14 dias",14],"15":["Quinzenal","a cada 15 dias",15],"M":["Mensal","todo mês",0]};
 var KEY="motorista_v1",dados=[],cur=new Date(),modo="r",cat="uber";
 var REC=[["uber","Uber","🟦"],["99","99","🟨"],["indrive","inDrive","🟩"],["go","GO","🟪"],["particular","Particular","💵"]];
 var DES=[["Almoço","Almoço","🍽️"],["Abastecimento","Abastecimento","⛽"]];
@@ -715,9 +744,9 @@ var custom=[],customRec=[],recIc={},icSel="💼",turno=null,turnos=[],tdArm=fals
 function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function loadCats(){try{var r=localStorage.getItem("motorista_cats");custom=r?JSON.parse(r):[]}catch(e){custom=[]}}
 function allDes(){return DES.concat(custom.map(function(n){return [n,n,recIc[n]?cleanIc(recIc[n]):"🏷️"]}))}
-function loadCfg(){try{var r=localStorage.getItem("motorista_cfg");if(r){var c=JSON.parse(r);meta=c.meta||meta;manut=c.manut||[];customRec=c.recs||[];recIc=c.icons||{};perfil=perfilLimpa(c.perfil);venc=c.venc||[];fixos=c.fixos||[];contas=Array.isArray(c.contas)?c.contas:null;turno=c.turno||null;turnos=c.turnos||[];catPrev=(c.catPrev&&typeof c.catPrev==="object")?c.catPrev:{}}}catch(e){}}
+function loadCfg(){try{var r=localStorage.getItem("motorista_cfg");if(r){var c=JSON.parse(r);meta=c.meta||meta;manut=c.manut||[];customRec=c.recs||[];recIc=c.icons||{};perfil=perfilLimpa(c.perfil);venc=c.venc||[];fixos=c.fixos||[];contas=Array.isArray(c.contas)?c.contas:null;turno=c.turno||null;turnos=c.turnos||[];catPrev=(c.catPrev&&typeof c.catPrev==="object")?c.catPrev:{};alug=alLimpa(c.alug)}}catch(e){}}
 function saveCats(){
-  try{localStorage.setItem("motorista_cats",JSON.stringify(custom));localStorage.setItem("motorista_cfg",JSON.stringify({meta:meta,manut:manut,recs:customRec,icons:recIc,perfil:perfil,venc:venc,contas:contas,turno:turno||0,turnos:turnos,catPrev:catPrev}))}catch(e){}
+  try{localStorage.setItem("motorista_cats",JSON.stringify(custom));localStorage.setItem("motorista_cfg",JSON.stringify({meta:meta,manut:manut,recs:customRec,icons:recIc,perfil:perfil,venc:venc,contas:contas,turno:turno||0,turnos:turnos,catPrev:catPrev,alug:alug}))}catch(e){}
   agendaArq();
 }
 function info(t){var a=allRec().concat(allDes());for(var i=0;i<a.length;i++)if(a[i][0]===t)return a[i];return [t,t,"🧾"]}
@@ -980,7 +1009,7 @@ function abrirS8(n){
 function renderGcSum(){
   var hd=hoje(),hm=hd.slice(0,7),md=metaDiaD(hd),dvv=diasTrab(hm),an=0,rs=0,mn=0;
   venc.forEach(function(v){if(v.emb===false)return;var x=planoReserva(v).filter(function(p){return p.m===hm})[0];if(x){if(v.cat==="R")rs+=x.valor;else if(v.cat==="M")mn+=x.valor;else an+=x.valor}});
-  $("gcsum").innerHTML=kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos mensais",brl(mn/dvv))+kv("+ Custos anuais",brl(an/dvv))+kv("+ Reservas",brl(rs/dvv))+kv("= Meta de hoje",brl(md.total),"ok")+(function(){var it=custoDiaDet(hd).it;return it.length?'<div style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.5">Custos do dia por categoria: '+it.map(function(x){return esc(info(x.n)[1])+' '+brl(x.u)+' ('+(x.l>=x.p&&x.l>0?'lançado':'previsto')+')'}).join(' · ')+'</div>':''})()+difLinha("Custos de hoje",custoDiaDet(hd))+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Os custos do dia entram inteiros: por categoria, valem o maior entre o previsto e o lançado hoje (nunca a soma dos dois). A meta compara com as receitas do dia, e o lucro do dia (receitas − custos) aparece no Início.</div>';
+  $("gcsum").innerHTML=kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos mensais",brl(mn/dvv))+kv("+ Custos anuais",brl(an/dvv))+kv("+ Reservas",brl(rs/dvv))+(alMes(hm)>0?kv("+ Aluguel do veículo",brl(alMes(hm)/dvv)):"")+kv("= Meta de hoje",brl(md.total),"ok")+(function(){var it=custoDiaDet(hd).it;return it.length?'<div style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.5">Custos do dia por categoria: '+it.map(function(x){return esc(info(x.n)[1])+' '+brl(x.u)+' ('+(x.l>=x.p&&x.l>0?'lançado':'previsto')+')'}).join(' · ')+'</div>':''})()+difLinha("Custos de hoje",custoDiaDet(hd))+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Os custos do dia entram inteiros: por categoria, valem o maior entre o previsto e o lançado hoje (nunca a soma dos dois). A meta compara com as receitas do dia, e o lucro do dia (receitas − custos) aparece no Início.</div>';
 }
 function gcSet(t){
   gcTab=t;["D","M","A","R"].forEach(function(k){$("gc"+k).style.display=k===t?"":"none"});
@@ -1457,9 +1486,9 @@ function renderPd(){
   $("pddes").innerHTML=grp(pd,x.s,"var(--bad)","Despesas por categoria");
   if(!Object.keys(pr).length&&!Object.keys(pd).length)$("pdrec").innerHTML='<div style="font-size:13px;color:var(--mut);margin-top:10px">Nenhum lançamento neste dia.</div>';
 }
-var diaSel=null,catPrev={},vcat="A",gcTab="D",cdIcone="🏷️",s8={};
+var diaSel=null,catPrev={},alug={on:0,pg:{}},vcat="A",gcTab="D",cdIcone="🏷️",s8={};
 function pagasPer(ini,fim){return pagasCasa().filter(function(x){return x.d>=ini&&x.d<=fim})}
-function origNome(o){return o==="mensal"?"Custos mensais":o==="manut"?"Manutenção":"Despesas de casa"}
+function origNome(o){return o==="mensal"?"Custos mensais":o==="manut"?"Manutenção":o==="alug"?"Aluguel do veículo":"Despesas de casa"}
 function turnoLinha(e){
   var t=[],hi=/^\d\d:\d\d$/.test(e.hi||"")?e.hi:"",hf=/^\d\d:\d\d$/.test(e.hf||"")?e.hf:"";
   if(hi&&hf)t.push("Turno "+hi+" às "+hf);else if(hi)t.push("Início do turno "+hi);else if(hf)t.push("Fim do turno "+hf);
@@ -1536,6 +1565,11 @@ function gcCalc(ini,fim){
     if(!it.me.length)return;
     (cat==="M"?o.M:cat==="R"?o.R:o.A).push(it);
   });
+  if(alug.on||Object.keys(alug.pg||{}).length){
+    var ai={n:"🚗 Aluguel do veículo",me:[],t:0,ok:0,emb:alug.emb!==false,vt:alug.valor,np:0,acum:0};
+    ms.forEach(function(m){alMesDatas(m).forEach(function(d0){var pg=alug.pg[d0];ai.me.push({m:m,v:pg?pg.v:alug.valor,ok:!!pg,d:pg?pg.d:"",fut:d0>hoje()});ai.t+=pg?pg.v:alug.valor;if(pg){ai.ok+=pg.v;ai.np++}})});
+    if(ai.me.length)o.M.push(ai);
+  }
   function sm(L,k){return L.reduce(function(a,x){return a+x[k]},0)}
   o.tM=sm(o.M,"t");o.pM=sm(o.M,"ok");o.tA=sm(o.A,"t");o.sA=sm(o.A,"ok");o.tR=sm(o.R,"t");o.sR=sm(o.R,"ok");
   o.fM=0;o.M.forEach(function(it){it.me.forEach(function(x){if(x.fut&&!x.ok)o.fM+=x.v})});
@@ -1614,7 +1648,7 @@ function perfilUI(){
 function addMeses(d,n){var y=d.getFullYear(),m=d.getMonth()+n,ult=new Date(y,m+1,0).getDate();return new Date(y,m,Math.min(d.getDate(),ult))}
 function ini0(dt,jan){var w=addMeses(dIso(dt),-jan),h=dIso(hoje());return iso(w>h?w:h)}
 function diasEntre(a,b){return Math.round((dIso(b)-dIso(a))/86400000)}
-function reservasMes(m){var t=0;venc.forEach(function(v){if(v.emb===false)return;planoReserva(v).forEach(function(x){if(x.m===m)t+=x.valor})});return t}
+function reservasMes(m){var t=alMes(m);venc.forEach(function(v){if(v.emb===false)return;planoReserva(v).forEach(function(x){if(x.m===m)t+=x.valor})});return t}
 function restDias(iso0){return diasDoMes(iso0.slice(0,7))-(+iso0.slice(8,10))+1}
 function ehMesIni(m){return !!(meta.ini&&meta.ini.slice(0,7)===m&&+meta.ini.slice(8,10)>1&&meta.dias>0)}
 function desdeIni(m){return ehMesIni(m)?meta.ini:"0000-00-00"}
@@ -1667,6 +1701,7 @@ function pagasCasa(){
     Object.keys(v.pg||{}).forEach(function(mk){if(!v.pg[mk])return;var x=planoReserva(v).filter(function(q){return q.m===mk})[0];if(x)o.push({d:(v.pgd&&v.pgd[mk])||(mk+"-01"),v:x.valor,n:v.nome,o:"mensal",ic:"🗓️"})});
   });
   servs.forEach(function(x){if(x.valor>0&&/^\d{4}-\d{2}-\d{2}$/.test(String(x.data)))o.push({d:x.data,v:x.valor,n:x.peca,o:"manut",ic:"🔧",sid:x.id})});
+  alPagas().forEach(function(x){o.push(x)});
   return o;
 }
 function pagoCasaMes(m){var t=0;pagasCasa().forEach(function(x){if(x.d.slice(0,7)===m)t+=x.v});return t}
@@ -1740,6 +1775,7 @@ function renderImp(){
     if(x){n++;tot+=x.valor;h+=kv(esc(v.nome)+' <span style="font-size:11px;color:var(--mut)">'+brl(x.valor)+'/mês</span>',"+ "+brl(x.valor/dv)+"/dia")}
     else if(pl[0].m>hm)fut.push(esc(v.nome)+" (começa em "+mesTxt(pl[0].m)+")");
   });
+  var alm=alMes(hm);if(alm>0){n++;h+=kv('🚗 Aluguel do veículo <span style="font-size:11px;color:var(--mut)">'+alMesDatas(hm).length+'× '+brl(alug.valor)+' = '+brl(alm)+'</span>','+ '+brl(alm/dv)+'/dia')}
   if(!n)h='<div style="font-size:13px;color:var(--mut);line-height:1.5;margin-bottom:6px">Nenhum custo anual ou reserva sendo diluído neste mês.</div>';
   var md=metaDiaD(hd),mm=metaMesM(hm);
   h+='<div style="border-top:1px solid var(--bd);margin-top:6px"></div>'+kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos anuais e reservas (valor do dia)",brl(md.ar))+kv("= Meta de hoje",brl(md.total),"ok")+kv("Meta do mês",brl(mm.total))+difLinha("Custos de hoje",custoDiaDet(hd));
@@ -1840,7 +1876,7 @@ function metasUI(s,m,rec){
   }
   var al=[];
   manut.forEach(function(x){var r=restam(x);if(r<=300)al.push('🔧 '+esc(x.nome)+': '+(r>0?'faltam '+Math.round(r)+' km':'atrasada '+Math.round(-r)+' km'))});
-  alertasContas().forEach(function(t){al.push(t)});
+  alertasContas().forEach(function(t){al.push(t)});alAlertas().forEach(function(t){al.push(t)});
   var dbk=diasBackup();if(dados.length>=5&&(dbk===null||dbk>=30)&&arqEst!=="ok")al.push('💾 Faça um backup dos seus dados (Ajustes → Backup)'+(dbk===null?'':' · último há '+dbk+' dias'));
   al.slice(0,4).forEach(function(t){h+='<div class="st" style="padding:10px 14px;margin-bottom:10px;border:1px solid var(--bad);font-size:13px">'+t+'</div>'});
   $("metas").innerHTML=h;
@@ -1957,7 +1993,7 @@ function renderRel(){
     kv("Km rodados",c.k.toLocaleString("pt-BR")+" km")+kv("Lucro por km",c.k>0?brl(c.l/c.k):"-")+
     kv("Horas trabalhadas",c.hs>0?c.hs.toLocaleString("pt-BR")+" h":"-")+kv("Ganho por hora",c.hs>0?brl(c.r/c.hs):"-")+kv("Lucro por hora",c.hs>0?brl(c.l/c.hs):"-")+kv("Corridas",c.nc>0?String(c.nc):"-")+kv("Ganho por corrida",c.nc>0?brl(c.r/c.nc):"-")+
     (c.tur>0||c.np>0?kv("Turnos com início e fim",String(c.tur))+kv("Pausas",c.np+(c.np===1?" pausa":" pausas")+(c.mp>0?" ("+fmtDur(c.mp*60000)+")":"")):"")+
-    kv("Contas pagas e manutenção",brl(c.pgT),"bad")+kv("Saldo após contas",brl(c.l-c.pgT),(c.l-c.pgT)>=0?"ok":"bad");
+    kv("Contas pagas e manutenção",brl(c.pgT),"bad")+kv("Saldo após contas",brl(c.l-c.pgT),(c.l-c.pgT)>=0?"ok":"bad")+(function(){var t=0;c.P.forEach(function(x){if(x.o==="alug")t+=x.v});return t>0?kv("🚗 Aluguel do veículo pago",brl(t)+(c.k>0?" · "+brl(t/c.k)+" por km":"")):""})();
   $("rpag").innerHTML=pagHtml(c.pgo,c.pgT);
   $("rcmpc").style.display=c.cmp?"":"none";$("rcmp").innerHTML=c.cmp?compHtml(c.cmp):"";
   $("rwd").innerHTML=wdHtml(c);
@@ -2133,11 +2169,11 @@ async function zApagar(){
   if(!ok){zShow(5);return}
   ["motorista_v1","motorista_cats","motorista_cfg","motorista_serv","motorista_ult_backup"].forEach(function(k){try{localStorage.removeItem(k)}catch(e){}});
   dados=[];custom=[];customRec=[];recIc={};meta={dia:0,mes:0,dias:0};manut=[];servs=[];fil="todos";cat="uber";
-  turno=null;turnos=[];catPrev={};venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();render();aba(1);
+  turno=null;turnos=[];catPrev={};alug=alLimpa(null);venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();render();aba(1);
   gdPausa();arqUI();bultUI();gdUI();setSync("💾 Dados salvos neste aparelho");
   zShow(4);
 }
-function backupJSON(){return JSON.stringify({v:2,dados:dados,servs:servs,meta:meta,manut:manut,cats:custom,recs:customRec,icons:recIc,perfil:perfil,venc:venc,contas:contas,turnos:turnos,catPrev:catPrev})}
+function backupJSON(){return JSON.stringify({v:2,dados:dados,servs:servs,meta:meta,manut:manut,cats:custom,recs:customRec,icons:recIc,perfil:perfil,venc:venc,contas:contas,turnos:turnos,catPrev:catPrev,alug:alug})}
 function marcaBackup(){try{localStorage.setItem("motorista_ult_backup",String(Date.now()))}catch(e){}}
 function diasBackup(){try{var t=+localStorage.getItem("motorista_ult_backup");return t>0?Math.floor((Date.now()-t)/86400000):null}catch(e){return null}}
 function bultUI(){var d=diasBackup(),e=$("bult");if(!e)return;e.textContent=d===null?"Você ainda não fez nenhum backup.":"Último backup: "+(d===0?"hoje":"há "+d+(d===1?" dia":" dias"))+"."}
@@ -2214,7 +2250,7 @@ function render(){
   var h="",ult="";
   its.forEach(function(e){
     if(e.data!==ult){h+='<div class="dia">'+diaTxt(e.data)+'</div>';ult=e.data}
-    if(e.sint){h+='<div class="it" data-sg="'+e.o+'" data-sid="'+(e.sid||"")+'"><div class="ic" style="background:rgba(229,72,77,.15)">'+e.ic+'</div><div class="t">'+esc(e.n)+'<small>✅ Pago · '+(e.o==="mensal"?"Custos mensais":e.o==="manut"?"Manutenção":"Despesas (casa)")+'</small></div><b class="bad">-'+brl(e.v)+'</b></div>';return}
+    if(e.sint){h+='<div class="it" data-sg="'+e.o+'" data-sid="'+(e.sid||"")+'"><div class="ic" style="background:rgba(229,72,77,.15)">'+e.ic+'</div><div class="t">'+esc(e.n)+'<small>✅ Pago · '+(e.o==="mensal"?"Custos mensais":e.o==="manut"?"Manutenção":e.o==="alug"?"Aluguel do veículo":"Despesas (casa)")+'</small></div><b class="bad">-'+brl(e.v)+'</b></div>';return}
     var i=info(e.tipo),g=isR(e.tipo);
     h+='<div class="it" data-id="'+e.id+'">'+(e.tipo==="uber"||e.tipo==="99"||e.tipo==="indrive"||e.tipo==="go"?em(e.tipo):'<div class="ic" style="background:'+(g?'rgba(0,168,107,.15)':'rgba(229,72,77,.15)')+'">'+i[2]+'</div>')+
        '<div class="t">'+esc(i[1])+detLanc(e,g)+'</div>'+
@@ -2243,7 +2279,7 @@ function render(){
     var hdr=document.querySelector("header"),pm=semPctMes(m),si=pm===null?null:semInfo(pm);
     hdr.className=si&&si.k!=="v"?"sem-"+si.k:"";
     $("semtxt").textContent=si?si.e+(semCfg().rit?" Ritmo do mês: ":" Meta do mês: ")+Math.round(pm)+"% ("+si.t+")":"";
-  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();if(typeof gdUI==="function")gdUI();
+  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();renderAlug();if(typeof gdUI==="function")gdUI();
   $("reprap").style.display=dados.length?"block":"none";$("reprap").textContent=repTxt();
 }
 
@@ -2426,7 +2462,7 @@ $("ex").onclick=function(){
 $("lista").onclick=function(ev){
   var el=ev.target.closest(".it");if(!el)return;
   var sg=el.getAttribute("data-sg");
-  if(sg){if(sg==="mensal"){aba(8);gcSet("M")}else if(sg==="manut"){aba(4);var rr=servs.filter(function(x){return String(x.id)===el.getAttribute("data-sid")})[0];if(rr)abrirS(rr)}else aba(7);return}
+  if(sg){if(sg==="alug"){aba(8);try{$("alcard").scrollIntoView({block:"start"})}catch(x){}}else if(sg==="mensal"){aba(8);gcSet("M")}else if(sg==="manut"){aba(4);var rr=servs.filter(function(x){return String(x.id)===el.getAttribute("data-sid")})[0];if(rr)abrirS(rr)}else aba(7);return}
   var id=el.getAttribute("data-id");
   var e=dados.filter(function(x){return String(x.id)===id})[0];
   if(e)abrir(e);
@@ -2796,6 +2832,7 @@ function restauraTexto(rtxt){
         (l.cats||[]).forEach(function(n){if(typeof n==="string"&&custom.indexOf(n)<0&&!DES.some(function(x){return x[0].toLowerCase()===n.toLowerCase()}))custom.push(n)});
         (l.manut||[]).forEach(function(mm){if(mm&&mm.id&&!manut.some(function(y){return y.id===mm.id}))manut=manut.concat([mm])});
         if(l.perfil&&!perfil.nome&&!perfil.veic&&!perfil.placa){perfil=perfilLimpa(l.perfil);fillPerfil();perfilUI()}
+        if(l.alug&&l.alug.on&&!alug.on)alug=alLimpa(l.alug);
         if(l.catPrev&&typeof l.catPrev==="object")Object.keys(l.catPrev).forEach(function(k){if(+l.catPrev[k]>0&&catPrev[k]==null)catPrev[k]=+l.catPrev[k]});
         (l.turnos||[]).forEach(function(x){if(x&&x.id&&x.ini&&x.mt>0&&!turnos.some(function(y){return y.id===x.id}))turnos=turnos.concat([{id:+x.id,ini:+x.ini,fim:+x.fim||0,mt:+x.mt,mp:+x.mp||0}])});
         (l.venc||[]).forEach(function(v){if(v&&v.id&&v.nome&&!venc.some(function(y){return y.id===v.id})){var o={id:v.id,nome:String(v.nome).slice(0,30)};if(v.data&&!(+v.per>=1))o.data=String(v.data).slice(0,10);if(+v.vt>0&&(+v.per>=1||+v.vd>=1)){o.vt=+v.vt;if(+v.per>=1)o.per=Math.min(36,Math.round(+v.per));else o.vd=Math.round(+v.vd);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.sep={};Object.keys(v.sep||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))o.sep[k]=1})}o.cat=v.cat==="R"?"R":v.cat==="M"?"M":"A";if(o.cat==="M"){if(+v.vt>0)o.vt=+v.vt;if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.pg={};o.pgd={};Object.keys(v.pg||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&v.pg[k])o.pg[k]=1});Object.keys(v.pgd||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&/^\d{4}-\d{2}-\d{2}$/.test(v.pgd[k]))o.pgd[k]=v.pgd[k]})}if(v.sv&&typeof v.sv==="object"){o.sv={};Object.keys(v.sv).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&+v.sv[k]>=0)o.sv[k]=+v.sv[k]})}venc=venc.concat([o])}});
@@ -3127,7 +3164,7 @@ $("lkfok").onclick=async function(){
     try{await idbClear("fotos");await idbClear("cfg");arqH=null;arqEst=""}catch(e){}
     ["motorista_v1","motorista_cats","motorista_cfg","motorista_serv","motorista_ult_backup"].forEach(function(k){try{localStorage.removeItem(k)}catch(e){}});
     dados=[];custom=[];customRec=[];recIc={};meta={dia:0,mes:0,dias:0};manut=[];servs=[];fil="todos";cat="uber";
-    turno=null;turnos=[];catPrev={};venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();
+    turno=null;turnos=[];catPrev={};alug=alLimpa(null);venc=[];fixos=[];contas=defaultContas();perfil=perfilLimpa(null);fillMeta();fillPerfil();perfilUI();
     try{gdPausa();gdUI()}catch(e){}
   }
   try{localStorage.removeItem("motorista_lock")}catch(e){}
@@ -3270,6 +3307,12 @@ function ajSecoes(){
     '<div class="ajs">🗓️ Custos mensais</div>'+
     f("Cadastro","Nome e valor do custo que se repete todo mês. O valor do dia entra na meta diária.")+
     f("Pagar e ✅ Pago","Toque em Pagar quando pagar: o valor sai do Saldo do mês na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.")+
+    '<div class="ajs">🚗 Aluguel do veículo</div>'+
+    f("Cadastrar aluguel","Para quem aluga o carro de trabalho. Informe a locadora (opcional), o <b>valor de cada pagamento</b>, a <b>periodicidade</b> (semanal, quinzenal a cada 14 ou 15 dias, ou mensal) e a <b>data do próximo pagamento</b>. O app calcula as datas seguintes.")+
+    f("Na meta do dia","O app conta quantos pagamentos caem em cada mês (no quinzenal, tem mês com 2 e mês com 3) e divide pelos dias de trabalho do mês. Desmarque <b>Entra na meta do dia</b> se não quiser.")+
+    f("Pagar","Avisa no Início 2 dias antes e quando atrasa. Toque em <b>Pagar</b>: o valor sai do saldo na data de hoje. Para desfazer, toque em ✅ Pago duas vezes.")+
+    f("Limite de km","Opcional: os km permitidos por período de pagamento e o valor do km excedente. O app soma os km lançados nas receitas desde o último pagamento e avisa ao chegar a 90% do limite.")+
+    f("Caução","Opcional: o valor deixado de garantia e quando foi pago, para você lembrar quanto tem a receber na devolução do carro.")+
     '<div class="ajs">📅 Custos anuais e 🏖️ Reservas</div>'+
     f("Valor total e Diluir em (meses)","O valor é dividido em parcelas mensais iguais, em reais inteiros, começando neste mês. A última parcela ajusta os centavos.")+
     f("Embutir na meta diária","Marcado, a parcela do mês entra na meta do dia.")+
@@ -3326,8 +3369,138 @@ $("ajq").oninput=function(){ajRender("")};
 $("ajb2").onclick=function(){ajAbre("comeco")};
 $("ajbt").onclick=function(){ajAbre(AJ_TAB[modAtual]||"comeco")};
 
+/* ===== Aluguel do veículo (Gestão de Custos) ===== */
+function alLimpa(o){
+  o=o&&typeof o==="object"?o:{};var d=/^\d{4}-\d{2}-\d{2}$/;
+  var r={on:o.on?1:0,valor:Math.max(0,+o.valor||0),per:AL_PER[o.per]?o.per:"15",ini:d.test(o.ini||"")?o.ini:"",cad:d.test(o.cad||"")?o.cad:"",emb:o.emb!==false,
+    loc:String(o.loc||"").slice(0,30),kmLim:Math.max(0,Math.round(+o.kmLim||0)),kmExc:Math.max(0,+o.kmExc||0),cau:Math.max(0,+o.cau||0),cauD:d.test(o.cauD||"")?o.cauD:"",desde:d.test(o.desde||"")?o.desde:"",pg:{}};
+  Object.keys(o.pg||{}).forEach(function(k){var x=o.pg[k];if(d.test(k)&&x&&d.test(x.d||""))r.pg[k]={d:x.d,v:Math.max(0,+x.v||0)}});
+  if(r.on&&!r.cad)r.cad=(r.ini||hoje()).slice(0,7)+"-01";
+  if(r.on&&!r.desde)r.desde=hoje();
+  return r;
+}
+function addDias(t,n){var x=dIso(t);x.setDate(x.getDate()+n);return iso(x)}
+function alDatas(a,b){
+  if(!alug.on||!(alug.valor>0)||!alug.ini)return [];
+  var lo=a<alug.cad?alug.cad:a,out=[],N=AL_PER[alug.per][2];
+  if(lo>b)return out;
+  if(N>0){
+    var t=alug.ini,dif=Math.floor((dIso(lo)-dIso(t))/86400000),k=Math.floor(dif/N);
+    t=addDias(alug.ini,k*N);if(t<lo)t=addDias(t,N);
+    for(var g=0;t<=b&&g<400;g++){out.push(t);t=addDias(t,N)}
+  }else{
+    var dd=+alug.ini.slice(8,10);
+    for(var m=lo.slice(0,7),g2=0;m<=b.slice(0,7)&&g2<120;m=proxMes(m,1),g2++){
+      var t2=m+"-"+p2(Math.min(dd,diasDoMes(m)));if(t2>=lo&&t2<=b)out.push(t2);
+    }
+  }
+  return out;
+}
+function alMesDatas(m){return alDatas(m+"-01",m+"-"+p2(diasDoMes(m)))}
+function alMes(m){return alug.on&&alug.emb!==false?alMesDatas(m).length*alug.valor:0}
+function alProx(){var h=hoje(),l=alDatas(addDias(h,-60),addDias(h,62));for(var i=0;i<l.length;i++)if(l[i]>=h)return l[i];return ""}
+function alAnt(){var h=hoje(),l=alDatas(addDias(h,-62),h);return l.length?l[l.length-1]:""}
+function alPerTxt(){var p=AL_PER[alug.per];return p[0]+" ("+p[1]+")"}
+function alKm(){
+  if(!alug.on||!(alug.kmLim>0))return null;
+  var a=alAnt()||alug.cad,h=hoje(),km=0;
+  dados.forEach(function(e){if(isR(e.tipo)&&e.data>=a&&e.data<=h)km+=+e.km||0});
+  var exc=Math.max(0,km-alug.kmLim);
+  return {ini:a,km:km,lim:alug.kmLim,falta:Math.max(0,alug.kmLim-km),exc:exc,custo:exc*(alug.kmExc||0),pc:km/alug.kmLim*100};
+}
+function alPagas(){
+  var o=[];if(!alug.on&&!Object.keys(alug.pg||{}).length)return o;
+  Object.keys(alug.pg||{}).forEach(function(k){var x=alug.pg[k];if(x&&x.v>0)o.push({d:x.d,v:x.v,n:"Aluguel do veículo",o:"alug",ic:"🚗",due:k})});
+  return o;
+}
+function alAlertas(){
+  var out=[];if(!alug.on||!(alug.valor>0))return out;
+  var h=hoje();
+  alDatas(addDias(h,-31),addDias(h,2)).forEach(function(t){
+    if(alug.pg[t]||t<alug.desde)return;var dd=Math.round((dIso(t)-dIso(h))/86400000);
+    out.push('🚗 Aluguel do veículo ('+brl(alug.valor)+'): '+(dd<0?'venceu em '+fmtBR(t).slice(0,5):dd===0?'vence hoje':dd===1?'vence amanhã':'vence em '+dd+' dias ('+fmtBR(t).slice(0,5)+')'));
+  });
+  var k=alKm();if(k&&k.pc>=90)out.push(k.exc>0?'🚗 Passou '+k.exc.toLocaleString("pt-BR")+' km do limite do aluguel'+(k.custo>0?' (≈ '+brl(k.custo)+' de excedente)':''):'🚗 Faltam '+k.falta.toLocaleString("pt-BR")+' km para o limite do aluguel neste período');
+  return out;
+}
+var alArm=null;
+function renderAlug(){
+  var t=$("altx");if(!t)return;
+  if(!alug.on){
+    t.innerHTML='<div style="font-size:13px;color:var(--mut);line-height:1.5">Aluga o carro que usa para trabalhar? Cadastre o aluguel: o app avisa antes de cada pagamento, coloca o valor certo na meta do dia (contando os meses com 2 ou 3 pagamentos) e acompanha o limite de km e a caução.</div>';
+    $("alnovo").style.display="block";$("alacts").style.display="none";return;
+  }
+  $("alnovo").style.display="none";$("alacts").style.display="block";
+  var hm=hoje().slice(0,7),nm=proxMes(hm,1),dl=alMesDatas(hm),dn=alMesDatas(nm),dt=diasTrab(hm),px=alProx(),h="";
+  h+=kv((alug.loc?esc(alug.loc)+" · ":"")+esc(alPerTxt()),brl(alug.valor));
+  if(px)h+=kv("Próximo pagamento",fmtBR(px)+" ("+SEM[dIso(px).getDay()].slice(0,3).toLowerCase()+")");
+  h+=kv("Em "+esc(mesTxt(hm)),dl.length+(dl.length===1?" pagamento":" pagamentos")+" = "+brl(dl.length*alug.valor));
+  if(alug.emb!==false)h+=kv("Na meta do dia","+ "+brl(dl.length*alug.valor/dt)+" por dia ("+dt+" dias de trabalho)");
+  else h+='<div style="font-size:12px;color:var(--mut);margin-top:4px">Fora da meta diária (opção desmarcada).</div>';
+  h+='<div style="font-size:12px;color:var(--mut);margin-top:2px">Em '+esc(mesTxt(nm))+': '+dn.length+(dn.length===1?' pagamento':' pagamentos')+' = '+brl(dn.length*alug.valor)+'.</div>';
+  var lst=dl.concat(dn.filter(function(x){return x<=addDias(hoje(),20)}));
+  if(lst.length){
+    h+='<div style="font-size:12px;color:var(--mut);margin:10px 0 2px">Pagamentos</div>';
+    lst.forEach(function(d0){
+      var pg=alug.pg[d0],at=!pg&&d0<hoje()&&d0>=alug.desde,antes=!pg&&d0<alug.desde;
+      h+='<div class="ir" style="font-size:13px"><div class="t">'+fmtBR(d0)+(at?' <b style="color:var(--bad)">· atrasado</b>':antes?' <span style="color:var(--mut);font-size:11px">· antes do cadastro</span>':'')+'</div><button class="'+(pg?'':'pb')+'" data-alp="'+d0+'" style="width:auto;margin:0;padding:8px 12px;border-radius:8px;'+(pg?'border:0;background:var(--in);color:var(--ok);font-weight:700':'border:0;background:var(--hd);color:#fff;font-weight:700')+'">'+(pg?(alArm===d0?'Toque p/ desfazer':'✅ Pago '+fmtBR(pg.d).slice(0,5)):'Pagar')+'</button></div>';
+    });
+  }
+  var k=alKm();
+  if(k){
+    h+='<div style="font-size:12px;color:var(--mut);margin:10px 0 2px">Limite de km (desde '+fmtBR(k.ini).slice(0,5)+')</div>'+kv("Rodados",k.km.toLocaleString("pt-BR")+" de "+k.lim.toLocaleString("pt-BR")+" km",k.exc>0?"bad":"");
+    h+=k.exc>0?kv("Passou do limite",k.exc.toLocaleString("pt-BR")+" km"+(k.custo>0?" ≈ "+brl(k.custo):""),"bad"):kv("Faltam",k.falta.toLocaleString("pt-BR")+" km");
+    h+='<div style="font-size:11px;color:var(--mut)">Conta os km lançados nas receitas desde o último pagamento.</div>';
+  }
+  if(alug.cau>0)h+=kv("Caução a receber na devolução",brl(alug.cau)+(alug.cauD?" (paga em "+fmtBR(alug.cauD)+")":""));
+  t.innerHTML=h;
+}
+function alAbre(){
+  var a=alug;
+  $("alloc").value=a.loc||"";$("alv").value=a.valor>0?a.valor:"";$("alper").value=a.per||"15";$("alini").value=a.ini||alProx()||hoje();
+  $("alemb").checked=a.on?a.emb!==false:true;$("alkm").value=a.kmLim>0?a.kmLim:"";$("alkx").value=a.kmExc>0?a.kmExc:"";
+  $("alcau").value=a.cau>0?a.cau:"";$("alcaud").value=a.cauD||"";$("alerr").textContent="";
+  $("alrmv").style.display=a.on?"block":"none";$("alrmv").textContent="Remover aluguel";alRmArm=false;
+  alPrev();$("ov11").className="on";
+}
+var alRmArm=false;
+function alPrev(){
+  var v=parseFloat($("alv").value)||0,per=$("alper").value,ini=$("alini").value,t="";
+  if(v>0&&ini){
+    var tmp=alug;alug=alLimpa({on:1,valor:v,per:per,ini:ini,cad:hoje().slice(0,7)+"-01"});
+    var hm=hoje().slice(0,7),n=alMesDatas(hm).length,n2=alMesDatas(proxMes(hm,1)).length,dt=diasTrab(hm);alug=tmp;
+    t=brl(v)+" "+AL_PER[per][1]+". Neste mês: "+n+(n===1?" pagamento":" pagamentos")+" = "+brl(n*v)+($("alemb").checked&&n?" → "+brl(n*v/dt)+" por dia de trabalho na meta":"")+". No mês que vem: "+n2+(n2===1?" pagamento":" pagamentos")+" = "+brl(n2*v)+".";
+  }else t="Informe o valor e a data do próximo pagamento.";
+  $("alprev").textContent=t;
+}
+$("alnovo").onclick=alAbre;$("aled").onclick=alAbre;
+$("alcx").onclick=function(){$("ov11").className=""};
+$("ov11").onclick=function(e){if(e.target===$("ov11"))$("ov11").className=""};
+["alv","alini","alkm"].forEach(function(i){$(i).addEventListener("input",alPrev)});$("alper").onchange=alPrev;$("alemb").onchange=alPrev;
+$("alok").onclick=function(){
+  var v=parseFloat($("alv").value)||0,ini=$("alini").value;
+  if(!(v>0)){$("alerr").textContent="Informe o valor do aluguel.";return}
+  if(!ini){$("alerr").textContent="Informe a data do próximo pagamento (ou de um pagamento já feito).";return}
+  var cd=$("alcaud").value;if(cd&&cd>hoje()){$("alerr").textContent="A data da caução não pode ser futura.";return}
+  var novo=alLimpa({on:1,valor:v,per:$("alper").value,ini:ini,cad:alug.on?alug.cad:(ini<hoje()?ini:hoje()).slice(0,7)+"-01",emb:$("alemb").checked,loc:$("alloc").value.trim(),
+    kmLim:parseInt($("alkm").value)||0,kmExc:parseFloat($("alkx").value)||0,cau:parseFloat($("alcau").value)||0,cauD:cd,desde:alug.on?alug.desde:hoje(),pg:alug.pg});
+  alug=novo;saveCats();$("ov11").className="";render();toast("🚗 Aluguel salvo");
+};
+$("alrmv").onclick=function(){
+  if(!alRmArm){alRmArm=true;this.textContent="Toque de novo para remover";return}
+  alug=alLimpa({pg:alug.pg});saveCats();$("ov11").className="";render();toast("Aluguel removido. Os pagamentos já feitos continuam no histórico.");
+};
+$("altx").onclick=function(e){
+  var b=e.target.closest("[data-alp]");if(!b)return;var d0=b.getAttribute("data-alp");
+  if(alug.pg[d0]){
+    if(alArm!==d0){alArm=d0;renderAlug();setTimeout(function(){if(alArm===d0){alArm=null;renderAlug()}},5000);return}
+    delete alug.pg[d0];alArm=null;saveCats();render();toast("Pagamento desfeito");return;
+  }
+  alug.pg[d0]={d:hoje(),v:alug.valor};saveCats();render();toast("✅ Aluguel de "+fmtBR(d0).slice(0,5)+" pago hoje ("+brl(alug.valor)+").");
+};
+
 /* ===== Campos de dinheiro no formato da moeda (digita só números: 5000 → 50,00) ===== */
-var MOEDA_IDS=["valor","sval","d6v","s7v","s8v","cdp","vtot","mmes","mdia"];
+var MOEDA_IDS=["valor","sval","d6v","s7v","s8v","cdp","vtot","mmes","mdia","alv","alkx","alcau"];
 function moedaFmt(c){var s=String(c);while(s.length<3)s="0"+s;var i=s.slice(0,-2).replace(/^0+(?=\d)/,""),d=s.slice(-2);return i.replace(/\B(?=(\d{3})+(?!\d))/g,".")+","+d}
 function moedaCampo(el){
   var D=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value"),ult="";

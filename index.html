@@ -175,9 +175,12 @@ nav button.on b{font-weight:800}
   <div class="f">
     <div style="grid-column:1/-1"><label for="alloc">Locadora (opcional)</label><input id="alloc" maxlength="30" placeholder="Ex: Kovi, Localiza, Movida"></div>
     <div><label for="alv">Valor de cada pagamento (R$)</label><input id="alv" type="number" inputmode="decimal" placeholder="0,00"></div>
-    <div><label for="alper">Periodicidade</label><select id="alper" class="fsel" style="width:100%"><option value="7">Semanal (a cada 7 dias)</option><option value="14">Quinzenal (a cada 14 dias)</option><option value="15">Quinzenal (a cada 15 dias)</option><option value="M">Mensal (todo mês)</option></select></div>
-    <div style="grid-column:1/-1"><label for="alini">Data do próximo pagamento</label><input id="alini" type="date"></div>
+    <div><label for="alper">Periodicidade</label><select id="alper" class="fsel" style="width:100%"><option value="7">Semanal (dia da semana)</option><option value="14">Quinzenal (a cada 14 dias)</option><option value="15">Quinzenal (a cada 15 dias)</option><option value="M">Mensal (todo mês)</option></select></div>
+    <div id="aldoww" style="grid-column:1/-1"><label>Dia do pagamento</label><div class="chips" id="aldow" style="justify-content:flex-start"><button type="button" class="chip" data-w="1">Seg</button><button type="button" class="chip" data-w="2">Ter</button><button type="button" class="chip" data-w="3">Qua</button><button type="button" class="chip" data-w="4">Qui</button><button type="button" class="chip" data-w="5">Sex</button><button type="button" class="chip" data-w="6">Sáb</button><button type="button" class="chip" data-w="0">Dom</button></div><label for="alp1" style="margin-top:8px">Primeiro pagamento (opcional: se já pagava antes de cadastrar)</label><input id="alp1" type="date"></div>
+    <div id="aliniw" style="grid-column:1/-1"><label for="alini">Data do próximo pagamento (ou do primeiro, se já pagava antes)</label><input id="alini" type="date"></div>
+    <div style="grid-column:1/-1"><label for="alfim">Até quando (opcional: fim do contrato)</label><input id="alfim" type="date"></div>
   </div>
+  <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:10px 0 0;color:var(--tx)"><input type="checkbox" id="alauto" style="width:22px;height:22px"> 🔁 Descontar sozinho no dia de cada pagamento</label>
   <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:10px 0 4px;color:var(--tx)"><input type="checkbox" id="alemb" checked style="width:22px;height:22px"> Entra na meta do dia</label>
   <div id="alprev" style="font-size:12px;color:var(--mut);line-height:1.45;background:var(--in);border-radius:10px;padding:10px;margin-top:6px"></div>
   <div style="font-size:13px;font-weight:800;margin:14px 0 0">Limite de km (opcional)</div>
@@ -328,7 +331,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 29/10/2026 · v77</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 31/10/2026 · v80</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -1592,7 +1595,7 @@ function gcCalc(ini,fim){
   });
   if(alug.on||Object.keys(alug.pg||{}).length){
     var ai={n:"🚗 Aluguel do veículo",me:[],t:0,ok:0,emb:alug.emb!==false,vt:alug.valor,np:0,acum:0};
-    ms.forEach(function(m){alMesDatas(m).forEach(function(d0){var pg=alug.pg[d0];ai.me.push({m:m,v:pg?pg.v:alug.valor,ok:!!pg,d:pg?pg.d:"",fut:d0>hoje()});ai.t+=pg?pg.v:alug.valor;if(pg){ai.ok+=pg.v;ai.np++}})});
+    ms.forEach(function(m){var dl0=alMesDatas(m);Object.keys(alug.pg||{}).forEach(function(k){if(k.slice(0,7)===m&&dl0.indexOf(k)<0)dl0.push(k)});dl0.sort();dl0.forEach(function(d0){var pg=alug.pg[d0];ai.me.push({m:m,v:pg?pg.v:alug.valor,ok:!!pg,d:pg?pg.d:"",fut:d0>hoje()});ai.t+=pg?pg.v:alug.valor;if(pg){ai.ok+=pg.v;ai.np++}})});
     if(ai.me.length)o.M.push(ai);
   }
   function sm(L,k){return L.reduce(function(a,x){return a+x[k]},0)}
@@ -2254,6 +2257,7 @@ function moveDia(n){
 }
 function render(){
   ajustaDia();
+  try{alAuto()}catch(e){}
   fuelInfo=fuelCalc().map;
   var m=mk(),r=0,d=0,k=0,por={},hs=0,ncs=0,its=[],cats={};
   $("mtxt").textContent=cur.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
@@ -3333,9 +3337,10 @@ function ajSecoes(){
     f("Cadastro","Nome e valor do custo que se repete todo mês. O valor do dia entra na meta diária.")+
     f("Pagar e ✅ Pago","Toque em Pagar quando pagar: o valor sai do Saldo do mês na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.")+
     '<div class="ajs">🚗 Aluguel do veículo</div>'+
-    f("Cadastrar aluguel","Para quem aluga o carro de trabalho. Informe a locadora (opcional), o <b>valor de cada pagamento</b>, a <b>periodicidade</b> (semanal, quinzenal a cada 14 ou 15 dias, ou mensal) e a <b>data do próximo pagamento</b>. O app calcula as datas seguintes.")+
+    f("Cadastrar aluguel","Para quem aluga o carro de trabalho. Informe a locadora (opcional), o <b>valor de cada pagamento</b> e a <b>periodicidade</b>. No <b>semanal</b>, toque no <b>dia da semana</b> do pagamento (ex: segunda); no quinzenal e no mensal, informe a data do próximo pagamento. O app conta a partir do primeiro pagamento (sem datas para trás) e calcula todas as seguintes. Se já pagava antes de cadastrar, informe o primeiro pagamento. <b>Até quando</b> (opcional) é o fim do contrato: depois dele, o aluguel para de contar.")+
+    f("🔁 Descontar sozinho","Opcional, vem desmarcado. Os pagamentos se repetem sozinhos (não precisa cadastrar toda semana), mas por padrão você marca cada um como pago tocando em <b>Pagar</b>. Marcando a opção, no dia de cada pagamento o valor sai do saldo sozinho; se não pagou, toque duas vezes em ✅ Descontado para desfazer.")+
     f("Na meta do dia","O app conta quantos pagamentos caem em cada mês (no quinzenal, tem mês com 2 e mês com 3) e divide pelos dias de trabalho do mês. Desmarque <b>Entra na meta do dia</b> se não quiser.")+
-    f("Pagar","Avisa no Início 2 dias antes e quando atrasa. Toque em <b>Pagar</b>: o valor sai do saldo na data de hoje. Para desfazer, toque em ✅ Pago duas vezes.")+
+    f("Pagar","Padrão: o Início avisa 2 dias antes, no dia e quando atrasa. Toque em <b>Pagar</b>: o valor sai do saldo na data de hoje. Para desfazer, toque em ✅ Pago duas vezes.")+
     f("Limite de km","Opcional: os km permitidos por período de pagamento e o valor do km excedente. O app soma os km lançados nas receitas desde o último pagamento e avisa ao chegar a 90% do limite.")+
     f("Caução","Opcional: o valor deixado de garantia e quando foi pago, para você lembrar quanto tem a receber na devolução do carro.")+
     '<div class="ajs">📅 Custos anuais e 🏖️ Reservas</div>'+
@@ -3398,16 +3403,30 @@ $("ajbt").onclick=function(){ajAbre(AJ_TAB[modAtual]||"comeco")};
 function alLimpa(o){
   o=o&&typeof o==="object"?o:{};var d=/^\d{4}-\d{2}-\d{2}$/;
   var r={on:o.on?1:0,valor:Math.max(0,+o.valor||0),per:AL_PER[o.per]?o.per:"15",ini:d.test(o.ini||"")?o.ini:"",cad:d.test(o.cad||"")?o.cad:"",emb:o.emb!==false,
-    loc:String(o.loc||"").slice(0,30),kmLim:Math.max(0,Math.round(+o.kmLim||0)),kmExc:Math.max(0,+o.kmExc||0),cau:Math.max(0,+o.cau||0),cauD:d.test(o.cauD||"")?o.cauD:"",desde:d.test(o.desde||"")?o.desde:"",pg:{}};
-  Object.keys(o.pg||{}).forEach(function(k){var x=o.pg[k];if(d.test(k)&&x&&d.test(x.d||""))r.pg[k]={d:x.d,v:Math.max(0,+x.v||0)}});
-  if(r.on&&!r.cad)r.cad=(r.ini||hoje()).slice(0,7)+"-01";
+    loc:String(o.loc||"").slice(0,30),kmLim:Math.max(0,Math.round(+o.kmLim||0)),kmExc:Math.max(0,+o.kmExc||0),cau:Math.max(0,+o.cau||0),cauD:d.test(o.cauD||"")?o.cauD:"",desde:d.test(o.desde||"")?o.desde:"",dow:(+o.dow>=0&&+o.dow<=6&&o.dow!=="")?+o.dow:1,auto:o.auto===true&&+o.av===1,av:(o.auto===true&&+o.av===1)?1:0,fim:d.test(o.fim||"")?o.fim:"",nao:{},pg:{}};
+  Object.keys(o.pg||{}).forEach(function(k){var x=o.pg[k];if(d.test(k)&&x&&d.test(x.d||""))r.pg[k]={d:x.d,v:Math.max(0,+x.v||0),a:x.a?1:0}});
+  Object.keys(o.nao||{}).forEach(function(k){if(d.test(k)&&o.nao[k])r.nao[k]=1});
+  if(r.on&&!r.desde)r.desde=hoje();
+  if(r.on&&r.ini&&!o.p1v)r.cad=alPrimeiro(r.ini,r.per,r.desde<r.ini?r.desde:r.ini);
+  if(r.on&&!r.cad)r.cad=r.ini||hoje();
+  r.p1v=1;
   if(r.on&&!r.desde)r.desde=hoje();
   return r;
 }
+function alPrimeiro(ini,per,desde){
+  var N=AL_PER[per][2];
+  if(N>0){var dif=Math.round((dIso(desde)-dIso(ini))/86400000),k=Math.ceil(dif/N);return addDias(ini,k*N)}
+  var dd=+ini.slice(8,10),m=desde.slice(0,7),t=m+"-"+p2(Math.min(dd,diasDoMes(m)));
+  if(t<desde){m=proxMes(m,1);t=m+"-"+p2(Math.min(dd,diasDoMes(m)))}
+  return t;
+}
+function alDowTxt(w){return (w===0||w===6?"todo ":"toda ")+SEM[w]}
+function alProxDow(w,desde){var t=desde||hoje();for(var i=0;i<7;i++){if(dIso(t).getDay()===w)return t;t=addDias(t,1)}return t}
 function addDias(t,n){var x=dIso(t);x.setDate(x.getDate()+n);return iso(x)}
 function alDatas(a,b){
   if(!alug.on||!(alug.valor>0)||!alug.ini)return [];
   var lo=a<alug.cad?alug.cad:a,out=[],N=AL_PER[alug.per][2];
+  if(alug.fim&&b>alug.fim)b=alug.fim;
   if(lo>b)return out;
   if(N>0){
     var t=alug.ini,dif=Math.floor((dIso(lo)-dIso(t))/86400000),k=Math.floor(dif/N);
@@ -3425,13 +3444,20 @@ function alMesDatas(m){return alDatas(m+"-01",m+"-"+p2(diasDoMes(m)))}
 function alMes(m){return alug.on&&alug.emb!==false?alMesDatas(m).length*alug.valor:0}
 function alProx(){var h=hoje(),l=alDatas(addDias(h,-60),addDias(h,62));for(var i=0;i<l.length;i++)if(l[i]>=h)return l[i];return ""}
 function alAnt(){var h=hoje(),l=alDatas(addDias(h,-62),h);return l.length?l[l.length-1]:""}
-function alPerTxt(){var p=AL_PER[alug.per];return p[0]+" ("+p[1]+")"}
+function alPerTxt(){var p=AL_PER[alug.per];return alug.per==="7"?"Semanal ("+alDowTxt(alug.dow)+")":p[0]+" ("+p[1]+")"}
 function alKm(){
   if(!alug.on||!(alug.kmLim>0))return null;
   var a=alAnt()||alug.cad,h=hoje(),km=0;
   dados.forEach(function(e){if(isR(e.tipo)&&e.data>=a&&e.data<=h)km+=+e.km||0});
   var exc=Math.max(0,km-alug.kmLim);
   return {ini:a,km:km,lim:alug.kmLim,falta:Math.max(0,alug.kmLim-km),exc:exc,custo:exc*(alug.kmExc||0),pc:km/alug.kmLim*100};
+}
+function alAuto(){
+  if(!alug.on||!alug.auto||!(alug.valor>0))return false;
+  var mud=false;
+  alDatas(alug.desde,hoje()).forEach(function(t){if(!alug.pg[t]&&!alug.nao[t]){alug.pg[t]={d:t,v:alug.valor,a:1};mud=true}});
+  if(mud)saveCats();
+  return mud;
 }
 function alPagas(){
   var o=[];if(!alug.on&&!Object.keys(alug.pg||{}).length)return o;
@@ -3443,6 +3469,7 @@ function alAlertas(){
   var h=hoje();
   alDatas(addDias(h,-31),addDias(h,2)).forEach(function(t){
     if(alug.pg[t]||t<alug.desde)return;var dd=Math.round((dIso(t)-dIso(h))/86400000);
+    if(alug.auto&&!alug.nao[t]){if(dd>0)out.push('🚗 Aluguel do veículo ('+brl(alug.valor)+'): será descontado '+(dd===1?'amanhã':'em '+dd+' dias ('+fmtBR(t).slice(0,5)+')'));return}
     out.push('🚗 Aluguel do veículo ('+brl(alug.valor)+'): '+(dd<0?'venceu em '+fmtBR(t).slice(0,5):dd===0?'vence hoje':dd===1?'vence amanhã':'vence em '+dd+' dias ('+fmtBR(t).slice(0,5)+')'));
   });
   var k=alKm();if(k&&k.pc>=90)out.push(k.exc>0?'🚗 Passou '+k.exc.toLocaleString("pt-BR")+' km do limite do aluguel'+(k.custo>0?' (≈ '+brl(k.custo)+' de excedente)':''):'🚗 Faltam '+k.falta.toLocaleString("pt-BR")+' km para o limite do aluguel neste período');
@@ -3459,16 +3486,18 @@ function renderAlug(){
   var hm=hoje().slice(0,7),nm=proxMes(hm,1),dl=alMesDatas(hm),dn=alMesDatas(nm),dt=diasTrab(hm),px=alProx(),h="";
   h+=kv((alug.loc?esc(alug.loc)+" · ":"")+esc(alPerTxt()),brl(alug.valor));
   if(px)h+=kv("Próximo pagamento",fmtBR(px)+" ("+SEM[dIso(px).getDay()].slice(0,3).toLowerCase()+")");
+  else if(alug.fim)h+=kv("Próximo pagamento","nenhum (contrato até "+fmtBR(alug.fim)+")");
+  h+='<div style="font-size:12px;color:var(--mut);margin:2px 0 4px">'+(alug.auto?'🔁 Desconto automático: no dia de cada pagamento, o valor sai do saldo sozinho.':'Toque em Pagar quando pagar: o valor só sai do saldo nessa hora. (Para descontar sozinho, marque a opção em Editar aluguel.)')+(alug.fim?' Contrato até '+fmtBR(alug.fim)+'.':'')+'</div>';
   h+=kv("Em "+esc(mesTxt(hm)),dl.length+(dl.length===1?" pagamento":" pagamentos")+" = "+brl(dl.length*alug.valor));
-  if(alug.emb!==false)h+=kv("Na meta do dia","+ "+brl(dl.length*alug.valor/dt)+" por dia ("+dt+" dias de trabalho)");
+  if(alug.emb!==false){if(dl.length)h+=kv("Na meta do dia","+ "+brl(dl.length*alug.valor/dt)+" por dia ("+dt+" dias de trabalho)");else h+='<div style="font-size:12px;color:var(--mut);margin-top:4px">Sem pagamento neste mês: o aluguel entra na meta a partir do mês do primeiro pagamento.</div>'}
   else h+='<div style="font-size:12px;color:var(--mut);margin-top:4px">Fora da meta diária (opção desmarcada).</div>';
   h+='<div style="font-size:12px;color:var(--mut);margin-top:2px">Em '+esc(mesTxt(nm))+': '+dn.length+(dn.length===1?' pagamento':' pagamentos')+' = '+brl(dn.length*alug.valor)+'.</div>';
   var lst=dl.concat(dn.filter(function(x){return x<=addDias(hoje(),20)}));
   if(lst.length){
     h+='<div style="font-size:12px;color:var(--mut);margin:10px 0 2px">Pagamentos</div>';
     lst.forEach(function(d0){
-      var pg=alug.pg[d0],at=!pg&&d0<hoje()&&d0>=alug.desde,antes=!pg&&d0<alug.desde;
-      h+='<div class="ir" style="font-size:13px"><div class="t">'+fmtBR(d0)+(at?' <b style="color:var(--bad)">· atrasado</b>':antes?' <span style="color:var(--mut);font-size:11px">· antes do cadastro</span>':'')+'</div><button class="'+(pg?'':'pb')+'" data-alp="'+d0+'" style="width:auto;margin:0;padding:8px 12px;border-radius:8px;'+(pg?'border:0;background:var(--in);color:var(--ok);font-weight:700':'border:0;background:var(--hd);color:#fff;font-weight:700')+'">'+(pg?(alArm===d0?'Toque p/ desfazer':'✅ Pago '+fmtBR(pg.d).slice(0,5)):'Pagar')+'</button></div>';
+      var pg=alug.pg[d0],at=!pg&&d0<hoje()&&d0>=alug.desde,antes=!pg&&d0<alug.desde,ag=!pg&&alug.auto&&!alug.nao[d0]&&d0>=hoje();
+      h+='<div class="ir" style="font-size:13px"><div class="t">'+fmtBR(d0)+(at?' <b style="color:var(--bad)">· atrasado</b>':antes?' <span style="color:var(--mut);font-size:11px">· antes do cadastro</span>':ag?' <span style="color:var(--mut);font-size:11px">· desconto automático</span>':'')+'</div><button class="'+(pg?'':'pb')+'" data-alp="'+d0+'" style="width:auto;margin:0;padding:8px 12px;border-radius:8px;'+(pg?'border:0;background:var(--in);color:var(--ok);font-weight:700':'border:0;background:var(--hd);color:#fff;font-weight:700')+'">'+(pg?(alArm===d0?'Toque p/ desfazer':(pg.a?'✅ Descontado ':'✅ Pago ')+fmtBR(pg.d).slice(0,5)):'Pagar')+'</button></div>';
     });
   }
   var k=alKm();
@@ -3482,33 +3511,38 @@ function renderAlug(){
 }
 function alAbre(){
   var a=alug;
-  $("alloc").value=a.loc||"";$("alv").value=a.valor>0?a.valor:"";$("alper").value=a.per||"15";$("alini").value=a.ini||alProx()||hoje();
+  $("alloc").value=a.loc||"";$("alv").value=a.valor>0?a.valor:"";$("alper").value=a.per||"7";$("alini").value=a.ini||alProx()||hoje();alDowSet(a.on?a.dow:1);$("alp1").value=(a.on&&a.per==="7"&&a.cad&&a.cad<hoje())?a.cad:"";$("alauto").checked=a.on?a.auto===true:false;$("alfim").value=a.fim||"";alPerUI();
   $("alemb").checked=a.on?a.emb!==false:true;$("alkm").value=a.kmLim>0?a.kmLim:"";$("alkx").value=a.kmExc>0?a.kmExc:"";
   $("alcau").value=a.cau>0?a.cau:"";$("alcaud").value=a.cauD||"";$("alerr").textContent="";
   $("alrmv").style.display=a.on?"block":"none";$("alrmv").textContent="Remover aluguel";alRmArm=false;
   alPrev();$("ov11").className="on";
 }
-var alRmArm=false;
+var alRmArm=false,alDowSel=1;
+function alDowSet(w){alDowSel=w;[].forEach.call(document.querySelectorAll("#aldow [data-w]"),function(b){b.className="chip"+(+b.getAttribute("data-w")===w?" on":"")})}
+function alPerUI(){var s7=$("alper").value==="7";$("aldoww").style.display=s7?"":"none";$("aliniw").style.display=s7?"none":"";}
+function alIniForm(){return $("alper").value==="7"?($("alp1").value||alProxDow(alDowSel,hoje())):$("alini").value}
 function alPrev(){
-  var v=parseFloat($("alv").value)||0,per=$("alper").value,ini=$("alini").value,t="";
+  var v=parseFloat($("alv").value)||0,per=$("alper").value,ini=alIniForm(),fim=$("alfim").value,t="";
   if(v>0&&ini){
-    var tmp=alug;alug=alLimpa({on:1,valor:v,per:per,ini:ini,cad:hoje().slice(0,7)+"-01"});
+    var tmp=alug;alug=alLimpa({on:1,valor:v,per:per,ini:ini,dow:alDowSel,fim:fim,cad:ini,desde:hoje(),p1v:1});
     var hm=hoje().slice(0,7),n=alMesDatas(hm).length,n2=alMesDatas(proxMes(hm,1)).length,dt=diasTrab(hm);alug=tmp;
-    t=brl(v)+" "+AL_PER[per][1]+". Neste mês: "+n+(n===1?" pagamento":" pagamentos")+" = "+brl(n*v)+($("alemb").checked&&n?" → "+brl(n*v/dt)+" por dia de trabalho na meta":"")+". No mês que vem: "+n2+(n2===1?" pagamento":" pagamentos")+" = "+brl(n2*v)+".";
-  }else t="Informe o valor e a data do próximo pagamento.";
+    t=brl(v)+" "+(per==="7"?alDowTxt(alDowSel):AL_PER[per][1])+" ("+(ini<hoje()?"a partir de ":"próximo: ")+fmtBR(ini).slice(0,5)+"). Neste mês: "+n+(n===1?" pagamento":" pagamentos")+" = "+brl(n*v)+($("alemb").checked&&n?" → "+brl(n*v/dt)+" por dia de trabalho na meta":"")+". No mês que vem: "+n2+(n2===1?" pagamento":" pagamentos")+" = "+brl(n2*v)+"."+($("alauto").checked?" O valor sai do saldo sozinho em cada dia de pagamento.":" Em cada pagamento, toque em Pagar para tirar o valor do saldo.");
+  }else t=$("alper").value==="7"?"Informe o valor e escolha o dia da semana do pagamento.":"Informe o valor e a data do próximo pagamento.";
   $("alprev").textContent=t;
 }
 $("alnovo").onclick=alAbre;$("aled").onclick=alAbre;
 $("alcx").onclick=function(){$("ov11").className=""};
 $("ov11").onclick=function(e){if(e.target===$("ov11"))$("ov11").className=""};
-["alv","alini","alkm"].forEach(function(i){$(i).addEventListener("input",alPrev)});$("alper").onchange=alPrev;$("alemb").onchange=alPrev;
+["alv","alini","alkm","alfim"].forEach(function(i){$(i).addEventListener("input",alPrev)});$("alp1").addEventListener("input",function(){if(this.value)alDowSet(dIso(this.value).getDay());alPrev()});$("alper").onchange=function(){alPerUI();alPrev()};$("alemb").onchange=alPrev;$("alauto").onchange=alPrev;
+$("aldow").onclick=function(e){var b=e.target.closest("[data-w]");if(!b)return;alDowSet(+b.getAttribute("data-w"));if($("alp1").value&&dIso($("alp1").value).getDay()!==alDowSel)$("alp1").value="";alPrev()};
 $("alok").onclick=function(){
-  var v=parseFloat($("alv").value)||0,ini=$("alini").value;
+  var v=parseFloat($("alv").value)||0,ini=alIniForm(),fim=$("alfim").value;
   if(!(v>0)){$("alerr").textContent="Informe o valor do aluguel.";return}
+  if(fim&&fim<hoje()){$("alerr").textContent="A data de fim do contrato não pode ter passado.";return}
   if(!ini){$("alerr").textContent="Informe a data do próximo pagamento (ou de um pagamento já feito).";return}
   var cd=$("alcaud").value;if(cd&&cd>hoje()){$("alerr").textContent="A data da caução não pode ser futura.";return}
-  var novo=alLimpa({on:1,valor:v,per:$("alper").value,ini:ini,cad:alug.on?alug.cad:(ini<hoje()?ini:hoje()).slice(0,7)+"-01",emb:$("alemb").checked,loc:$("alloc").value.trim(),
-    kmLim:parseInt($("alkm").value)||0,kmExc:parseFloat($("alkx").value)||0,cau:parseFloat($("alcau").value)||0,cauD:cd,desde:alug.on?alug.desde:hoje(),pg:alug.pg});
+  var novo=alLimpa({on:1,valor:v,per:$("alper").value,ini:ini,cad:(alug.on&&alug.cad&&alug.cad<ini)?alug.cad:ini,p1v:1,emb:$("alemb").checked,loc:$("alloc").value.trim(),
+    kmLim:parseInt($("alkm").value)||0,kmExc:parseFloat($("alkx").value)||0,cau:parseFloat($("alcau").value)||0,cauD:cd,desde:alug.on?alug.desde:hoje(),dow:alDowSel,auto:$("alauto").checked,av:1,fim:fim,nao:alug.nao,pg:alug.pg});
   alug=novo;saveCats();$("ov11").className="";render();toast("🚗 Aluguel salvo");
 };
 $("alrmv").onclick=function(){
@@ -3519,9 +3553,9 @@ $("altx").onclick=function(e){
   var b=e.target.closest("[data-alp]");if(!b)return;var d0=b.getAttribute("data-alp");
   if(alug.pg[d0]){
     if(alArm!==d0){alArm=d0;renderAlug();setTimeout(function(){if(alArm===d0){alArm=null;renderAlug()}},5000);return}
-    delete alug.pg[d0];alArm=null;saveCats();render();toast("Pagamento desfeito");return;
+    var era=alug.pg[d0].a;delete alug.pg[d0];if(alug.auto)alug.nao[d0]=1;alArm=null;saveCats();render();toast(era?"Desconto desfeito. Toque em Pagar quando pagar.":"Pagamento desfeito");return;
   }
-  alug.pg[d0]={d:hoje(),v:alug.valor};saveCats();render();toast("✅ Aluguel de "+fmtBR(d0).slice(0,5)+" pago hoje ("+brl(alug.valor)+").");
+  delete alug.nao[d0];alug.pg[d0]={d:hoje(),v:alug.valor};saveCats();render();toast("✅ Aluguel de "+fmtBR(d0).slice(0,5)+" pago hoje ("+brl(alug.valor)+").");
 };
 
 /* ===== Campos de dinheiro no formato da moeda (digita só números: 5000 → 50,00) ===== */

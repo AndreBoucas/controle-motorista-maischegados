@@ -333,7 +333,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 31/10/2026 · v82</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 01/11/2026 · v83</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -376,6 +376,7 @@ nav button.on b{font-weight:800}
 </div>
 <div id="p7" style="display:none">
   <div class="st"><h3>💸 Despesas</h3><div id="dsum7"></div></div>
+  <div class="st" id="cc7" style="display:none"><h3>💳 Cartão de crédito</h3><div id="cc7l"></div></div>
   <div class="st">
     <div id="dhint" style="font-size:12px;color:var(--mut);margin:2px 0 8px;line-height:1.4"></div>
     <div id="dlist7"></div>
@@ -484,6 +485,8 @@ nav button.on b{font-weight:800}
     <div><label>Odômetro (km)</label><input type="number" inputmode="numeric" id="fodo" placeholder="Km do painel"></div>
   </div>
   <div class="f" id="obsWrap" style="margin-top:10px"><div style="grid-column:1/-1"><label>Observação (opcional)</label><input id="obs" maxlength="120" placeholder="Ex: almoço com cliente, troca de pneu, mercado..."></div></div>
+  <div id="pgWrap" style="margin-top:10px"><label style="font-size:12px;color:var(--mut);display:block;margin-bottom:4px">Como pagou?</label><div class="chips" id="pgc" style="justify-content:flex-start"><button type="button" class="chip on" data-pg="0">💵 Dinheiro / Pix / Débito</button><button type="button" class="chip" data-pg="1">💳 Cartão de crédito</button></div>
+    <div class="f" id="pgvw" style="display:none;margin-top:8px"><div style="grid-column:1/-1"><label for="pgv">Vencimento da fatura (quando sai do bolso)</label><input id="pgv" type="date"><div id="pgvi" style="font-size:12px;color:var(--mut);margin-top:4px;line-height:1.4"></div></div></div></div>
   <div id="err"></div>
   <button id="sv">Salvar</button><button id="ex">Excluir lançamento</button><button id="cx">Cancelar</button>
 </div></div>
@@ -829,6 +832,7 @@ function detLanc(e,g){
     if(l3.length)o+='<small>💵 '+l3.join(" · ")+'</small>';
   }else{
     if(e.ob)o+='<small>📝 '+esc(String(e.ob).slice(0,120))+'</small>';
+    if(e.pc)o+='<small>💳 Cartão · '+(ccPago(e)?'fatura paga em '+fmtBR(e.pp).slice(0,5):'sai do saldo em '+fmtBR(e.pv).slice(0,5))+'</small>';
     if(e.l){var fu=fuelU(e.cb);o+='<small>'+(e.cb==="eletrico"?"⚡ ":"⛽ ")+(FUEL[e.cb]?esc(fuelN(e.cb))+' · ':'')+e.l.toLocaleString("pt-BR")+' '+fu+(e.valor>0?' · '+brl(e.valor/e.l)+'/'+fu:'')+(fuelInfo[e.id]?' · '+fmt1(fuelInfo[e.id].kml)+' km/'+fu:'')+'</small>'}
     if(e.o>0)o+='<small>📟 Odômetro '+(e.o|0).toLocaleString("pt-BR")+' km</small>';
   }
@@ -1897,7 +1901,7 @@ function metasUI(s,m,rec){
   }
   var al=[];
   manut.forEach(function(x){var r=restam(x);if(r<=300)al.push('🔧 '+esc(x.nome)+': '+(r>0?'faltam '+Math.round(r)+' km':'atrasada '+Math.round(-r)+' km'))});
-  alertasContas().forEach(function(t){al.push(t)});alAlertas().forEach(function(t){al.push(t)});
+  alertasContas().forEach(function(t){al.push(t)});alAlertas().forEach(function(t){al.push(t)});cartaoAlertas().forEach(function(t){al.push(t)});
   var dbk=diasBackup();if(dados.length>=5&&(dbk===null||dbk>=30)&&arqEst!=="ok")al.push('💾 Faça um backup dos seus dados (Ajustes → Backup)'+(dbk===null?'':' · último há '+dbk+' dias'));
   al.slice(0,4).forEach(function(t){h+='<div class="st" style="padding:10px 14px;margin-bottom:10px;border:1px solid var(--bad);font-size:13px">'+t+'</div>'});
   $("metas").innerHTML=h;
@@ -2014,7 +2018,7 @@ function renderRel(){
     kv("Km rodados",c.k.toLocaleString("pt-BR")+" km")+kv("Lucro por km",c.k>0?brl(c.l/c.k):"-")+
     kv("Horas trabalhadas",c.hs>0?c.hs.toLocaleString("pt-BR")+" h":"-")+kv("Ganho por hora",c.hs>0?brl(c.r/c.hs):"-")+kv("Lucro por hora",c.hs>0?brl(c.l/c.hs):"-")+kv("Corridas",c.nc>0?String(c.nc):"-")+kv("Ganho por corrida",c.nc>0?brl(c.r/c.nc):"-")+
     (c.tur>0||c.np>0?kv("Turnos com início e fim",String(c.tur))+kv("Pausas",c.np+(c.np===1?" pausa":" pausas")+(c.mp>0?" ("+fmtDur(c.mp*60000)+")":"")):"")+
-    kv("Contas pagas e manutenção",brl(c.pgT),"bad")+kv("Saldo após contas",brl(c.l-c.pgT),(c.l-c.pgT)>=0?"ok":"bad")+(function(){var t=0;c.P.forEach(function(x){if(x.o==="alug")t+=x.v});return t>0?kv("🚗 Aluguel do veículo pago",brl(t)+(c.k>0?" · "+brl(t/c.k)+" por km":"")):""})();
+    kv("Contas pagas e manutenção",brl(c.pgT),"bad")+kv("Saldo após contas",brl(c.l-c.pgT),(c.l-c.pgT)>=0?"ok":"bad")+(function(){var cc=cartaoAj(c.ini,c.fim);return cc.aj?kv("💳 Ajuste do cartão de crédito",(cc.aj>0?"+ ":"− ")+brl(Math.abs(cc.aj)))+kv("Saldo em caixa",brl(c.l-c.pgT+cc.aj),(c.l-c.pgT+cc.aj)>=0?"ok":"bad"):""})()+(function(){var t=0;c.P.forEach(function(x){if(x.o==="alug")t+=x.v});return t>0?kv("🚗 Aluguel do veículo pago",brl(t)+(c.k>0?" · "+brl(t/c.k)+" por km":"")):""})();
   $("rpag").innerHTML=pagHtml(c.pgo,c.pgT);
   $("rcmpc").style.display=c.cmp?"":"none";$("rcmp").innerHTML=c.cmp?compHtml(c.cmp):"";
   $("rwd").innerHTML=wdHtml(c);
@@ -2260,9 +2264,9 @@ function render(){
     if(isR(e.tipo)){r+=e.valor;por[e.tipo]=(por[e.tipo]||0)+e.valor}
     else{d+=e.valor;cats[e.tipo]=(cats[e.tipo]||0)+e.valor}
   });
-  var s=r-d,cm=pagoCasaMes(m);
-  $("saldo").textContent=brl(s-cm);$("rec").textContent=brl(r);$("des").textContent=brl(d+cm);$("recD").textContent=brl(recDia(diaSel));$("desD").textContent=brl(lancDia(diaSel));var pgd=pagoCasaDia(diaSel);$("pgdia").style.display=pgd>0?"block":"none";$("pgdia").textContent=pgd>0?"+ "+brl(pgd)+" pagos neste dia em contas, aluguel ou manutenção (contam só no mês)":"";
-  $("saldonota").textContent=cm>0?"Inclui "+brl(cm)+" de contas, aluguel e manutenção pagos":"";
+  var s=r-d,cm=pagoCasaMes(m),cc=cartaoAj(m+"-01",m+"-31");s+=cc.aj;
+  $("saldo").textContent=brl(s-cm);$("rec").textContent=brl(r);$("des").textContent=brl(d+cm);$("recD").textContent=brl(recDia(diaSel));$("desD").textContent=brl(lancDia(diaSel));var pgd=pagoCasaDia(diaSel)+cartaoPagoDia(diaSel);$("pgdia").style.display=pgd>0?"block":"none";$("pgdia").textContent=pgd>0?"+ "+brl(pgd)+" pagos neste dia em contas, aluguel, manutenção ou fatura do cartão (contam só no saldo do mês)":"";
+  $("saldonota").textContent=[cm>0?"Inclui "+brl(cm)+" de contas, aluguel e manutenção pagos":"",cc.apagar>0?"💳 "+brl(cc.apagar)+" no cartão ainda a pagar (não saiu do saldo)":"",cc.depois>0?"💳 "+brl(cc.depois)+" no cartão pagos na fatura de outro mês":"",cc.pag>0?"Inclui "+brl(cc.pag)+" de fatura do cartão paga":""].filter(function(x){return x}).join(" · ");
   var dp=diaSel.split("-"),eh=diaSel===hoje();
   $("diatxt").textContent=SEM[new Date(+dp[0],+dp[1]-1,+dp[2]).getDay()]+", "+dp[2]+"/"+dp[1]+"/"+dp[0]+(eh?" (hoje)":"");
   $("diahoje").style.display=eh?"none":"";
@@ -2301,7 +2305,7 @@ function render(){
     var hdr=document.querySelector("header"),pm=semPctMes(m),si=pm===null?null:semInfo(pm);
     hdr.className=si&&si.k!=="v"?"sem-"+si.k:"";
     $("semtxt").textContent=si?si.e+(semCfg().rit?" Ritmo do mês: ":" Meta do mês: ")+Math.round(pm)+"% ("+si.t+")":"";
-  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();renderAlug();if(typeof gdUI==="function")gdUI();
+  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();renderAlug();renderCC();if(typeof gdUI==="function")gdUI();
   $("reprap").style.display=dados.length?"block":"none";$("reprap").textContent=repTxt();
 }
 
@@ -2320,7 +2324,7 @@ function chips(){
   h+='<option value="__nova">➕ Nova categoria…</option></select>';
   $("chips").innerHTML=h;updDel();
 }
-function setModo(m){modo=m;$("kmWrap").style.display=$("hWrap").style.display=$("hiWrap").style.display=$("crWrap").style.display=$("hfWrap").style.display=$("npWrap").style.display=$("mpWrap").style.display=m==="r"?"":"none";$("obsWrap").style.display=m==="d"?"":"none";$("dtWrap").style.gridColumn="1 / -1";$("tr").className=m==="r"?"on r":"";$("td").className=m==="d"?"on d":"d";chips()}
+function setModo(m){modo=m;$("kmWrap").style.display=$("hWrap").style.display=$("hiWrap").style.display=$("crWrap").style.display=$("hfWrap").style.display=$("npWrap").style.display=$("mpWrap").style.display=m==="r"?"":"none";$("obsWrap").style.display=m==="d"?"":"none";$("pgWrap").style.display=m==="d"?"":"none";$("dtWrap").style.gridColumn="1 / -1";$("tr").className=m==="r"?"on r":"";$("td").className=m==="d"?"on d":"d";chips()}
 var d4={k:null,n:null,arm:false};
 function toast(t){var e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display="none"},2600)}
 function refreshUI(){
@@ -2378,13 +2382,13 @@ function repTxt(){var u=ultimo();return u?"🔁 Repetir último: "+info(u.tipo)[
 function fillRep(){
   var u=ultimo();if(!u)return;
   cat=u.tipo;setModo(isR(u.tipo)?"r":"d");
-  $("valor").value=u.valor;$("kmin").value=u.km||"";$("hin").value=u.h||"";$("hini").value="";$("ncor").value="";$("hfim").value="";$("npaus").value="";$("mpaus").value="";$("obs").value="";$("flit").value=u.l||"";$("fodo").value="";fcbSet(u.cb||"");
+  $("valor").value=u.valor;$("kmin").value=u.km||"";$("hin").value=u.h||"";$("hini").value="";$("ncor").value="";$("hfim").value="";$("npaus").value="";$("mpaus").value="";$("obs").value="";$("flit").value=u.l||"";$("fodo").value="";fcbSet(u.cb||"");var uc=!!(u.pc&&u.pv>=hoje());$("pgv").value=uc?u.pv:"";pgSet(uc?1:0);
   $("err").textContent="";toast("🔁 Último lançamento copiado. Ajuste o que precisar e salve.");
 }
 var editId=null,exArm=false,dupOk=false;
 function abrir(e){
   editId=e?e.id:null;exArm=false;dupOk=false;
-  $("data").value=e?e.data:hoje();$("data").max=hoje();$("valor").value=e?e.valor:"";$("kmin").value=e&&e.km?e.km:"";$("hin").value=e&&e.h?e.h:"";$("hini").value=e&&e.hi?e.hi:"";$("ncor").value=e&&e.nc>0?(e.nc|0):"";$("hfim").value=e&&e.hf?e.hf:"";$("npaus").value=e&&e.np>0?(e.np|0):(e&&e.hf&&e.np===0?0:"");$("mpaus").value=e&&e.mp>0?(e.mp|0):"";$("flit").value=e&&e.l?e.l:"";$("fodo").value=e&&e.o?e.o:"";fcbSet(e&&e.cb||"");$("obs").value=e&&e.ob?String(e.ob).slice(0,120):"";
+  $("data").value=e?e.data:hoje();$("data").max=hoje();$("valor").value=e?e.valor:"";$("kmin").value=e&&e.km?e.km:"";$("hin").value=e&&e.h?e.h:"";$("hini").value=e&&e.hi?e.hi:"";$("ncor").value=e&&e.nc>0?(e.nc|0):"";$("hfim").value=e&&e.hf?e.hf:"";$("npaus").value=e&&e.np>0?(e.np|0):(e&&e.hf&&e.np===0?0:"");$("mpaus").value=e&&e.mp>0?(e.mp|0):"";$("flit").value=e&&e.l?e.l:"";$("fodo").value=e&&e.o?e.o:"";fcbSet(e&&e.cb||"");$("pgv").value=e&&e.pc?e.pv:"";pgSet(e&&e.pc?1:0);$("obs").value=e&&e.ob?String(e.ob).slice(0,120):"";
   $("err").textContent="";$("sv").textContent=e?"Salvar alterações":"Salvar";
   $("ex").style.display=e?"block":"none";$("ex").textContent="Excluir lançamento";
   if(e){cat=e.tipo;setModo(isR(e.tipo)?"r":"d")}else setModo("r");
@@ -2463,14 +2467,17 @@ $("sv").onclick=function(){
   var v=parseFloat($("valor").value);
   if(!(v>0)){$("err").textContent="Digite um valor maior que zero.";return}
   var d=$("data").value||hoje(),km=modo==="r"?(parseFloat($("kmin").value)||0):0,h=modo==="r"?(parseFloat($("hin").value)||0):0,hi=modo==="r"?$("hini").value:"",nc=modo==="r"?Math.max(0,parseInt($("ncor").value)||0):0,hf=modo==="r"?$("hfim").value:"",np=modo==="r"?Math.max(0,parseInt($("npaus").value)||0):0,mp=modo==="r"?Math.max(0,parseInt($("mpaus").value)||0):0,ob=modo==="d"?$("obs").value.trim().slice(0,120):"",fc=modo==="d"&&cat==="Abastecimento",lit=fc?(parseFloat($("flit").value)||0):0,od=fc?(parseInt($("fodo").value)||0):0,ms=[d.slice(0,7)];
+  var pv0=modo==="d"&&pgCard?$("pgv").value:"";
+  if(modo==="d"&&pgCard&&!pv0){$("err").textContent="Informe o vencimento da fatura do cartão.";$("pgv").focus();return}
+  if(pv0&&pv0<d){$("err").textContent="O vencimento da fatura não pode ser antes da data da compra.";return}
   if(fc&&!fcb){$("err").textContent="Escolha o tipo de combustível: Etanol, Gasolina, GNV ou Elétrico.";$("fcb").scrollIntoView({block:"center"});return}
   if(d>hoje()){$("err").textContent="A data não pode ser futura. Hoje é "+fmtBR(hoje())+" (data do aparelho).";return}
   var dd1=dados.some(function(x){return x.data===d&&x.tipo===cat&&!isR(x.tipo)&&Math.abs(x.valor-v)<0.005}),dd2=servs.some(function(x){return x.data===d&&Math.abs((x.valor||0)-v)<0.005});
   if(!editId&&modo==="d"&&!dupOk&&(dd1||dd2)){dupOk=true;$("err").textContent=dd1?"Já existe um lançamento igual neste dia ("+info(cat)[1]+" "+brl(v)+"). Toque em Salvar de novo se for outro gasto.":"Já existe uma manutenção de "+brl(v)+" neste dia, e ela já conta nas despesas. Toque em Salvar de novo se for outro gasto.";return}
   if(editId){
     var e=dados.filter(function(x){return x.id===editId})[0];
-    if(e){ms.push(e.data.slice(0,7));e.tipo=cat;e.valor=v;e.km=km;e.h=h;e.hi=hi;e.hf=hf;e.np=np;e.mp=mp;e.nc=nc;e.l=lit;e.o=od;if(fc)e.cb=fcb;else delete e.cb;if(modo==="d")e.ob=ob;e.data=d}
-  }else dados.push(Object.assign({id:Date.now(),tipo:cat,valor:v,km:km,h:h,hi:hi,hf:hf,np:np,mp:mp,nc:nc,l:lit,o:od,ob:ob,data:d},fc?{cb:fcb}:{}));
+    if(e){ms.push(e.data.slice(0,7));e.tipo=cat;e.valor=v;e.km=km;e.h=h;e.hi=hi;e.hf=hf;e.np=np;e.mp=mp;e.nc=nc;e.l=lit;e.o=od;if(fc)e.cb=fcb;else delete e.cb;if(pv0){if(e.pv!==pv0)delete e.pp;e.pc=1;e.pv=pv0}else{delete e.pc;delete e.pv;delete e.pp}if(modo==="d")e.ob=ob;e.data=d}
+  }else dados.push(Object.assign({id:Date.now(),tipo:cat,valor:v,km:km,h:h,hi:hi,hf:hf,np:np,mp:mp,nc:nc,l:lit,o:od,ob:ob,data:d},fc?{cb:fcb}:{},pv0?{pc:1,pv:pv0}:{}));
   save(Array.from(new Set(ms)));
   if(fc&&od>0&&od>(odoAtual()||0)){perfil.odo=od;perfil.odoTs=Date.now();saveCats();fillPerfil()}
   var p=d.split("-");cur=new Date(+p[0],+p[1]-1,1);fechar();render();
@@ -3247,7 +3254,7 @@ function ajSecoes(){
     c('💡 Em cada tela, o botão <b>❓</b> ao lado do título abre direto a parte do manual daquela tela.')},
   {k:"inicio",tab:1,t:"🏠 Início",b:
     f("‹ Mês ›","Troca o mês mostrado na tela. Tudo abaixo segue esse mês.")+
-    f("Saldo do mês","Receitas − despesas − contas pagas e manutenção do mês. A linha embaixo mostra quanto das contas pagas e da manutenção já foi descontado.")+
+    f("Saldo do mês","Receitas − despesas − contas pagas e manutenção do mês. Compras no cartão de crédito só saem do saldo quando a fatura é paga. A linha embaixo mostra quanto das contas pagas e da manutenção já foi descontado.")+
     f("Cor do topo","Segue o 🚦 Semáforo da meta (em 🎯 Metas): vermelho, amarelo ou verde, conforme a parte da meta do mês que você já alcançou.")+
     f("Receitas · Mensal","Soma das receitas lançadas no mês.")+
     f("Despesas · Mensal","Despesas lançadas no mês + contas pagas + aluguel pago + manutenção.")+
@@ -3274,6 +3281,7 @@ function ajSecoes(){
     f("Categoria","Almoço, Lanche, Abastecimento, Supermercado, Lavagem de carro… Em ➕ você cria uma categoria nova. <b>Almoço</b> e <b>Abastecimento</b> são fixas e não podem ser apagadas. As que você criou podem ser apagadas em 🗑 Excluir esta categoria.")+
     f("Data","Dia do gasto. Não aceita data futura.")+
     f("Observação","Opcional, até 120 caracteres (ex: almoço com cliente).")+
+    f("Como pagou?","<b>Dinheiro / Pix / Débito</b> (padrão): o valor sai do saldo na hora. <b>💳 Cartão de crédito</b>: informe o <b>vencimento da fatura</b>. A compra conta como despesa na data da compra (lucro do dia, meta, consumo e relatórios), mas só sai do saldo quando você pagar a fatura em 💸 Despesas → 💳 Cartão de crédito. O Início avisa 3 dias antes do vencimento.")+
     f("Tipo de combustível","Só no Abastecimento: Etanol, Gasolina, GNV ou ⚡ Elétrico. É obrigatório escolher.")+
     f("Quantidade","Litros (etanol e gasolina), m³ (GNV) ou kWh (elétrico).")+
     f("Odômetro","Km do painel na hora de abastecer. Atualiza o odômetro do cadastro e permite calcular o consumo (km/L, km/m³ ou km/kWh).")+
@@ -3317,7 +3325,8 @@ function ajSecoes(){
     f("Periodicidade","<b>Todo mês</b>, <b>Uma vez por ano</b> (escolha o mês do vencimento) ou <b>Parcelada</b> (mês da 1ª parcela e número de parcelas).")+
     f("Repetir este valor nos meses seguintes","Marque se o valor é sempre o mesmo. Desmarque quando o valor muda todo mês (ex: luz).")+
     f("Pago neste mês e Data do pagamento","Marca a conta como paga. O valor sai do Saldo do mês na data do pagamento.")+
-    f("📅 Próximas","Contas anuais e parceladas que não vencem neste mês. Toque para editar.")},
+    f("📅 Próximas","Contas anuais e parceladas que não vencem neste mês. Toque para editar.")+
+    f("💳 Cartão de crédito","Aparece quando há despesas lançadas no cartão. Mostra cada fatura (vencimento, compras e total). Toque em <b>Pagar fatura</b>: o valor sai do saldo do mês. Para desfazer, toque duas vezes em ✅ Paga.")},
   {k:"gestao",tab:8,t:"💼 Gestão de Custos",b:
     c('Organiza os custos do trabalho para a <b>meta do dia</b> mostrar quanto você precisa faturar de verdade. Tem 4 abas: Custos diários, Custos mensais (onde fica também o aluguel do veículo), Custos anuais e Reservas.')+
     '<div class="ajs">📌 Onde lançar cada coisa (para não contar duas vezes)</div>'+
@@ -3561,6 +3570,54 @@ $("altx").onclick=function(e){
     var era=alug.pg[d0].a;delete alug.pg[d0];if(alug.auto)alug.nao[d0]=1;alArm=null;saveCats();render();toast(era?"Desconto desfeito. Toque em Pagar quando pagar.":"Pagamento desfeito");return;
   }
   delete alug.nao[d0];alug.pg[d0]={d:hoje(),v:alug.valor};saveCats();render();toast("✅ Aluguel de "+fmtBR(d0).slice(0,5)+" pago hoje ("+brl(alug.valor)+").");
+};
+
+/* ===== Compras no cartão de crédito (custo na data da compra, saída do saldo no vencimento) ===== */
+var pgCard=0,ccArm=null;
+function pgSet(v){pgCard=v?1:0;[].forEach.call(document.querySelectorAll("#pgc [data-pg]"),function(b){b.className="chip"+(+b.getAttribute("data-pg")===pgCard?" on":"")});$("pgvw").style.display=pgCard?"":"none";if(pgCard&&!$("pgv").value)$("pgv").value=cartaoUltVenc();pgInfo()}
+function cartaoUltVenc(){var h=hoje(),best="";dados.forEach(function(e){if(e.pc&&!e.pp&&e.pv>=h&&(!best||e.pv<best))best=e.pv});return best}
+function pgInfo(){var t="";if(pgCard){var e=editId?dados.filter(function(x){return x.id===editId})[0]:null;t=(e&&e.pc&&e.pp)?"✅ Fatura paga em "+fmtBR(e.pp)+".":"Conta como despesa na data da compra (lucro do dia, meta e relatórios), mas só sai do saldo quando você pagar a fatura."}$("pgvi").textContent=t}
+function ccPago(e){return !!(e.pc&&e.pp&&e.pp<=hoje())}
+function cartaoAj(ini,fim){
+  var o={abe:0,pag:0,apagar:0,depois:0};
+  dados.forEach(function(e){
+    if(!e.pc||isR(e.tipo))return;
+    var inP=e.data>=ini&&e.data<=fim,pp=ccPago(e)?e.pp:"",pagoP=pp&&pp>=ini&&pp<=fim;
+    if(inP&&!pagoP){o.abe+=e.valor;if(pp)o.depois+=e.valor;else o.apagar+=e.valor}
+    if(!inP&&pagoP)o.pag+=e.valor;
+  });
+  o.aj=o.abe-o.pag;return o;
+}
+function cartaoPagoDia(d){var t=0;dados.forEach(function(e){if(e.pc&&e.pp===d&&!isR(e.tipo))t+=e.valor});return t}
+function ccGrupos(){
+  var g={};dados.forEach(function(e){if(!e.pc||isR(e.tipo)||!e.pv)return;var k=e.pv,x=g[k]||(g[k]={pv:k,it:[],tot:0,abe:0,pp:""});x.it.push(e);x.tot+=e.valor;if(ccPago(e))x.pp=x.pp&&x.pp>e.pp?x.pp:e.pp;else x.abe+=e.valor});
+  return Object.keys(g).sort().map(function(k){return g[k]});
+}
+function cartaoAlertas(){
+  var out=[],h=hoje();
+  ccGrupos().forEach(function(x){
+    if(!(x.abe>0))return;var dd=Math.round((dIso(x.pv)-dIso(h))/86400000);if(dd>3)return;
+    out.push('💳 Fatura do cartão de '+fmtBR(x.pv).slice(0,5)+': '+brl(x.abe)+' ('+(dd<0?'venceu':dd===0?'vence hoje':dd===1?'vence amanhã':'vence em '+dd+' dias')+'). Pague em 💸 Despesas.');
+  });
+  return out;
+}
+function renderCC(){
+  var bx=$("cc7"),l=$("cc7l");if(!bx)return;
+  var h=hoje(),lim=addDias(h,-62),gs=ccGrupos().filter(function(x){return x.abe>0||x.pv>=lim});
+  bx.style.display=gs.length?"":"none";if(!gs.length){l.innerHTML="";return}
+  l.innerHTML=gs.map(function(x){
+    var ab=x.abe>0,at=ab&&x.pv<h;
+    return '<div style="padding:8px 0;border-top:1px solid var(--bd)"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div><b>Fatura '+fmtBR(x.pv)+'</b>'+(at?' <b style="color:var(--bad);font-size:12px">· vencida</b>':'')+'<div style="font-size:12px;color:var(--mut)">'+x.it.length+(x.it.length===1?' compra':' compras')+' · '+brl(ab?x.abe:x.tot)+'</div></div>'+
+      '<button data-ccp="'+x.pv+'" style="width:auto;margin:0;padding:8px 12px;border:0;border-radius:8px;font-weight:700;'+(ab?'background:var(--hd);color:#fff':'background:var(--in);color:var(--ok)')+'">'+(ab?'Pagar fatura':(ccArm===x.pv?'Toque p/ desfazer':'✅ Paga '+fmtBR(x.pp).slice(0,5)))+'</button></div>'+
+      '<div style="font-size:11px;color:var(--mut);margin-top:4px;line-height:1.5">'+x.it.slice().sort(function(a,b){return a.data.localeCompare(b.data)}).map(function(e){return fmtBR(e.data).slice(0,5)+' · '+esc(info(e.tipo)[1])+' · '+brl(e.valor)}).join('<br>')+'</div></div>';
+  }).join("")+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">As compras no cartão já contam como despesa na data da compra. Ao pagar a fatura, o valor sai do saldo do mês.</div>';
+}
+$("pgc").onclick=function(e){var b=e.target.closest("[data-pg]");if(!b)return;pgSet(+b.getAttribute("data-pg"));$("err").textContent=""};
+$("cc7l").onclick=function(ev){
+  var b=ev.target.closest("[data-ccp]");if(!b)return;var pv=b.getAttribute("data-ccp"),ms=[],ab=dados.some(function(e){return e.pc&&e.pv===pv&&!ccPago(e)&&!isR(e.tipo)});
+  if(ab){dados.forEach(function(e){if(e.pc&&e.pv===pv&&!ccPago(e)&&!isR(e.tipo)){e.pp=hoje();ms.push(e.data.slice(0,7))}});save(Array.from(new Set(ms)));ccArm=null;render();toast("💳 Fatura de "+fmtBR(pv).slice(0,5)+" paga hoje. O valor saiu do saldo.");return}
+  if(ccArm!==pv){ccArm=pv;renderCC();setTimeout(function(){if(ccArm===pv){ccArm=null;renderCC()}},5000);return}
+  dados.forEach(function(e){if(e.pc&&e.pv===pv&&e.pp){delete e.pp;ms.push(e.data.slice(0,7))}});save(Array.from(new Set(ms)));ccArm=null;render();toast("Pagamento da fatura desfeito");
 };
 
 /* ===== Campos de dinheiro no formato da moeda (digita só números: 5000 → 50,00) ===== */

@@ -333,7 +333,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 31/10/2026 · v81</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 31/10/2026 · v82</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -387,20 +387,8 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>💼 Gestão de Custos</h3>
     <div class="tg" id="gctab"><button data-g="D" class="on">Custos diários</button><button data-g="M">Custos mensais</button><button data-g="A">Custos anuais</button><button data-g="R">Reservas</button></div>
     <div style="font-size:12px;color:var(--mut);margin:2px 0 6px">Composição da meta diária (hoje)</div>
-    <div id="gcsum"></div></div>
-  <div class="st" id="alcard"><h3>🚗 Aluguel do veículo</h3><div id="altx"></div>
-    <button class="pb" id="alnovo">Cadastrar aluguel</button>
-    <div id="alacts" style="display:none;margin-top:10px"><button id="aled" class="pb" style="background:var(--in);color:var(--tx)">✏️ Editar aluguel</button></div></div>
-  <details class="st" id="gcreg"><summary style="font-weight:800;cursor:pointer">📌 Regras para não duplicar</summary>
-    <div style="font-size:13px;line-height:1.55;margin-top:8px">
-      <b>1. Gastos do dia</b> (almoço, lanche, combustível…): lance só em <b>Início → + → Despesa</b>. A Gestão apenas lê esses lançamentos. Por categoria, a meta do dia usa o <b>maior</b> entre o previsto e o lançado, nunca a soma dos dois.<br>
-      <b>2. Custos pagos uma vez por ano</b> (IPVA, vistoria do GNV, licenciamento): só em <b>Custos anuais</b>. Não lance o pagamento como despesa do dia.<br>
-      <b>2b. Custos que se repetem todo mês</b> (seguro normal ou cooperativa…): só em <b>Custos mensais</b>.<br>
-      <b>3. Férias, folgas</b> e outras reservas: só em <b>Reservas</b>.<br>
-      <b>4. Contas de casa</b> (aluguel, luz, água, celular, financiamento): só em <b>Despesas</b>. Elas não entram na meta.<br>
-      <b>5. Manutenção</b> (troca de óleo, pneus, peças): registre só em <b>Manutenção</b>. O valor pago já entra no saldo, nas despesas e no histórico. Não lance de novo como despesa.<br>
-      <b>6. Nomes únicos:</b> o mesmo nome não pode existir em dois lugares. O app bloqueia o repetido e avisa se já houver algum.
-    </div></details>
+    <div id="gcsum"></div>
+    <button type="button" id="gcregl" style="display:block;width:100%;margin-top:10px;padding:8px 0 0;border:0;border-top:1px solid var(--bd);background:none;color:var(--hd);font-size:13px;font-weight:700;text-align:left">📌 Onde lançar cada coisa para não contar duas vezes? Ver no manual</button></div>
   <div id="gcD">
     <div class="st"><h3>🍽️ Custos diários</h3>
       <div style="font-size:12px;color:var(--mut);margin-bottom:6px;line-height:1.4">Categorias do dia a dia (as mesmas da tela de lançamento). Os valores aqui vêm dos lançamentos de despesa do dia (Início → + → Despesa). O que você lança entra inteiro na meta do dia. O previsto por dia é opcional: por categoria, vale o maior entre o previsto e o lançado, sem somar.</div>
@@ -412,6 +400,9 @@ nav button.on b{font-weight:800}
       <button class="pb" id="cdadd">Adicionar custo diário</button></div>
   </div>
   <div id="gcM" style="display:none">
+  <div class="st" id="alcard"><h3>🚗 Aluguel do veículo</h3><div id="altx"></div>
+    <button class="pb" id="alnovo">Cadastrar aluguel</button>
+    <div id="alacts" style="display:none;margin-top:10px"><button id="aled" class="pb" style="background:var(--in);color:var(--tx)">✏️ Editar aluguel</button></div></div>
     <div class="st"><h3>🗓️ Custos do mês</h3><div id="rsumM"></div>
       <div style="font-size:12px;color:var(--mut);margin:6px 0;line-height:1.4">Custos que se repetem todo mês (seguro normal ou cooperativa, entre outros). O valor do dia entra na meta diária. Toque em Pagar quando pagar: o valor sai do Saldo do mês, na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.</div>
       <div id="rlistM"></div></div>
@@ -2493,7 +2484,7 @@ $("ex").onclick=function(){
 $("lista").onclick=function(ev){
   var el=ev.target.closest(".it");if(!el)return;
   var sg=el.getAttribute("data-sg");
-  if(sg){if(sg==="alug"){aba(8);try{$("alcard").scrollIntoView({block:"start"})}catch(x){}}else if(sg==="mensal"){aba(8);gcSet("M")}else if(sg==="manut"){aba(4);var rr=servs.filter(function(x){return String(x.id)===el.getAttribute("data-sid")})[0];if(rr)abrirS(rr)}else aba(7);return}
+  if(sg){if(sg==="alug"){aba(8);gcSet("M");try{$("alcard").scrollIntoView({block:"start"})}catch(x){}}else if(sg==="mensal"){aba(8);gcSet("M")}else if(sg==="manut"){aba(4);var rr=servs.filter(function(x){return String(x.id)===el.getAttribute("data-sid")})[0];if(rr)abrirS(rr)}else aba(7);return}
   var id=el.getAttribute("data-id");
   var e=dados.filter(function(x){return String(x.id)===id})[0];
   if(e)abrir(e);
@@ -3328,9 +3319,9 @@ function ajSecoes(){
     f("Pago neste mês e Data do pagamento","Marca a conta como paga. O valor sai do Saldo do mês na data do pagamento.")+
     f("📅 Próximas","Contas anuais e parceladas que não vencem neste mês. Toque para editar.")},
   {k:"gestao",tab:8,t:"💼 Gestão de Custos",b:
-    c('Organiza os custos do trabalho para a <b>meta do dia</b> mostrar quanto você precisa faturar de verdade. Tem 4 abas: Custos diários, Custos mensais, Custos anuais e Reservas.')+
+    c('Organiza os custos do trabalho para a <b>meta do dia</b> mostrar quanto você precisa faturar de verdade. Tem 4 abas: Custos diários, Custos mensais (onde fica também o aluguel do veículo), Custos anuais e Reservas.')+
     '<div class="ajs">📌 Onde lançar cada coisa (para não contar duas vezes)</div>'+
-    '<ul class="ajo"><li>Gastos do dia (almoço, combustível): só no <b>+ → Despesa</b> do Início.</li><li>Pagos uma vez por ano (IPVA, licenciamento, vistoria do GNV): só em <b>Custos anuais</b>.</li><li>Todo mês (seguro, cooperativa): só em <b>Custos mensais</b>.</li><li>Férias e folgas: só em <b>Reservas</b>.</li><li>Contas de casa: só em <b>💸 Despesas</b>.</li><li>Peças e serviços do carro: só em <b>🔧 Manutenção</b>.</li><li>O mesmo nome não pode existir em dois lugares.</li></ul>'+
+    '<ul class="ajo"><li>Gastos do dia (almoço, combustível): só no <b>+ → Despesa</b> do Início.</li><li>Pagos uma vez por ano (IPVA, licenciamento, vistoria do GNV): só em <b>Custos anuais</b>.</li><li>Todo mês (seguro, cooperativa): só em <b>Custos mensais</b>.</li><li>Aluguel do carro: só no cartão <b>🚗 Aluguel do veículo</b> (aba Custos mensais). Não lance o pagamento como despesa do dia.</li><li>Férias e folgas: só em <b>Reservas</b>.</li><li>Contas de casa (aluguel da casa, luz, água, celular, financiamento): só em <b>💸 Despesas</b>. Elas não entram na meta.</li><li>Peças e serviços do carro: só em <b>🔧 Manutenção</b>. O valor já entra no saldo; não lance de novo como despesa.</li><li>O mesmo nome não pode existir em dois lugares: o app bloqueia o repetido e avisa.</li></ul>'+
     '<div class="ajs">🍽️ Custos diários</div>'+
     f("Lista","As categorias de despesa do dia a dia, com o que você lançou. A Gestão só lê os lançamentos do Início.")+
     f("Previsto por dia","Opcional. Por categoria, a meta do dia usa o maior entre o previsto e o lançado, nunca a soma. Ao editar: <b>Usar a média</b> dos últimos dias ou <b>Não prever</b>.")+
@@ -3338,7 +3329,7 @@ function ajSecoes(){
     '<div class="ajs">🗓️ Custos mensais</div>'+
     f("Cadastro","Nome e valor do custo que se repete todo mês. O valor do dia entra na meta diária.")+
     f("Pagar e ✅ Pago","Toque em Pagar quando pagar: o valor sai do Saldo do mês na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.")+
-    '<div class="ajs">🚗 Aluguel do veículo</div>'+
+    '<div class="ajs">🚗 Aluguel do veículo (aba Custos mensais)</div>'+
     f("Cadastrar aluguel","Para quem aluga o carro de trabalho. Informe a locadora (opcional), o <b>valor de cada pagamento</b> e a <b>periodicidade</b>. No <b>semanal</b>, toque no <b>dia da semana</b> do pagamento (ex: segunda). No quinzenal, escolha <b>2 vezes por mês, dias fixos</b> (informe os dois dias, ex: 10 e 25) ou <b>a cada 15 dias corridos</b> (ou 14). No mensal, informe a data do próximo pagamento. O app conta a partir do primeiro pagamento (sem datas para trás) e calcula todas as seguintes. Se já pagava antes de cadastrar, informe o primeiro pagamento. <b>Até quando</b> (opcional) é o fim do contrato: depois dele, o aluguel para de contar.")+
     f("🔁 Descontar sozinho","Opcional, vem desmarcado. Os pagamentos se repetem sozinhos (não precisa cadastrar toda semana), mas por padrão você marca cada um como pago tocando em <b>Pagar</b>. Marcando a opção, no dia de cada pagamento o valor sai do saldo sozinho; se não pagou, toque duas vezes em ✅ Descontado para desfazer.")+
     f("Na meta do dia","O app conta quantos pagamentos caem em cada mês e divide pelos dias de trabalho do mês. Quinzenal em dias fixos (ex: 10 e 25): sempre 2 por mês. Quinzenal a cada 15 dias corridos: a data recua um pouco a cada mês, então quase sempre são 2 e raramente 3. Semanal: mês com 4 e mês com 5. O aluguel entra na meta a partir do mês do primeiro pagamento. Desmarque <b>Entra na meta do dia</b> se não quiser.")+
@@ -3399,6 +3390,7 @@ function ajAbre(k){$("ajq").value="";ajRender(k||"");$("ajd").className="on";$("
 $("ajx").onclick=function(){$("ajd").className=""};
 $("ajq").oninput=function(){ajRender("")};
 $("ajb2").onclick=function(){ajAbre("comeco")};
+$("gcregl").onclick=function(){ajAbre("gestao")};
 $("ajbt").onclick=function(){ajAbre(AJ_TAB[modAtual]||"comeco")};
 
 /* ===== Aluguel do veículo (Gestão de Custos) ===== */

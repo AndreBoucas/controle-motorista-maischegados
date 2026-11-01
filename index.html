@@ -222,10 +222,11 @@ nav button.on b{font-weight:800}
 </div>
 <div id="pgdia" style="display:none;margin:-4px 14px 10px;font-size:12px;color:var(--mut);text-align:center;line-height:1.4"></div>
 <div class="mtitw"><div id="mtit" class="mtit">🏠 Início</div><button id="ajbt" aria-label="Ajuda desta tela">❓</button></div>
-<div id="p1"><button id="gdpend" style="display:none;width:calc(100% - 28px);margin:0 14px 10px;padding:12px;border:1px solid var(--hd);border-radius:12px;background:var(--card);color:var(--hd);font-size:14px;font-weight:700">☁️ Toque para salvar o backup no Google Drive</button><div id="metas"></div><div id="banner"></div><div class="st" id="turnoBox" style="margin-bottom:10px"></div>
+<div id="p1"><div id="apini"></div><button id="gdpend" style="display:none;width:calc(100% - 28px);margin:0 14px 10px;padding:12px;border:1px solid var(--hd);border-radius:12px;background:var(--card);color:var(--hd);font-size:14px;font-weight:700">☁️ Toque para salvar o backup no Google Drive</button><div id="metas"></div><div id="banner"></div><div class="st" id="turnoBox" style="margin-bottom:10px"></div>
 <div style="margin:0 14px 10px"><button class="pb" id="reprap" style="margin-top:0;background:var(--card);color:var(--tx);border:1px solid var(--bd);display:none"></button></div>
 <div style="margin:0 14px 10px"><select id="fil" class="fsel"></select></div><div class="sec" id="lista"></div></div>
 <div id="p2" style="display:none">
+  <div class="st" id="apres"><h3>📅 A pagar</h3><div id="aptx"></div></div>
   <div class="st" id="pdcard"><h3>📊 Painel do dia</h3>
     <div class="tg" id="pdtab"><button data-pm="L" class="on">Lucro</button><button data-pm="R">Receitas</button><button data-pm="D">Despesas</button><button data-pm="K">Km</button><button data-pm="C">Corridas</button></div>
     <div id="pdchart" style="overflow-x:auto;padding-bottom:4px"></div>
@@ -333,7 +334,7 @@ nav button.on b{font-weight:800}
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 01/11/2026 · v83</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 01/11/2026 · v84</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -429,6 +430,7 @@ nav button.on b{font-weight:800}
     <label id="vcalcl" style="display:none;align-items:center;gap:10px;margin-top:12px;font-size:14px"><input type="checkbox" id="vcalc" style="width:22px;height:22px"> 💰 Calcular reserva (valor total ÷ meses)</label>
     <div id="vcalcw" style="display:none">
       <div class="two2"><div id="vtotw"><label id="vtotl">Valor total (R$)</label><input id="vtot" type="number" inputmode="decimal" step="0.01" placeholder="0,00"></div><div id="vdiasw"><label>Diluir em (meses)</label><input id="vdias" type="number" inputmode="numeric" min="1" max="36" placeholder="Meses"></div></div>
+      <div id="vdvw" style="display:none;margin-top:8px"><label for="vdv">Dia do vencimento (opcional)</label><input id="vdv" type="number" inputmode="numeric" min="1" max="31" placeholder="Ex: 10"></div>
       <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:6px 0 4px;color:var(--tx)"><input type="checkbox" id="vemb" checked style="width:22px;height:22px"> Embutir na meta diária (já a partir deste mês)</label>
       <div id="vprev" style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.4"></div>
       <div id="vplan" style="font-size:12px;color:var(--tx);margin-top:6px;line-height:1.5"></div>
@@ -1032,7 +1034,7 @@ function vCalcUI(){
   var on=$("vcalc").checked;$("vcalcw").style.display=on?"":"none";if(!on)return;
   var nome=$("vsel").value==="__outro"?$("vn2").value.trim():$("vsel").value,M=vcat==="M";
   $("vtotl").textContent=(M?"Valor mensal":"Valor total")+(nome?" do "+nome:"")+" (R$)";
-  $("vdiasw").style.display=M?"none":"";$("vtotw").style.gridColumn=M?"1/-1":"";
+  $("vdiasw").style.display=M?"none":"";$("vdvw").style.display=M?"":"none";$("vtotw").style.gridColumn=M?"1/-1":"";
   var t=parseFloat($("vtot").value)||0,emb=$("vemb").checked;
   if(M){
     var fm=t>0?planoReserva({cat:"M",vt:t,ini:hoje()})[0]:null;
@@ -1069,7 +1071,7 @@ function vReset(){
   $("vsel").value=vNames()[0];$("vn2").style.display="none";$("vn2").value="";
   $("vadd").textContent=M?"Adicionar custo mensal":r?"Adicionar reserva":"Adicionar custo anual";$("vcx").style.display="none";$("vtit").textContent=M?"Novo custo mensal":r?"Nova reserva":"Novo custo anual";
   $("vcalcl").style.display="none";$("vcalc").checked=true;
-  $("vtot").value="";$("vdias").value="";$("vemb").checked=true;vdiasMan=false;vCalcUI();
+  $("vtot").value="";$("vdias").value="";$("vdv").value="";$("vemb").checked=true;vdiasMan=false;vCalcUI();
 }
 function varMedio(){
   var l=new Date();l.setDate(l.getDate()-30);var li=iso(l),d=0,dias={};
@@ -1901,7 +1903,7 @@ function metasUI(s,m,rec){
   }
   var al=[];
   manut.forEach(function(x){var r=restam(x);if(r<=300)al.push('🔧 '+esc(x.nome)+': '+(r>0?'faltam '+Math.round(r)+' km':'atrasada '+Math.round(-r)+' km'))});
-  alertasContas().forEach(function(t){al.push(t)});alAlertas().forEach(function(t){al.push(t)});cartaoAlertas().forEach(function(t){al.push(t)});
+  alertasContas().forEach(function(t){al.push(t)});alAlertas().forEach(function(t){al.push(t)});cartaoAlertas().forEach(function(t){al.push(t)});alertasMensais().forEach(function(t){al.push(t)});
   var dbk=diasBackup();if(dados.length>=5&&(dbk===null||dbk>=30)&&arqEst!=="ok")al.push('💾 Faça um backup dos seus dados (Ajustes → Backup)'+(dbk===null?'':' · último há '+dbk+' dias'));
   al.slice(0,4).forEach(function(t){h+='<div class="st" style="padding:10px 14px;margin-bottom:10px;border:1px solid var(--bad);font-size:13px">'+t+'</div>'});
   $("metas").innerHTML=h;
@@ -2305,7 +2307,7 @@ function render(){
     var hdr=document.querySelector("header"),pm=semPctMes(m),si=pm===null?null:semInfo(pm);
     hdr.className=si&&si.k!=="v"?"sem-"+si.k:"";
     $("semtxt").textContent=si?si.e+(semCfg().rit?" Ritmo do mês: ":" Meta do mês: ")+Math.round(pm)+"% ("+si.t+")":"";
-  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();renderAlug();renderCC();if(typeof gdUI==="function")gdUI();
+  })();popFil();renderMan();renderCl();chart(mes);renderServ();fillDL();renderRel();renderIR();renderFuel();renderVenc();renderFat();renderDesp();renderReserva();renderCD();renderGcSum();renderDup();renderImp();renderPd();odoInfo();renderTurno();renderAlug();renderCC();renderAP();if(typeof gdUI==="function")gdUI();
   $("reprap").style.display=dados.length?"block":"none";$("reprap").textContent=repTxt();
 }
 
@@ -2520,7 +2522,8 @@ $("vadd").onclick=function(){
   var t=parseFloat($("vtot").value)||0,d=parseInt($("vdias").value)||0;
   if(M){
     if(!(t>0)){toast("Informe o valor mensal");return}
-    it.vt=t;delete it.per;delete it.vd;it.pg=(old&&old.pg)||{};it.pgd=(old&&old.pgd)||{};delete it.sv;
+    var dv0=parseInt($("vdv").value)||0;if($("vdv").value&&(dv0<1||dv0>31)){toast("Dia do vencimento: de 1 a 31");return}
+    it.vt=t;delete it.per;delete it.vd;it.pg=(old&&old.pg)||{};it.pgd=(old&&old.pgd)||{};delete it.sv;if(dv0)it.dv=dv0;else delete it.dv;
   }else{
     if(!(t>0)||d<1||d>36){toast("Informe o valor total e o período em meses (1 a 36)");return}
     it.vt=t;it.per=d;delete it.vd;it.sv=(old&&old.sv)||{};
@@ -2602,7 +2605,7 @@ $("vlist").onclick=$("vlistR").onclick=$("vlistM").onclick=function(ev){
     var v=venc.filter(function(x){return String(x.id)===e})[0];if(!v)return;
     gcSet(v.cat==="R"?"R":v.cat==="M"?"M":"A");vedit=v.id;$("vsel").value=vNames().indexOf(v.nome)>=0?v.nome:"__outro";
     $("vn2").value=vNames().indexOf(v.nome)>=0?"":v.nome;$("vn2").style.display=vNames().indexOf(v.nome)>=0?"none":"block";
-    $("vcalc").checked=true;$("vtot").value=v.vt>0?v.vt:"";$("vdias").value=v.per>0?v.per:(v.vd>0&&v.data?Math.max(1,Math.round(diasEntre(v.ini||hoje(),v.data)/30.4)):12);$("vemb").checked=v.emb!==false;vdiasMan=v.vt>0;vCalcUI();$("vadd").textContent="Salvar alterações";$("vcx").style.display="block";$("vtit").textContent=v.cat==="R"?"Editar reserva":v.cat==="M"?"Editar custo mensal":"Editar custo anual";
+    $("vcalc").checked=true;$("vtot").value=v.vt>0?v.vt:"";$("vdv").value=v.dv||"";$("vdias").value=v.per>0?v.per:(v.vd>0&&v.data?Math.max(1,Math.round(diasEntre(v.ini||hoje(),v.data)/30.4)):12);$("vemb").checked=v.emb!==false;vdiasMan=v.vt>0;vCalcUI();$("vadd").textContent="Salvar alterações";$("vcx").style.display="block";$("vtit").textContent=v.cat==="R"?"Editar reserva":v.cat==="M"?"Editar custo mensal":"Editar custo anual";
     try{$("vtit").scrollIntoView({block:"center"})}catch(x){}
   }else if(r){
     venc=venc.map(function(x){if(String(x.id)!==r)return x;var o=Object.assign({},x,{ini:hoje(),sv:{},sep:{}});if(x.vt>0&&!(x.per>0)){o.per=12;delete o.vd}return o});
@@ -2864,7 +2867,7 @@ function restauraTexto(rtxt){
         if(l.alug&&l.alug.on&&!alug.on)alug=alLimpa(l.alug);
         if(l.catPrev&&typeof l.catPrev==="object")Object.keys(l.catPrev).forEach(function(k){if(+l.catPrev[k]>0&&catPrev[k]==null)catPrev[k]=+l.catPrev[k]});
         (l.turnos||[]).forEach(function(x){if(x&&x.id&&x.ini&&x.mt>0&&!turnos.some(function(y){return y.id===x.id}))turnos=turnos.concat([{id:+x.id,ini:+x.ini,fim:+x.fim||0,mt:+x.mt,mp:+x.mp||0}])});
-        (l.venc||[]).forEach(function(v){if(v&&v.id&&v.nome&&!venc.some(function(y){return y.id===v.id})){var o={id:v.id,nome:String(v.nome).slice(0,30)};if(v.data&&!(+v.per>=1))o.data=String(v.data).slice(0,10);if(+v.vt>0&&(+v.per>=1||+v.vd>=1)){o.vt=+v.vt;if(+v.per>=1)o.per=Math.min(36,Math.round(+v.per));else o.vd=Math.round(+v.vd);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.sep={};Object.keys(v.sep||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))o.sep[k]=1})}o.cat=v.cat==="R"?"R":v.cat==="M"?"M":"A";if(o.cat==="M"){if(+v.vt>0)o.vt=+v.vt;if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.pg={};o.pgd={};Object.keys(v.pg||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&v.pg[k])o.pg[k]=1});Object.keys(v.pgd||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&/^\d{4}-\d{2}-\d{2}$/.test(v.pgd[k]))o.pgd[k]=v.pgd[k]})}if(v.sv&&typeof v.sv==="object"){o.sv={};Object.keys(v.sv).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&+v.sv[k]>=0)o.sv[k]=+v.sv[k]})}venc=venc.concat([o])}});
+        (l.venc||[]).forEach(function(v){if(v&&v.id&&v.nome&&!venc.some(function(y){return y.id===v.id})){var o={id:v.id,nome:String(v.nome).slice(0,30)};if(v.data&&!(+v.per>=1))o.data=String(v.data).slice(0,10);if(+v.vt>0&&(+v.per>=1||+v.vd>=1)){o.vt=+v.vt;if(+v.per>=1)o.per=Math.min(36,Math.round(+v.per));else o.vd=Math.round(+v.vd);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.sep={};Object.keys(v.sep||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))o.sep[k]=1})}o.cat=v.cat==="R"?"R":v.cat==="M"?"M":"A";if(o.cat==="M"){if(+v.vt>0)o.vt=+v.vt;if(+v.dv>=1&&+v.dv<=31)o.dv=Math.round(+v.dv);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.pg={};o.pgd={};Object.keys(v.pg||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&v.pg[k])o.pg[k]=1});Object.keys(v.pgd||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&/^\d{4}-\d{2}-\d{2}$/.test(v.pgd[k]))o.pgd[k]=v.pgd[k]})}if(v.sv&&typeof v.sv==="object"){o.sv={};Object.keys(v.sv).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&+v.sv[k]>=0)o.sv[k]=+v.sv[k]})}venc=venc.concat([o])}});
         (l.contas||[]).forEach(function(c){if(c&&c.id&&c.nome&&!contas.some(function(y){return String(y.id)===String(c.id)}))contas=contas.concat([contaLimpa(c)])});
         (l.fixos||[]).forEach(function(v){if(v&&v.nome&&+v.valor>0&&!contas.some(function(y){return y.tipo==="F"&&y.nome.toLowerCase()===String(v.nome).toLowerCase()}))contas=contas.concat([contaLimpa({id:"m"+v.id,nome:v.nome,tipo:"F",icone:"💶",vals:[{de:"2000-01",v:+v.valor}]})])});
         if(l.meta&&!meta.dia&&!meta.mes)meta={dia:+l.meta.dia||0,mes:+l.meta.mes||0,dias:+l.meta.dias||0,impdiv:l.meta.impdiv==="trab"?"trab":undefined,ini:/^\d{4}-\d{2}-\d{2}$/.test(l.meta.ini)?l.meta.ini:undefined,diasAt:+l.meta.diasAt>0?Math.round(+l.meta.diasAt):undefined,prop:l.meta.prop?1:undefined,semR:+l.meta.semR>0?Math.round(+l.meta.semR):undefined,semV:+l.meta.semV>0?Math.round(+l.meta.semV):undefined,semRit:l.meta.semRit?1:undefined};
@@ -3263,7 +3266,8 @@ function ajSecoes(){
     f("⏱️ Turno","Toque em ▶ Iniciar ao começar a trabalhar. O cronômetro conta o tempo, com pausa se precisar, e ⏹ Encerrar fecha o turno. Em Últimos turnos, ＋ lançar horas abre uma receita com as horas, o início, o fim e as pausas já preenchidos: só falta o valor.")+
     f("Filtro da lista","Mostra só uma origem (Uber, 99…), só as despesas ou só as contas pagas.")+
     f("Lista de lançamentos","Agrupada por dia. Toque num lançamento para editar ou excluir. Contas pagas aparecem com ✅ Pago.")+
-    f("Avisos","Aparecem no Início: manutenção faltando 300 km ou menos (ou atrasada), contas perto do vencimento e backup atrasado.")+
+    f("📅 A pagar","Quadro no topo do Início: quanto falta pagar até o fim do mês (contas de casa, custos mensais, aluguel e fatura do cartão), o <b>saldo previsto</b> no fim do mês (saldo de hoje menos o que ainda vence) e o total dos próximos 30 dias. Toque para ver a lista completa no Resumo.")+
+    f("Avisos","Aparecem no Início: manutenção faltando 300 km ou menos (ou atrasada), contas, custos mensais, aluguel e fatura do cartão perto do vencimento, e backup atrasado.")+
     f("Botão +","Abre o lançamento de receita ou despesa.")},
   {k:"lanc",tab:1,t:"➕ Lançar receita ou despesa",b:
     c('Toque no <b>+</b> do Início e escolha <b>Receita</b> ou <b>Despesa</b>. Digite o valor e escolha a origem ou a categoria.')+
@@ -3287,6 +3291,7 @@ function ajSecoes(){
     f("Odômetro","Km do painel na hora de abastecer. Atualiza o odômetro do cadastro e permite calcular o consumo (km/L, km/m³ ou km/kWh).")+
     c('🔁 <b>Repetir último</b> copia o último lançamento para você só ajustar e salvar.<br>⚠️ Se já existir um gasto igual no mesmo dia, o app avisa. Toque em Salvar de novo se for outro gasto.<br>🔧 Manutenção não se lança aqui: use a tela 🔧 Manutenção, senão o valor conta duas vezes.')},
   {k:"resumo",tab:2,t:"📊 Resumo",b:
+    f("📅 A pagar","Lista por data de tudo que ainda falta pagar: até o fim do mês e nos próximos 30 dias. Atrasados aparecem primeiro, em vermelho. Toque numa linha para ir ao módulo onde se paga. Mostra também o saldo de hoje e o saldo previsto no fim do mês.")+
     f("📊 Painel do dia","Gráfico de barras por dia do mês: Lucro, Receitas, Despesas, Km ou Corridas. Toque numa barra para ver os números do dia. A linha tracejada é a meta do dia.")+
     f("Receitas x Despesas","Comparação por dia ou por semana.")+
     f("Despesas por categoria","Para onde foi o dinheiro no mês.")+
@@ -3336,7 +3341,7 @@ function ajSecoes(){
     f("Previsto por dia","Opcional. Por categoria, a meta do dia usa o maior entre o previsto e o lançado, nunca a soma. Ao editar: <b>Usar a média</b> dos últimos dias ou <b>Não prever</b>.")+
     f("➕ Novo custo diário","Nome (ex: Pedágio), ícone e previsto por dia.")+
     '<div class="ajs">🗓️ Custos mensais</div>'+
-    f("Cadastro","Nome e valor do custo que se repete todo mês. O valor do dia entra na meta diária.")+
+    f("Cadastro","Nome, valor e (opcional) <b>dia do vencimento</b> do custo que se repete todo mês. O valor do dia entra na meta diária. Com o dia preenchido, o Início avisa 3 dias antes; sem ele, avisa nos últimos 5 dias do mês se ainda não estiver pago.")+
     f("Pagar e ✅ Pago","Toque em Pagar quando pagar: o valor sai do Saldo do mês na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.")+
     '<div class="ajs">🚗 Aluguel do veículo (aba Custos mensais)</div>'+
     f("Cadastrar aluguel","Para quem aluga o carro de trabalho. Informe a locadora (opcional), o <b>valor de cada pagamento</b> e a <b>periodicidade</b>. No <b>semanal</b>, toque no <b>dia da semana</b> do pagamento (ex: segunda). No quinzenal, escolha <b>2 vezes por mês, dias fixos</b> (informe os dois dias, ex: 10 e 25) ou <b>a cada 15 dias corridos</b> (ou 14). No mensal, informe a data do próximo pagamento. O app conta a partir do primeiro pagamento (sem datas para trás) e calcula todas as seguintes. Se já pagava antes de cadastrar, informe o primeiro pagamento. <b>Até quando</b> (opcional) é o fim do contrato: depois dele, o aluguel para de contar.")+
@@ -3619,6 +3624,84 @@ $("cc7l").onclick=function(ev){
   if(ccArm!==pv){ccArm=pv;renderCC();setTimeout(function(){if(ccArm===pv){ccArm=null;renderCC()}},5000);return}
   dados.forEach(function(e){if(e.pc&&e.pv===pv&&e.pp){delete e.pp;ms.push(e.data.slice(0,7))}});save(Array.from(new Set(ms)));ccArm=null;render();toast("Pagamento da fatura desfeito");
 };
+
+/* ===== A pagar (contas de casa, custos mensais, aluguel e fatura do cartão) ===== */
+function apItens(fim){
+  var h=hoje(),hm=h.slice(0,7),out=[],fm=fim.slice(0,7);
+  function add(d,m,v,n,ic,o){if(!(v>0))return;out.push({d:d,m:m,v:v,n:n,ic:ic,o:o,atr:!!(d&&d<h)})}
+  // contas de casa: do mês atual (e anteriores ainda em aberto) até o mês do fim
+  contas.forEach(function(c){
+    if(c.ref!=null)return;
+    for(var m=hm;m<=fm;m=proxMes(m,1)){
+      if(!aplica(c,m)||(c.pg&&c.pg[m]))continue;var v=valorMes(c,m);if(v==null)continue;
+      var d=c.dia?m+"-"+p2(Math.min(c.dia,diasDoMes(m))):"";
+      if(m<hm&&!(d&&d<h))continue;
+      if(d&&d>fim)continue;if(!d&&m!==hm)continue;
+      add(d,m,v,c.nome,cleanIc(c.icone),"casa");
+    }
+  });
+  // custos mensais da Gestão
+  venc.forEach(function(v){
+    if(v.cat!=="M")return;
+    planoReserva(v).forEach(function(x){
+      if(x.m<hm||x.m>fm||(v.pg&&v.pg[x.m]))return;
+      var d=v.dv?x.m+"-"+p2(Math.min(v.dv,diasDoMes(x.m))):"";
+      if(x.m<hm&&!(d&&d<h))return;
+      if(d&&d>fim)return;if(!d&&x.m!==hm)return;
+      add(d,x.m,x.valor,v.nome,"🗓️","mensal");
+    });
+  });
+  // aluguel do veículo
+  if(alug.on)alDatas(addDias(h,-62),fim).forEach(function(t){if(alug.pg[t]||t<alug.desde)return;add(t,t.slice(0,7),alug.valor,"Aluguel do veículo","🚗","alug")});
+  // fatura do cartão
+  ccGrupos().forEach(function(x){if(x.abe>0&&x.pv<=fim)add(x.pv,x.pv.slice(0,7),x.abe,"Fatura do cartão","💳","cartao")});
+  out.sort(function(a,b){return (b.atr-a.atr)||((a.d||a.m+"-99").localeCompare(b.d||b.m+"-99"))});
+  return out;
+}
+function apTot(L){return L.reduce(function(a,x){return a+x.v},0)}
+function saldoMesAtual(){
+  var m=hoje().slice(0,7),r=0,d=0;
+  dados.forEach(function(e){if(e.data.slice(0,7)!==m)return;if(isR(e.tipo))r+=e.valor;else d+=e.valor});
+  return r-d-pagoCasaMes(m)+cartaoAj(m+"-01",m+"-31").aj;
+}
+function apLinha(x){
+  var h=hoje(),dd=x.d?Math.round((dIso(x.d)-dIso(h))/86400000):null;
+  var q=x.atr?'<b style="color:var(--bad)">atrasado</b>':dd===0?'<b>hoje</b>':dd===1?'amanhã':x.d?fmtBR(x.d).slice(0,5):'neste mês';
+  return '<div class="ir" data-apo="'+x.o+'" style="font-size:13px;cursor:pointer"><div style="font-size:18px">'+x.ic+'</div><div class="t">'+esc(x.n)+'<div style="font-size:11px;color:var(--mut)">'+q+' · '+({casa:"Despesas",mensal:"Custos mensais",alug:"Aluguel",cartao:"Cartão"})[x.o]+'</div></div><b class="bad">'+brl(x.v)+'</b></div>';
+}
+function renderAP(){
+  var h=hoje(),hm=h.slice(0,7),fm=hm+"-"+p2(diasDoMes(hm)),f30=addDias(h,30);
+  var Lm=apItens(fm),L30=apItens(f30),tm=apTot(Lm),t30=apTot(L30),sp=saldoMesAtual()-tm,at=Lm.filter(function(x){return x.atr}).length;
+  var ini=$("apini");
+  if(ini){
+    if(!L30.length&&!Lm.length){ini.innerHTML="";}
+    else ini.innerHTML='<div class="st" id="apcard" style="padding:12px 14px;margin-bottom:10px;cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:center"><b>📅 A pagar</b><span style="font-size:12px;color:var(--hd);font-weight:700">Ver detalhes ›</span></div>'+
+      '<div style="font-size:13px;margin-top:6px;line-height:1.6">Até '+fmtBR(fm).slice(0,5)+': <b class="bad">'+brl(tm)+'</b> ('+Lm.length+(Lm.length===1?' conta':' contas')+(at?', <b style="color:var(--bad)">'+at+' atrasada'+(at>1?'s':'')+'</b>':'')+') · Saldo previsto: <b class="'+(sp>=0?'ok':'bad')+'">'+brl(sp)+'</b><br>Próximos 30 dias: <b>'+brl(t30)+'</b></div></div>';
+  }
+  var r=$("aptx");if(!r)return;
+  var hh='<div style="font-size:12px;color:var(--mut);line-height:1.4;margin-bottom:6px">Contas de casa, custos mensais, aluguel do veículo e fatura do cartão ainda não pagos. Toque numa linha para ir aonde se paga.</div>';
+  hh+='<div style="font-size:13px;font-weight:800;margin:10px 0 2px">Até o fim do mês ('+fmtBR(fm).slice(0,5)+')</div>';
+  hh+=Lm.length?Lm.map(apLinha).join("")+kv("Total até o fim do mês",brl(tm),"bad")+kv("Saldo do mês hoje",brl(saldoMesAtual()))+kv("Saldo previsto no fim do mês",brl(sp),sp>=0?"ok":"bad"):'<div style="font-size:13px;color:var(--mut)">Nada a pagar até o fim do mês.</div>';
+  hh+='<div style="font-size:13px;font-weight:800;margin:14px 0 2px">Próximos 30 dias (até '+fmtBR(f30).slice(0,5)+')</div>';
+  hh+=L30.length?L30.map(apLinha).join("")+kv("Total nos próximos 30 dias",brl(t30),"bad"):'<div style="font-size:13px;color:var(--mut)">Nada a pagar nos próximos 30 dias.</div>';
+  r.innerHTML=hh;
+}
+function apVai(o){
+  if(o==="casa"){aba(7);return}
+  if(o==="cartao"){aba(7);try{$("cc7").scrollIntoView({block:"start"})}catch(x){}return}
+  aba(8);gcSet("M");if(o==="alug")try{$("alcard").scrollIntoView({block:"start"})}catch(x){}
+}
+$("apini").onclick=function(){aba(2);try{$("apres").scrollIntoView({block:"start"})}catch(x){}};
+$("aptx").onclick=function(e){var b=e.target.closest("[data-apo]");if(b)apVai(b.getAttribute("data-apo"))};
+function alertasMensais(){
+  var out=[],h=hoje(),hm=h.slice(0,7),dm=diasDoMes(hm),hd=+h.slice(8,10);
+  venc.forEach(function(v){
+    if(v.cat!=="M"||(v.pg&&v.pg[hm]))return;var x=planoReserva(v).filter(function(p){return p.m===hm})[0];if(!x)return;
+    if(v.dv){var d=hm+"-"+p2(Math.min(v.dv,dm)),dd=Math.round((dIso(d)-dIso(h))/86400000);if(dd>3)return;out.push('🗓️ '+esc(v.nome)+' ('+brl(x.valor)+'): '+(dd<0?'venceu em '+fmtBR(d).slice(0,5):dd===0?'vence hoje':dd===1?'vence amanhã':'vence em '+dd+' dias'))}
+    else if(dm-hd<5)out.push('🗓️ '+esc(v.nome)+' ('+brl(x.valor)+'): ainda não pago neste mês');
+  });
+  return out;
+}
 
 /* ===== Campos de dinheiro no formato da moeda (digita só números: 5000 → 50,00) ===== */
 var MOEDA_IDS=["valor","sval","d6v","s7v","s8v","cdp","vtot","mmes","mdia","alv","alkx","alcau"];

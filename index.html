@@ -158,7 +158,7 @@ body.fora1 #cwseg{display:none!important}body:not(.fora1) .mtitw{display:none}.m
 .avi{border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin-bottom:8px;background:var(--in)}.avt{display:flex;gap:10px;align-items:flex-start}.avt b{display:block;font-size:15px}.avt small{display:block;font-size:12px;color:var(--mut);margin-top:2px;line-height:1.4}.avb{display:flex;gap:8px;margin-top:8px}.avb button{flex:1;padding:9px 6px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font-size:13px;font-weight:700;margin:0;width:auto}.avb button:first-child{border-color:var(--hd);color:var(--hd)}
 .sg{display:flex;gap:4px;margin-top:12px;background:rgba(0,0,0,.16);padding:4px;border-radius:12px;overflow-x:auto;scrollbar-width:none}.sg::-webkit-scrollbar{display:none}
 .sg button{flex:1 0 auto;border:0;background:none;color:#fff;opacity:.88;padding:8px 10px;border-radius:9px;font-size:13px;font-weight:700;margin:0;width:auto;white-space:nowrap}.sg button.on{background:#fff;color:var(--hd);opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.saldo{margin-top:14px}.sempill{display:inline-block;margin-top:10px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.2);font-size:14px!important;font-weight:800}.sempill:empty{display:none}
+.saldo{margin-top:14px}.sempill{display:inline-block;margin-top:10px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.78);color:#fff;font-size:14px!important;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.25)}.catrow{display:flex;gap:8px;width:100%;align-items:stretch}.catrow select{flex:1;min-width:0}#catnova{flex:0 0 auto;padding:0 14px;border:1.5px solid var(--hd);border-radius:10px;background:none;color:var(--hd);font-size:14px;font-weight:800;white-space:nowrap}#novaErr{font-size:13px;line-height:1.45;color:var(--bad);font-weight:600}#novaErr:empty{display:none}.sempill:empty{display:none}
 .saldo #saldonota:empty{display:none}
 #cwbar{margin:12px 14px 0}#cwbar:empty{display:none}
 #p1>.st,#p1>#gdpend{margin-left:14px;margin-right:14px}#p1{padding-top:12px}
@@ -373,7 +373,7 @@ body.fora1 #cwseg{display:none!important}body:not(.fora1) .mtitw{display:none}.m
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 06/11/2026 · v89</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 06/11/2026 · v90</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -518,7 +518,7 @@ body.fora1 #cwseg{display:none!important}body:not(.fora1) .mtitw{display:none}.m
   <button type="button" id="delcat" style="display:none;margin:10px auto 0;background:none;border:0;color:var(--bad);font-size:13px;font-weight:600">🗑 Excluir esta categoria</button>
   <div id="cathint" style="display:none;font-size:12px;color:var(--mut);text-align:center;margin-top:6px;line-height:1.4"></div>
   <div id="novaBox" style="display:none;flex-direction:column;gap:8px;margin-top:10px">
-    <input id="novaIn" maxlength="30" placeholder="Nome da nova categoria" style="width:100%;padding:12px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx)">
+    <input id="novaIn" maxlength="30" placeholder="Nome da nova categoria" style="width:100%;padding:12px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx)"><div id="novaErr"></div>
     <div id="icwrap" style="display:none">
       <label style="display:block;font-size:12px;color:var(--mut);margin-bottom:4px">Ícone da categoria</label>
       <button type="button" id="icbtn" style="width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);font-size:15px"><span id="icprev" style="font-size:26px">💼</span><span style="flex:1;text-align:left">Escolher ícone</span><span>▾</span></button>
@@ -2458,9 +2458,9 @@ function chips(){
     h+='<button class="chip" data-c="__novar">➕ Nova origem</button>';
     $("chips").innerHTML=h;updDel();return;
   }
-  h='<select id="catsel">';
+  h='<div class="catrow"><select id="catsel"><option value="__nova">➕ Nova categoria…</option>';
   a.forEach(function(x){h+='<option value="'+esc(x[0])+'"'+(x[0]===cat?' selected':'')+'>'+x[2]+' '+esc(x[1])+'</option>'});
-  h+='<option value="__nova">➕ Nova categoria…</option></select>';
+  h+='<option value="__nova">➕ Nova categoria…</option></select><button type="button" id="catnova" data-c="__novad">➕ Nova</button></div>';
   $("chips").innerHTML=h;updDel();
 }
 function setModo(m){modo=m;$("kmWrap").style.display=$("hWrap").style.display=$("hiWrap").style.display=$("crWrap").style.display=$("hfWrap").style.display=$("npWrap").style.display=$("mpWrap").style.display=m==="r"?"":"none";$("obsWrap").style.display=m==="d"?"":"none";$("pgWrap").style.display=m==="d"?"":"none";$("dtWrap").style.gridColumn="1 / -1";$("tr").className=m==="r"?"on r":"";$("td").className=m==="d"?"on d":"d";chips()}
@@ -2544,15 +2544,21 @@ $("ov").onclick=function(e){if(e.target===$("ov"))fechar()};
 $("tr").onclick=function(){setModo("r")};$("td").onclick=function(){setModo("d")};
 $("chips").onchange=function(e){
   if(e.target.id!=="catsel")return;
-  if(e.target.value==="__nova"){$("delcat").style.display="none";icFill();$("icwrap").style.display="block";$("novaIn").placeholder="Nome da nova categoria";$("novaBox").style.display="flex";$("novaIn").value="";$("novaIn").focus()}
+  if(e.target.value==="__nova"){novaAbreD()}
   else{cat=e.target.value;$("novaBox").style.display="none";updDel()}
 };
+function novaAbreD(){$("delcat").style.display="none";icFill();$("icwrap").style.display="block";$("novaIn").placeholder="Nome da nova categoria";$("novaErr").textContent="";$("novaBox").style.display="flex";$("novaIn").value="";$("novaIn").focus();try{$("novaBox").scrollIntoView({block:"center",behavior:"smooth"})}catch(x){}}
+function novaErro(t){var e=$("novaErr");e.textContent="⚠️ "+t;try{e.scrollIntoView({block:"center",behavior:"smooth"})}catch(x){}try{$("novaIn").focus()}catch(x){}}
+$("novaIn").addEventListener("input",function(){$("novaErr").textContent=""});
 $("novaOk").onclick=function(){
-  var n=$("novaIn").value.trim().replace(/\s+/g," ");
-  if(!n)return;
-  var ex=allRec().concat(allDes()).filter(function(x){return nomeNorm(x[1])===nomeNorm(n)})[0];
-  if(!ex){var ot=nomeOnde(n);if(ot){$("err").textContent=nomeAviso(n,ot);return}}
-  if(ex){cat=ex[0]}else{if(modo==="r")customRec.push(n);else custom.push(n);var iv=$("icown").value.trim()||$("icsel").value;recIc[n]=cleanIc(iv);saveCats();cat=n}
+  var n=$("novaIn").value.trim().replace(/\s+/g," "),qual=modo==="r"?"origem":"categoria";
+  $("novaErr").textContent="";
+  if(!n){novaErro("Digite o nome da "+qual+".");return}
+  function ach(l){return l.filter(function(x){return nomeNorm(x[1])===nomeNorm(n)||nomeNorm(x[0])===nomeNorm(n)})[0]}
+  var ex=ach(modo==="r"?allRec():allDes()),out=ex?null:ach(modo==="r"?allDes():allRec());
+  if(out){novaErro("\""+out[1]+"\" já existe como "+(modo==="r"?"categoria de despesa":"origem de receita")+". Use outro nome para a "+qual+", por exemplo \""+n+(modo==="r"?" (receita)":" (gasto)")+"\".");return}
+  if(!ex){var ot=nomeOnde(n);if(ot){novaErro(nomeAviso(n,ot)+" Use outro nome, por exemplo \""+n+" (dia a dia)\".");return}}
+  if(ex){cat=ex[0];toast("\""+ex[1]+"\" já existia e foi escolhida.")}else{if(modo==="r")customRec.push(n);else custom.push(n);var iv=$("icown").value.trim()||$("icsel").value;recIc[n]=cleanIc(iv);saveCats();cat=n}
   chips();
 };
 $("turnoBox").onclick=function(ev){
@@ -2599,7 +2605,8 @@ $("icgrid").onclick=function(e){var b=e.target.closest("[data-i]");if(!b)return;
 $("chips").onclick=function(e){
   var b=e.target.closest?e.target.closest("[data-c]"):null,c=b&&b.getAttribute("data-c");
   if(!c)return;
-  if(c==="__novar"){$("novaIn").placeholder="Nome da nova origem (ex: Frete)";$("novaIn").value="";icFill();$("icwrap").style.display="block";$("novaBox").style.display="flex";$("novaIn").focus();return}
+  if(c==="__novar"){$("novaIn").placeholder="Nome da nova origem (ex: Frete)";$("novaIn").value="";$("novaErr").textContent="";icFill();$("icwrap").style.display="block";$("novaBox").style.display="flex";$("novaIn").focus();return}
+  if(c==="__novad"){try{$("catsel").value="__nova"}catch(x){}novaAbreD();return}
   cat=c;chips();
 };
 $("fcb").onclick=function(e){var b=e.target.closest("[data-cb]");if(!b)return;fcbSet(b.getAttribute("data-cb"));$("err").textContent="";try{$("flit").focus()}catch(x){}};
@@ -3435,7 +3442,7 @@ function ajSecoes(){
     f("Pausas e tempo em pausa","Quantas pausas você fez e quantos minutos ficou parado.")+
     '<div class="ajs">Despesa</div>'+
     f("Valor","Quanto você gastou. Obrigatório. Digite só os números, com os centavos (ex: 3590 = R$ 35,90).")+
-    f("Categoria","Almoço, Lanche, Abastecimento, Supermercado, Lavagem de carro… Em ➕ você cria uma categoria nova. <b>Almoço</b> e <b>Abastecimento</b> são fixas e não podem ser apagadas. As que você criou podem ser apagadas em 🗑 Excluir esta categoria.")+
+    f("Categoria","Almoço, Lanche, Abastecimento, Supermercado, Lavagem de carro… Para criar uma categoria nova, toque em <b>➕ Nova</b>, ao lado da categoria (ou em ➕ Nova categoria…, no topo da lista). Se o nome já existir em outro lugar do app, o aviso aparece logo abaixo do nome. <b>Almoço</b> e <b>Abastecimento</b> são fixas e não podem ser apagadas. As que você criou podem ser apagadas em 🗑 Excluir esta categoria.")+
     f("Data","Dia do gasto. Não aceita data futura.")+
     f("Observação","Opcional, até 120 caracteres (ex: almoço com cliente).")+
     f("Como pagou?","<b>Dinheiro / Pix / Débito</b> (padrão): o valor sai do saldo na hora. <b>💳 Cartão de crédito</b>: informe o <b>vencimento da fatura</b>. A compra conta como despesa na data da compra (lucro do dia, meta, consumo e relatórios), mas só sai do saldo quando você pagar a fatura em 💸 Despesas → 💳 Cartão de crédito. O Início avisa 3 dias antes do vencimento.")+

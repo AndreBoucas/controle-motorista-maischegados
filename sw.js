@@ -1,10 +1,12 @@
 // Service worker: deixa o app abrir sem internet.
 // Ao publicar uma versão nova, troque o número em VERSAO.
-var VERSAO = "motorista-v95";
+// A instalação busca os arquivos direto do servidor (sem cópia velha do navegador)
+// e o app mostra o aviso "Nova versão disponível".
+var VERSAO = "motorista-v96";
 var ARQUIVOS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png?v=24", "./icon-512.png?v=24", "./icon-maskable-512.png?v=24", "./apple-touch-icon.png?v=24"];
 
 self.addEventListener("install", function (e) {
-  e.waitUntil(caches.open(VERSAO).then(function (c) { return c.addAll(ARQUIVOS); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(VERSAO).then(function (c) { return c.addAll(ARQUIVOS.map(function (u) { return new Request(u, { cache: "reload" }); })); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener("activate", function (e) {

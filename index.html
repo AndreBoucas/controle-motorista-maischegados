@@ -292,7 +292,7 @@ html:not([data-estilo="m3"]) .pgx s{display:none}
 .apv .ok{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(--hd);color:#fff;font-size:16px;line-height:30px;text-align:center;display:none;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .apk.on .ok{display:block}
 .apv .hl{position:absolute;inset:0;width:50%}
-#apcard .mopt{margin-top:0}
+#aparcard .mopt{margin-top:0}
 .apes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 </style>
 <script>
@@ -477,7 +477,7 @@ try{new MutationObserver(function(){
     <div style="font-size:11px;color:var(--mut);margin-top:8px;line-height:1.4">Nome, veículo e placa aparecem no topo de todas as telas. O CPF identifica você em todos os relatórios e PDFs. CPF, identidade e data de nascimento ficam guardados só neste aparelho e nos seus backups.</div></div>
   <div class="st"><h3>Minhas categorias</h3><div id="clist"></div>
     <div id="cedit" style="display:none;gap:8px;margin-top:10px"><input id="cin" maxlength="30"><button class="pb" id="cok" style="width:auto;margin:0;padding:0 16px">OK</button></div></div>
-  <div class="st" id="apcard"><h3>🎨 Aparência</h3>
+  <div class="st" id="aparcard"><h3>🎨 Aparência</h3>
     <div style="font-size:12px;color:var(--mut);line-height:1.4">Escolha o visual do app. Vale só neste aparelho e não mexe nos seus dados.</div>
     <div class="aplb">Estilo</div>
     <div class="apes"><button class="mopt" data-ae="c"><b>Clássico</b><small>Como era antes: o + abre direto o lançamento, sempre verde.</small></button><button class="mopt" data-ae="m"><b>Moderno</b><small>Animações, menu no + e cor do tema.</small></button></div>
@@ -525,7 +525,7 @@ try{new MutationObserver(function(){
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 14/11/2026 · v94</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 14/11/2026 · v95</div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -1526,7 +1526,7 @@ var MODS=[[1,"🏠","Início"],[2,"📊","Resumo"],[9,"📆","Agenda"],[7,"💸"
 function aplicaMenu(){
   try{var m=localStorage.getItem("motorista_menu");if(m==="barra"||m==="misto"||m==="gaveta")menuModo=m}catch(e){}
   document.body.className=document.body.className.replace(/\bm-\w+/g,"").trim()+" m-"+menuModo;
-  Array.prototype.forEach.call(document.querySelectorAll(".mopt"),function(b){b.className="mopt"+(b.getAttribute("data-mm")===menuModo?" on":"")});
+  Array.prototype.forEach.call(document.querySelectorAll(".mopt[data-mm]"),function(b){b.className="mopt"+(b.getAttribute("data-mm")===menuModo?" on":"")});
   marcaMenu();
 }
 function marcaMenu(){$("nmenu").className=(menuModo==="misto"&&[4,5,6,8,9].indexOf(modAtual)>=0)?"on":""}
@@ -4545,7 +4545,7 @@ function apThumb(bg,card,hd,g1,g2,half){
 }
 function apEscuro(){return apM==="dark"||(apM==="auto"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)}
 function renderAp(){
-  var c=$("apcard");if(!c)return;
+  var c=$("aparcard");if(!c)return;
   [].forEach.call(c.querySelectorAll("[data-ae]"),function(b){b.classList.toggle("on",b.getAttribute("data-ae")===apE)});
   var t=AP_T[apE==="m"?apC:"verde"],md=[["auto","Automático do sistema"],["light","Claro"],["dark","Escuro"]],h="";
   md.forEach(function(x){var dk=x[0]==="dark";h+='<button class="apk'+(apM===x[0]?' on':'')+'" data-am="'+x[0]+'">'+apThumb(dk?"#101314":"#f2f4f5",dk?"#2a3033":"#ffffff",t[1],t[3],t[4],x[0]==="auto").replace('border-color:transparent','')+x[1]+'</button>'});
@@ -4556,7 +4556,7 @@ function renderAp(){
   $("apcw").style.display=apE==="m"?"":"none";
 }
 function apSalva(){try{localStorage.setItem("motorista_estilo",apE);localStorage.setItem("motorista_modo",apM);localStorage.setItem("motorista_cor",apC)}catch(x){}apAplica();try{fabMenu(false)}catch(x){}renderAp()}
-$("apcard").onclick=function(e){
+$("aparcard").onclick=function(e){
   var b=e.target.closest("[data-ae],[data-am],[data-at]");if(!b)return;
   if(b.hasAttribute("data-ae")){apE=b.getAttribute("data-ae");toast(apE==="m"?"✨ Estilo Moderno":"🧭 Estilo Clássico")}
   else if(b.hasAttribute("data-am")){apM=b.getAttribute("data-am");toast(apM==="auto"?"🌗 Segue o claro/escuro do celular":apM==="dark"?"🌙 Sempre escuro":"☀️ Sempre claro")}

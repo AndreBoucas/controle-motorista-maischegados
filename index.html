@@ -261,6 +261,30 @@ html[data-estilo="m3"] #fabm button:active{transform:scale(.95)}
 #alnx{font-size:13px;line-height:1.5;margin-top:8px;padding:10px;border-radius:10px;border:1px dashed var(--hd);color:var(--tx)}
 #alnx:empty{display:none}
 #hojec #diatxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== v97 · Liberação do app ===== */
+#libt{position:fixed;inset:0;z-index:10001;background:var(--bg);display:none;align-items:center;justify-content:center;overflow:auto;padding:calc(20px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px))}
+#libt.on{display:flex}
+#libt .libb{width:100%;max-width:400px;text-align:center;position:relative}
+#libt .libic{font-size:44px;line-height:1}
+#libt h2{font-size:21px;line-height:1.25;margin:12px 0 8px;color:var(--tx)}
+#libt p{font-size:14px;line-height:1.5;color:var(--mut);margin:0 0 14px}
+#libin{width:100%;box-sizing:border-box;min-height:74px;resize:vertical;font:13px/1.4 ui-monospace,monospace;padding:10px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx)}
+#liberr{color:var(--bad);font-size:13px;font-weight:700;margin-top:8px;min-height:1px}
+#liberr:empty{display:none}
+#libwa{display:block;margin-top:14px;padding:12px;border-radius:10px;border:1px solid var(--bd);color:var(--tx);font-weight:700;text-decoration:none;background:var(--card)}
+#libt small{display:block;margin-top:14px;color:var(--mut);font-size:12px}
+#libx{position:absolute;top:-6px;right:0;width:40px;height:40px;border:0;border-radius:50%;background:var(--card);color:var(--tx);font-size:18px;cursor:pointer}
+#libbar{display:none;position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top,0px));z-index:9;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-radius:999px;background:#1f2933;color:#fff;font-size:13px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:calc(100% - 24px)}
+#libbar.on{display:flex}
+#libbar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#libbar button{border:0;border-radius:999px;background:var(--hd);color:#fff;font-weight:800;font-size:13px;padding:8px 12px;margin:0;width:auto;cursor:pointer;flex:none}
+#libbar #libbarx{background:transparent;padding:8px 10px}
+#libinfo{text-align:center;font-size:12px;color:var(--mut);margin:-6px 0 12px;cursor:pointer}
+#libinfo:empty{display:none}
+#libnota{font-size:12px;color:var(--mut);margin:4px 0 0}
+#libnota:empty{display:none}
+#cnome[readonly],#ccpf[readonly]{opacity:.75}
 /* ===== v93 · A pagar / Já pagas ===== */
 .dvh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:800;color:var(--tx);padding:10px 0 4px}
 .dvh small,.dvt small{font-size:12px;font-weight:700;color:var(--mut)}
@@ -308,6 +332,8 @@ html:not([data-estilo="m3"]) .pgx s{display:none}
 var AP_T={verde:["Verde","#00a88f","#00907a","#00b398","#00866f","#d4f3ec","#0f3a33","#00695a","#7ff0dc"],azul:["Azul","#1a73e8","#1559b8","#2b84f0","#1557b0","#dce9fd","#13294d","#0d47a1","#9cc3ff"],roxo:["Roxo","#7c4dff","#5f35d6","#8c63ff","#5a32c9","#ebe3ff","#2a1f4d","#4a23a8","#c7b4ff"],laranja:["Laranja","#ef6c00","#c25400","#f7841e","#c25400","#ffe9d6","#3d2614","#9a4300","#ffbf8a"],dourado:["Dourado","#b8860b","#8f6a08","#c99a1e","#93700a","#f6ecd0","#3a3016","#6e5205","#f0d58a"],grafite:["Grafite","#455a64","#2f3f46","#56707c","#2f3f46","#e1e7ea","#232b30","#263238","#b9cad2"]};
 var apE="m",apM="auto",apC="verde";
 try{var _e=localStorage.getItem("motorista_estilo"),_m=localStorage.getItem("motorista_modo"),_c=localStorage.getItem("motorista_cor");if(_e==="c"||_e==="m")apE=_e;if(_m==="light"||_m==="dark"||_m==="auto")apM=_m;if(AP_T[_c])apC=_c}catch(e){}
+/* v97 · quem já usava o app ganha 7 dias para pedir a liberação */
+try{if(!localStorage.getItem("motorista_lib")&&!localStorage.getItem("motorista_lib_ini")&&(localStorage.getItem("motorista_v1")||localStorage.getItem("motorista_cfg")))localStorage.setItem("motorista_lib_ini",String(Date.now()))}catch(e){}
 function apAplica(){
   var r=document.documentElement,m=apE==="m",t=AP_T[m?apC:"verde"];
   apTrava=true;
@@ -385,6 +411,18 @@ try{new MutationObserver(function(){
   <input id="ajq" type="search" placeholder="Buscar no manual (ex: meta, backup, combustível)" aria-label="Buscar no manual">
   <div id="ajl"></div>
 </div></div>
+<div id="libt" role="dialog" aria-modal="true" aria-labelledby="libh"><div class="libb">
+  <button id="libx" type="button" aria-label="Fechar">✕</button>
+  <div class="libic">🔒</div>
+  <h2 id="libh">App exclusivo do grupo<br>Os Mais Chegados</h2>
+  <p>Para usar o Gestão Financeira, toque no link de liberação que o André te enviou pelo WhatsApp. Se o link não abrir o app, ou se você recebeu uma chave, copie e cole aqui:</p>
+  <textarea id="libin" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Cole aqui a chave ou o link de liberação"></textarea>
+  <div id="liberr"></div>
+  <button id="libok" class="pb" type="button">Liberar o app</button>
+  <a id="libwa" href="https://wa.me/5571988431359?text=Ol%C3%A1%20Andr%C3%A9%2C%20quero%20a%20libera%C3%A7%C3%A3o%20do%20app%20Gest%C3%A3o%20Financeira." target="_blank" rel="noopener">💬 Falar com o André · (71) 98843-1359</a>
+  <small>Seus lançamentos continuam guardados neste celular.</small>
+</div></div>
+<div id="libbar" role="status"><span id="libbart"></span><button id="libbarok" type="button">Liberar</button><button id="libbarx" type="button" aria-label="Fechar aviso">✕</button></div>
 <div id="updbar" role="status"><span>✨ Nova versão disponível</span><button id="updok" type="button">Atualizar</button></div>
 <div id="app">
 <div id="ident"><span id="idn"></span><span id="idv"></span><span id="idp"></span></div>
@@ -473,7 +511,7 @@ try{new MutationObserver(function(){
   <div class="st" id="ajcard"><h3>❓ Manual do app</h3><div style="font-size:12px;color:var(--mut);line-height:1.45">Como usar cada tela e o que significa cada campo. Em qualquer tela, o botão ❓ ao lado do título abre a parte certa do manual.</div><button class="pb" id="ajb2">Abrir o manual</button></div>
   <div class="st" id="cwcard"><h3>👛 Carteiras</h3><div style="font-size:12px;color:var(--mut);line-height:1.45">Separe o dinheiro em até 5 carteiras (ex: corridas e salário). 🚗 Corridas e 🏠 Pessoal são fixas; as que você criar podem ser renomeadas e apagadas.</div><div id="cwaj" style="margin-top:6px"></div><div class="bk" style="margin-top:8px"><button id="cwnova">➕ Nova carteira</button><button id="cwtr">↔️ Transferir</button></div><button id="cwman" style="border:0;background:none;color:var(--hd);font-size:13px;font-weight:700;padding:8px 0">❓ Como funcionam as carteiras</button></div>
   <div class="st" id="cadcard"><h3>👤 Meu cadastro</h3>
-    <label>Nome do usuário</label><input id="cnome" maxlength="40" autocomplete="name" placeholder="Seu nome">
+    <label>Nome do usuário</label><input id="cnome" maxlength="40" autocomplete="name" placeholder="Seu nome"><div id="libnota"></div>
     <div class="two2"><div><label for="ccpf">CPF</label><input id="ccpf" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00"></div>
     <div><label for="cnasc">Data de nascimento</label><input id="cnasc" type="date" min="1900-01-01"></div></div>
     <label for="crg">Identidade (RG)</label><input id="crg" maxlength="25" autocomplete="off" placeholder="Ex: 12.345.678-90 SSP/BA">
@@ -534,7 +572,7 @@ try{new MutationObserver(function(){
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 15/11/2026 · v96</div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 15/11/2026 · v97</div><div id="libinfo" role="button" tabindex="0"></div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -3710,6 +3748,7 @@ function ajSecoes(){
   {k:"ajustes",tab:5,t:"⚙️ Ajustes",b:
     f("👤 Meu cadastro","Nome, veículo e placa aparecem no topo das telas e nos PDFs. O <b>CPF</b> identifica você em todos os relatórios e PDFs; o app confere se ele é válido. <b>Identidade (RG)</b> e <b>data de nascimento</b> ficam no cadastro. O <b>odômetro atual</b> é atualizado sozinho pelos km lançados e pelos abastecimentos; corrija quando quiser.")+
     f("Minhas categorias","Ícones e nomes das categorias que você criou.")+
+    f("🔓 Liberação do app","O app é exclusivo do grupo <b>Os Mais Chegados</b>. Toque no link de liberação que o André te mandou pelo WhatsApp (o link vale por 1 hora). Depois de liberado, o app funciona normal, também sem internet. Seu <b>nome</b> e <b>CPF</b> vêm da liberação e ficam travados no cadastro. Se trocar de celular ou apagar os dados do app, peça um novo link. No iPhone, se o app da tela de início não liberar pelo link, copie o link, abra o app e cole na tela de liberação.")+
     f("✨ Nova versão disponível","Quando sai uma atualização, o app baixa sozinho e mostra o aviso <b>Nova versão disponível · Atualizar</b>. Toque em Atualizar quando quiser (o que estiver digitando não se perde até você tocar). Depois aparece \"App atualizado para a vNN\".")+
     f("🎨 Aparência","<b>Estilo</b>: Clássico (como era antes, o + abre direto o lançamento) ou Moderno (animações, menu no + e cor do tema). <b>Claro ou escuro</b>: Automático do sistema, Claro ou Escuro. <b>Cor do tema</b> (só no Moderno): Verde, Azul, Roxo, Laranja, Dourado ou Grafite. Receitas continuam verdes e despesas vermelhas. Vale só neste aparelho.")+
     f("🧭 Estilo do menu","<b>Barra de baixo</b>, <b>Misto</b> (recomendado: principais na barra e ☰ com todos) ou <b>Só gaveta lateral</b>. Vale só neste aparelho.")+
@@ -4620,6 +4659,78 @@ document.addEventListener("click",function(e){
 
 /* ===== v96 · avisa quando o app acabou de ser atualizado ===== */
 setTimeout(function(){try{var v=($("vers").textContent.match(/v\d+/)||[""])[0],a=localStorage.getItem("motorista_ver");if(v&&a&&a!==v)toast("✅ App atualizado para a "+v);if(v)localStorage.setItem("motorista_ver",v)}catch(x){}},1600);
+
+/* ===== v97 · Liberação do app (grupo Os Mais Chegados) ===== */
+var LIB_PUB={"kty": "EC", "crv": "P-256", "x": "3qr0_Gu-_7f7rLTNsoT7JiPGheSkEWgSUFFLXn3rrJw", "y": "qf9N3tJRS0z9zJSt-aU3hkknP8D91Bgil1U3a89MDzA"};
+/* chaves bloqueadas no Gerador (números das chaves) */
+var LIB_BLOQ=[];
+var LIB_TOL=7*86400000,LIB_VAL=3600000,LIB=null;
+function libB64d(s){s=String(s).replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";var t=atob(s),a=new Uint8Array(t.length);for(var i=0;i<t.length;i++)a[i]=t.charCodeAt(i);return a}
+function libGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function libSet(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
+function libLe(tok){try{var p=String(tok).trim().split(".");if(p.length!==2)return null;var o=JSON.parse(new TextDecoder().decode(libB64d(p[0])));if(!o||o.v!==1||!(+o.i>0)||!o.n||!cpfOk(o.c))return null;return {i:+o.i,n:String(o.n).slice(0,40),c:String(o.c).replace(/\D/g,""),t:+o.t||0,pl:p[0],sg:p[1],tok:p[0]+"."+p[1]}}catch(e){return null}}
+function libConfere(L){
+  if(!(window.crypto&&crypto.subtle&&window.TextEncoder))return Promise.resolve(null);
+  return crypto.subtle.importKey("jwk",LIB_PUB,{name:"ECDSA",namedCurve:"P-256"},false,["verify"]).then(function(k){
+    return crypto.subtle.verify({name:"ECDSA",hash:"SHA-256"},k,libB64d(L.sg),new TextEncoder().encode(L.pl));
+  }).then(function(ok){return !!ok},function(){return false});
+}
+/* nome e CPF do cadastro vêm da liberação */
+var libPL0=perfilLimpa;
+perfilLimpa=function(o){var p=libPL0(o);if(LIB){p.nome=LIB.n;p.cpf=LIB.c}return p};
+var libFP0=fillPerfil;
+fillPerfil=function(){libFP0();var on=!!LIB;$("cnome").readOnly=on;$("ccpf").readOnly=on;$("libnota").textContent=on?"🔒 Nome e CPF vêm da sua liberação do app.":""};
+function libInfo(){var e=$("libinfo");e.textContent=LIB?"🔓 Liberado para "+LIB.n+" · Os Mais Chegados · chave #"+LIB.i:"🔒 App ainda não liberado · toque aqui para liberar"}
+function libTela(modo,msg){
+  $("libx").style.display=modo==="op"?"":"none";$("liberr").textContent=msg||"";$("libt").className="on";
+  try{document.activeElement&&document.activeElement.blur&&document.activeElement.blur()}catch(e){}
+}
+function libFecha(){$("libt").className="";$("liberr").textContent=""}
+function libSemChave(msg){
+  var ini=+libGet("motorista_lib_ini")||0,rest=ini?LIB_TOL-(Date.now()-ini):-1;
+  if(rest>0){var d=Math.ceil(rest/86400000);$("libbart").textContent="⏳ "+(d===1?"Falta 1 dia":"Faltam "+d+" dias")+" para liberar o app";$("libbar").className="on";if(msg)libTela("op",msg);return "op"}
+  $("libbar").className="";libTela("bloq",msg||"");return "bloq";
+}
+function libDesliga(msg){LIB=null;libSet("motorista_lib",null);fillPerfil();libInfo();libSemChave(msg)}
+function libAtiva(txt){
+  var s=String(txt||""),m=s.match(/lib=([A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+)/)||s.match(/(eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+)/),L=libLe(m?m[1]:s);
+  if(!L)return Promise.resolve("Chave ou link de liberação inválido. Confira se copiou tudo.");
+  return libConfere(L).then(function(ok){
+    if(ok===null)return "Este navegador não consegue conferir a liberação. Atualize o Chrome ou o Safari.";
+    if(!ok)return "Chave ou link de liberação inválido. Peça um novo ao André.";
+    if(LIB_BLOQ.indexOf(L.i)>=0)return "Esta liberação foi bloqueada. Fale com o André.";
+    var ag=Date.now();
+    if(ag-L.t>LIB_VAL)return "Esta chave ou link venceu (vale 1 hora). Peça um novo ao André.";
+    if(L.t-ag>10*60000)return "A data ou a hora do celular está errada. Acerte e tente de novo.";
+    libSet("motorista_lib",L.tok);libSet("motorista_lib_ini",null);LIB=L;
+    perfil=perfilLimpa(perfil);try{saveCats()}catch(e){}fillPerfil();perfilUI();libInfo();libFecha();$("libbar").className="";$("libin").value="";
+    toast("✅ App liberado para "+L.n);return "";
+  });
+}
+function libLink(h){
+  var m=String(h||"").match(/lib=([A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+)/);if(!m)return;
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  libAtiva(m[1]).then(function(er){if(!er)return;if($("libt").className==="on")$("liberr").textContent=er;else if(LIB)toast(er);else libTela("op",er)});
+}
+(function libInicio(){
+  var tok=libGet("motorista_lib"),L=tok?libLe(tok):null;
+  if(L){
+    LIB=L;perfil=perfilLimpa(perfil);fillPerfil();perfilUI();libInfo();
+    if(LIB_BLOQ.indexOf(L.i)>=0)libDesliga("Esta liberação foi bloqueada. Fale com o André.");
+    else libConfere(L).then(function(ok){if(ok===false)libDesliga("Liberação inválida. Peça um novo link ao André.")});
+  }else{if(tok)libSet("motorista_lib",null);fillPerfil();libInfo();libSemChave("")}
+  libLink(location.hash);
+})();
+window.addEventListener("hashchange",function(){libLink(location.hash)});
+$("libok").onclick=function(){
+  var v=$("libin").value.trim();if(!v){$("liberr").textContent="Cole o link de liberação que você recebeu.";return}
+  var b=this;b.disabled=true;libAtiva(v).then(function(er){b.disabled=false;if(er)$("liberr").textContent=er});
+};
+$("libin").oninput=function(){$("liberr").textContent=""};
+$("libx").onclick=libFecha;
+$("libbarok").onclick=function(){libTela("op","")};
+$("libbarx").onclick=function(){$("libbar").className=""};
+$("libinfo").onclick=function(){if(!LIB)libTela("op","")};
 
 /* ===== Campos de dinheiro no formato da moeda (digita só números: 5000 → 50,00) ===== */
 var MOEDA_IDS=["valor","sval","d6v","s7v","s8v","cdp","vtot","mmes","mdia","alv","alkx","alcau","trv","agv","lfv","d6cvr","vcvr"];

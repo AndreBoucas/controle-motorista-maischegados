@@ -572,7 +572,7 @@ try{new MutationObserver(function(){
   <div class="st"><h3>Zerar dados</h3>
     <div style="font-size:13px;color:var(--mut);line-height:1.5">Apaga todos os lançamentos, manutenções (com fotos), metas, categorias e lembretes, deixando o app vazio. Baixe um backup antes.</div>
     <button class="dg" id="zbtn">🗑️ Zerar todos os dados</button></div>
-  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 15/11/2026 · v97</div><div id="libinfo" role="button" tabindex="0"></div>
+  <div style="text-align:center;font-size:11px;color:var(--mut);margin:0 0 12px" id="vers">Versão independente · 18/11/2026 · v98</div><div id="libinfo" role="button" tabindex="0"></div>
   <div class="st" style="text-align:center"><h3>Apoie o aplicativo 💚</h3>
     <div style="font-size:14px;line-height:1.5">Se gostou do aplicativo e quiser doar qualquer valor, o PIX do idealizador é:</div>
     <div id="pixk" style="font-size:22px;font-weight:800;margin:12px 0 2px;user-select:all;-webkit-user-select:all">71988431359</div>
@@ -662,7 +662,7 @@ try{new MutationObserver(function(){
     <div class="st"><h3>📋 Reservas cadastradas</h3><div id="vlistR"></div></div>
   </div>
   <div class="st" id="gcForm" style="display:none">
-    <div style="font-size:11px;color:var(--mut);margin-bottom:6px;line-height:1.4">O valor total é diluído em parcelas mensais iguais, no período escolhido, começando já neste mês, e a parcela entra na meta diária. 🔄 reinicia a diluição por mais um período. ✏️ edita.</div>
+    <div id="vhint" style="font-size:11px;color:var(--mut);margin-bottom:6px;line-height:1.4">O valor total é diluído em parcelas mensais iguais, no período escolhido, começando já neste mês, e a parcela entra na meta diária. 🔄 reinicia a diluição por mais um período. ✏️ edita.</div>
     <label id="vtit">Novo custo anual</label>
     <select id="vsel" class="fsel" style="width:100%"></select>
     <input id="vn2" maxlength="30" placeholder="Nome" style="display:none;margin-top:6px">
@@ -673,6 +673,7 @@ try{new MutationObserver(function(){
 <div id="vcobw" style="display:none"><label style="display:flex;align-items:center;gap:10px;margin-top:12px;font-size:15px"><input type="checkbox" id="vcob" style="width:22px;height:22px"> 🤝 Cobrar de alguém</label><div id="vcobf" style="display:none;margin-top:6px"><div class="two2"><div><label for="vcn">Nome da pessoa</label><input id="vcn" maxlength="30" placeholder="Ex: João"></div><div><label for="vct">WhatsApp (opcional)</label><input id="vct" type="tel" inputmode="tel" maxlength="20" placeholder="(71) 99999-9999"></div></div><label for="vcm" style="display:block;margin-top:8px">Quanto cobrar</label><select id="vcm" class="fsel" style="width:100%"><option value="T">O valor todo da conta</option><option value="V">Um valor fixo (R$)</option><option value="P">Uma porcentagem (%)</option></select><div id="vcvrw" style="display:none;margin-top:8px"><label for="vcvr">Valor a cobrar (R$)</label><input id="vcvr" type="number" inputmode="decimal" placeholder="0,00"></div><div id="vcvpw" style="display:none;margin-top:8px"><label for="vcvp">Porcentagem da conta (%)</label><input id="vcvp" type="number" inputmode="decimal" min="1" max="100" placeholder="Ex: 50"></div><div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">A cobrança aparece no Início (🤝 A receber) e na 📆 Agenda, com aviso e botão para cobrar pelo WhatsApp. Ao receber, você escolhe em qual carteira o dinheiro entra.</div></div></div>
 
       <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:6px 0 4px;color:var(--tx)"><input type="checkbox" id="vemb" checked style="width:22px;height:22px"> Embutir na meta diária (já a partir deste mês)</label>
+      <div id="vddw" style="margin-top:4px"><label for="vdd">Diluir na meta do dia em (dias)</label><input id="vdd" type="number" inputmode="numeric" min="1" max="31" placeholder="Dias"><div id="vddn" style="font-size:11px;color:var(--mut);margin-top:4px;line-height:1.4"></div></div>
       <div id="vprev" style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.4"></div>
       <div id="vplan" style="font-size:12px;color:var(--tx);margin-top:6px;line-height:1.5"></div>
     </div>
@@ -1295,25 +1296,25 @@ function renderResLista(cat,idl,ids){
   venc.filter(function(v){return (v.cat||"A")===cat}).sort(function(a,b){return String(a.nome).localeCompare(String(b.nome))}).forEach(function(v){
     var x=planoReserva(v).filter(function(p){return p.m===m})[0];if(!x)return;
     var vv=x.valor,sp=Math.min(vv,sepAtualV(v,m)),pc=vv>0?Math.min(100,sp/vv*100):0;
-    tot+=vv;sep+=sp;if(v.emb!==false)te+=vv;
-    h+='<div class="ir" style="flex-wrap:wrap"><div class="t"><b>'+esc(v.nome)+'</b><div style="font-size:12px;color:var(--mut)">'+(x.k?'parcela '+x.k+'/'+x.n:x.dias+(x.dias===1?' dia':' dias'))+(v.emb!==false?' · + '+brl(impDiaV(vv,m))+'/dia na meta diária':' · fora da meta')+'</div></div><div style="text-align:right;font-weight:800">'+brl(vv)+'</div><button data-sp="'+v.id+'">'+(sp>=vv-0.005?'✅ Separado':'💰 Separar')+'</button><div style="width:100%;font-size:12px;color:var(--mut)">Separado: '+brl(sp)+' de '+brl(vv)+'</div><div class="pg" style="width:100%"><i style="width:'+pc+'%"></i></div></div>';
+    tot+=vv;sep+=sp;if(v.emb!==false)te+=impDiaV(vv,m,v);
+    h+='<div class="ir" style="flex-wrap:wrap"><div class="t"><b>'+esc(v.nome)+'</b><div style="font-size:12px;color:var(--mut)">'+(x.k?'parcela '+x.k+'/'+x.n:x.dias+(x.dias===1?' dia':' dias'))+(v.emb!==false?' · + '+brl(impDiaV(vv,m,v))+'/dia na meta diária ('+diasV(v,m)+' dias)':' · fora da meta')+'</div></div><div style="text-align:right;font-weight:800">'+brl(vv)+'</div><button data-sp="'+v.id+'">'+(sp>=vv-0.005?'✅ Separado':'💰 Separar')+'</button><div style="width:100%;font-size:12px;color:var(--mut)">Separado: '+brl(sp)+' de '+brl(vv)+'</div><div class="pg" style="width:100%"><i style="width:'+pc+'%"></i></div></div>';
   });
   $(idl).innerHTML=h||'<div style="font-size:13px;color:var(--mut);padding:8px 0">Nada para separar neste mês. Cadastre abaixo, marcando "Calcular reserva".</div>';
-  $(ids).innerHTML='<div style="font-size:12px;color:var(--mut);margin-bottom:4px;text-transform:capitalize">'+mesTxt(m)+'</div>'+kv(cat==="R"?"Reserva do mês":"Parcela do mês",brl(tot),"bad")+kv("Separado",brl(sep),"ok")+kv("A separar",brl(tot-sep))+kv("Na meta diária (valor do dia)",te>0?"+ "+brl(impDiaV(te,m))+"/dia":"—");
+  $(ids).innerHTML='<div style="font-size:12px;color:var(--mut);margin-bottom:4px;text-transform:capitalize">'+mesTxt(m)+'</div>'+kv(cat==="R"?"Reserva do mês":"Parcela do mês",brl(tot),"bad")+kv("Separado",brl(sep),"ok")+kv("A separar",brl(tot-sep))+kv("Na meta diária (valor do dia)",te>0?"+ "+brl(te)+"/dia":"—");
 }
 function renderMensal(){
   var m=mk(),tot=0,pago=0,te=0,h="",dvA=[],dvB=[];
   venc.filter(function(v){return v.cat==="M"}).sort(function(a,b){return String(a.nome).localeCompare(String(b.nome))}).forEach(function(v){
     var x=planoReserva(v).filter(function(p){return p.m===m})[0];if(!x)return;
     var vv=x.valor,pg=!!(v.pg&&v.pg[m]);
-    tot+=vv;if(pg)pago+=vv;if(v.emb!==false)te+=vv;
-    var row='<div class="ir"><div class="t"><b>'+esc(v.nome)+'</b><div style="font-size:12px;color:var(--mut)">todo mês'+(v.emb!==false?' · + '+brl(impDiaV(vv,m))+'/dia na meta diária':' · fora da meta')+(pg?' · pago em '+fmtBR((v.pgd&&v.pgd[m])||(m+"-01")).slice(0,5):'')+'</div></div><div style="text-align:right;font-weight:800">'+brl(vv)+'</div><button data-mp="'+v.id+'">'+(pg?'✅ Pago':'☐ Pagar')+'</button></div>';
+    tot+=vv;if(pg)pago+=vv;if(v.emb!==false)te+=impDiaV(vv,m,v);
+    var row='<div class="ir"><div class="t"><b>'+esc(v.nome)+'</b><div style="font-size:12px;color:var(--mut)">todo mês'+(v.emb!==false?' · + '+brl(impDiaV(vv,m,v))+'/dia na meta diária ('+diasV(v,m)+' dias)':' · fora da meta')+(pg?' · pago em '+fmtBR((v.pgd&&v.pgd[m])||(m+"-01")).slice(0,5):'')+'</div></div><div style="text-align:right;font-weight:800">'+brl(vv)+'</div><button data-mp="'+v.id+'">'+(pg?'✅ Pago':'☐ Pagar')+'</button></div>';
     var hmM=hoje().slice(0,7),atM=!pg&&+v.dv>0&&(m<hmM||(m===hmM&&+hoje().slice(8,10)>+v.dv));
     (pg?dvB:dvA).push({h:row,id:v.id,n:v.nome,v:vv,at:atM,d:+v.dv||99,sl:false,pd:pg?String((v.pgd&&v.pgd[m])||(m+"-01")):''});
   });
   h=dvMonta("M",m,dvA,dvB);
   $("rlistM").innerHTML=h||'<div style="font-size:13px;color:var(--mut);padding:8px 0">Nenhum custo mensal neste mês. Cadastre abaixo.</div>';
-  $("rsumM").innerHTML='<div style="font-size:12px;color:var(--mut);margin-bottom:4px;text-transform:capitalize">'+mesTxt(m)+'</div>'+kv("Custos do mês",brl(tot),"bad")+kv("Pago",brl(pago),"ok")+kv("A pagar",brl(tot-pago))+kv("Na meta diária (valor do dia)",te>0?"+ "+brl(impDiaV(te,m))+"/dia":"—");
+  $("rsumM").innerHTML='<div style="font-size:12px;color:var(--mut);margin-bottom:4px;text-transform:capitalize">'+mesTxt(m)+'</div>'+kv("Custos do mês",brl(tot),"bad")+kv("Pago",brl(pago),"ok")+kv("A pagar",brl(tot-pago))+kv("Na meta diária (valor do dia)",te>0?"+ "+brl(te)+"/dia":"—");
 }
 function renderReserva(){renderResLista("A","rlist8","rsum8");renderResLista("R","rlistR","rsumR");renderMensal()}
 function prevDiario(){var t=0;Object.keys(catPrev).forEach(function(k){if(+catPrev[k]>0)t+=+catPrev[k]});return t}
@@ -1341,8 +1342,8 @@ function abrirS8(n){
 }
 function renderGcSum(){
   var hd=hoje(),hm=hd.slice(0,7),md=metaDiaD(hd),dvv=diasTrab(hm),an=0,rs=0,mn=0;
-  venc.forEach(function(v){if(v.emb===false)return;var x=planoReserva(v).filter(function(p){return p.m===hm})[0];if(x){if(v.cat==="R")rs+=x.valor;else if(v.cat==="M")mn+=x.valor;else an+=x.valor}});
-  $("gcsum").innerHTML=kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos mensais",brl(mn/dvv))+kv("+ Custos anuais",brl(an/dvv))+kv("+ Reservas",brl(rs/dvv))+(alMes(hm)>0?kv("+ Aluguel do veículo",brl(alMes(hm)/dvv)):"")+kv("= Meta de hoje",brl(md.total),"ok")+(function(){var it=custoDiaDet(hd).it;return it.length?'<div style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.5">Custos do dia por categoria: '+it.map(function(x){return esc(info(x.n)[1])+' '+brl(x.u)+' ('+(x.l>=x.p&&x.l>0?'lançado':'previsto')+')'}).join(' · ')+'</div>':''})()+difLinha("Custos de hoje",custoDiaDet(hd))+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Os custos do dia entram inteiros: por categoria, valem o maior entre o previsto e o lançado hoje (nunca a soma dos dois). A meta compara com as receitas do dia, e o lucro do dia (receitas − custos) aparece no Início.</div>';
+  venc.forEach(function(v){if(v.emb===false)return;var x=planoReserva(v).filter(function(p){return p.m===hm})[0];if(x){var q=x.valor/diasV(v,hm);if(v.cat==="R")rs+=q;else if(v.cat==="M")mn+=q;else an+=q}});
+  $("gcsum").innerHTML=kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos mensais",brl(mn))+kv("+ Custos anuais",brl(an))+kv("+ Reservas",brl(rs))+(alMes(hm)>0?kv("+ Aluguel do veículo",brl(alMes(hm)/dvv)):"")+kv("= Meta de hoje",brl(md.total),"ok")+(function(){var it=custoDiaDet(hd).it;return it.length?'<div style="font-size:12px;color:var(--mut);margin-top:6px;line-height:1.5">Custos do dia por categoria: '+it.map(function(x){return esc(info(x.n)[1])+' '+brl(x.u)+' ('+(x.l>=x.p&&x.l>0?'lançado':'previsto')+')'}).join(' · ')+'</div>':''})()+difLinha("Custos de hoje",custoDiaDet(hd))+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Os custos do dia entram inteiros: por categoria, valem o maior entre o previsto e o lançado hoje (nunca a soma dos dois). A meta compara com as receitas do dia, e o lucro do dia (receitas − custos) aparece no Início.</div>';
 }
 function gcSet(t){
   gcTab=t;["D","M","A","R"].forEach(function(k){$("gc"+k).style.display=k===t?"":"none"});
@@ -1354,7 +1355,7 @@ var s7={};
 function abrirS7(id,m){
   var v=venc.filter(function(x){return String(x.id)===String(id)})[0];if(!v)return;
   var px=planoReserva(v).filter(function(p){return p.m===m})[0];if(!px){toast("Sem parcela neste mês");return}
-  var d=r2(impDiaV(px.valor,m)),sp=Math.min(px.valor,sepAtualV(v,m));
+  var d=r2(impDiaV(px.valor,m,v)),sp=Math.min(px.valor,sepAtualV(v,m));
   s7={id:v.id,m:m,plan:px.valor,dia:d};
   $("s7t").textContent=v.nome;
   $("s7i").textContent=(v.cat==="R"?"Reserva":"Parcela")+" de "+mesTxt(m)+": "+brl(px.valor)+(d>0?" · valor do dia: "+brl(d):"")+". Separado até agora: "+brl(sp)+".";
@@ -1366,24 +1367,31 @@ function vCalcUI(){
   var nome=$("vsel").value==="__outro"?$("vn2").value.trim():$("vsel").value,M=vcat==="M";
   $("vtotl").textContent=(M?"Valor mensal":"Valor total")+(nome?" do "+nome:"")+" (R$)";
   $("vdiasw").style.display=M?"none":"";$("vdvw").style.display=M?"":"none";$("vcobw").style.display=M?"":"none";$("vtotw").style.gridColumn=M?"1/-1":"";
-  var t=parseFloat($("vtot").value)||0,emb=$("vemb").checked;
+  var t=parseFloat($("vtot").value)||0,emb=$("vemb").checked,dd=parseInt($("vdd").value)||0,vo=dd>0?{dd:dd}:null,dp=dPad();
+  $("vddw").style.display=emb?"":"none";
+  $("vhint").textContent=M?"O valor mensal entra na meta do dia, dividido pelos dias de diluição. Toque em Pagar quando pagar. ✏️ edita.":"O valor total é diluído em parcelas mensais iguais, no período escolhido, começando já neste mês, e a parcela entra na meta do dia, dividida pelos dias de diluição. 🔄 reinicia a diluição por mais um período. ✏️ edita.";
+  var vmes=M?t:(parseInt($("vdias").value)>0?t/Math.min(36,parseInt($("vdias").value)):0);
+  $("vddn").innerHTML=dd>dp&&vmes>0?"⚠️ Na sua Meta você trabalha "+dp+" dias por mês. Diluindo em "+dd+" dias, a meta do dia fica menor e, trabalhando "+dp+" dias, você junta cerca de "+brl(vmes*dp/dd)+" de "+brl(vmes)+" no mês.":(dd>0&&dd!==dp?"Padrão: "+dp+" dias (os dias de trabalho da sua Meta).":"Padrão: os dias de trabalho da sua Meta ("+dp+"). Mude se quiser diluir este custo em outro número de dias.");
   if(M){
     var fm=t>0?planoReserva({cat:"M",vt:t,ini:hoje()})[0]:null;
-    $("vprev").textContent=t>0?"Todo mês "+brl(t)+", a partir deste mês. "+(emb&&fm?"Valor do dia na meta diária: + "+brl(impDiaV(fm.valor,fm.m))+" por dia ("+"parcela ÷ "+diasTrab(fm.m)+" dias trabalhados"+").":"Fora da meta diária."):"Informe o valor mensal.";
+    $("vprev").textContent=t>0?"Todo mês "+brl(t)+", a partir deste mês. "+(emb&&fm?"Valor do dia na meta diária: + "+brl(impDiaV(fm.valor,fm.m,vo))+" por dia ("+brl(fm.valor)+" ÷ "+diasV(vo,fm.m)+" dias).":"Fora da meta diária."):"Informe o valor mensal.";
     $("vplan").textContent="";return;
   }
   if(!vdiasMan)$("vdias").value=12;
   var n=Math.min(36,parseInt($("vdias").value)||0);
   var pl=(t>0&&n>0)?planoReserva({vt:t,per:n,ini:hoje()}):[],tp=0;pl.forEach(function(x){tp+=x.valor});
-  var f0=pl[0],d0=f0?impDiaV(f0.valor,f0.m):0;
-  $("vprev").textContent=(t>0&&n>0)?"= "+brl(t/n)+" por mês, em "+n+(n===1?" mês":" meses")+", começando já neste mês. "+(emb&&f0?"Valor do dia na meta diária: + "+brl(d0)+" por dia ("+"parcela ÷ "+diasTrab(f0.m)+" dias trabalhados"+").":"Fora da meta diária."):"Informe o valor total e o período em meses (padrão: 12).";
-  $("vplan").textContent=pl.length?"Parcelas: "+pl.map(function(x){return mesTxt(x.m).replace(/ de .*/,"").slice(0,3)+" "+brl(x.valor)+(emb?" (+ "+brl(impDiaV(x.valor,x.m))+"/dia)":"")}).join(" · ")+" — total "+brl(r2(tp)):"";
+  var f0=pl[0],d0=f0?impDiaV(f0.valor,f0.m,vo):0;
+  $("vprev").textContent=(t>0&&n>0)?"= "+brl(t/n)+" por mês, em "+n+(n===1?" mês":" meses")+", começando já neste mês. "+(emb&&f0?"Valor do dia na meta diária: + "+brl(d0)+" por dia (parcela ÷ "+diasV(vo,f0.m)+" dias).":"Fora da meta diária."):"Informe o valor total e o período em meses (padrão: 12).";
+  $("vplan").textContent=pl.length?"Parcelas: "+pl.map(function(x){return mesTxt(x.m).replace(/ de .*/,"").slice(0,3)+" "+brl(x.valor)+(emb?" (+ "+brl(impDiaV(x.valor,x.m,vo))+"/dia)":"")}).join(" · ")+" — total "+brl(r2(tp)):"";
 }
-function impDiaV(valor,m){return valor/diasTrab(m)}
+function dPad(){return meta.dias>0?meta.dias:22}
+/* v98 · cada custo pode ter os seus dias de diluição (v.dd); sem v.dd usa os dias de trabalho da Meta */
+function diasV(v,m){m=m||hoje().slice(0,7);var dt=diasTrab(m);if(!(v&&+v.dd>0))return dt;var d=Math.max(1,Math.min(31,Math.round(+v.dd)));if(ehMesIni(m))d=Math.max(1,Math.round(d*dt/meta.dias));return d}
+function impDiaV(valor,m,v){return valor/diasV(v,m)}
 function vMetaTxt(v){
   if(v.emb===false)return "fora da meta";
   var pl=planoReserva(v),hm=hoje().slice(0,7),x=pl.filter(function(p){return p.m===hm})[0];
-  if(x)return "na meta diária: + "+brl(impDiaV(x.valor,hm))+"/dia";
+  if(x)return "na meta diária: + "+brl(impDiaV(x.valor,hm,v))+"/dia (÷ "+diasV(v,hm)+" dias)";
   return pl.length&&pl[0].m>hm?"entra na meta em "+mesTxt(pl[0].m):"já fora da meta (período encerrado)";
 }
 function vNames(){return vcat==="R"?VNR:vcat==="M"?VNM:VN}
@@ -1402,7 +1410,7 @@ function vReset(){
   $("vsel").value=vNames()[0];$("vn2").style.display="none";$("vn2").value="";
   $("vadd").textContent=M?"Adicionar custo mensal":r?"Adicionar reserva":"Adicionar custo anual";$("vcx").style.display="none";$("vtit").textContent=M?"Novo custo mensal":r?"Nova reserva":"Novo custo anual";
   $("vcalcl").style.display="none";$("vcalc").checked=true;
-  $("vtot").value="";$("vdias").value="";$("vdv").value="";$("vemb").checked=true;vdiasMan=false;vCalcUI();cobFill("v",null);
+  $("vtot").value="";$("vdias").value="";$("vdv").value="";$("vdd").value=dPad();$("vemb").checked=true;vdiasMan=false;vCalcUI();cobFill("v",null);
 }
 function varMedio(){
   var l=new Date();l.setDate(l.getDate()-30);var li=iso(l),d=0,dias={};
@@ -1411,7 +1419,7 @@ function varMedio(){
 }
 function renderFat(){
   var md=metaDiaD(hoje()),h="";
-  if(md.total>0)h=kv("Meta do dia",brl(md.total),"ok")+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Sua meta + custos do dia + custos anuais e reservas. Muda sozinha quando você lança um custo.</div>';
+  if(md.total>0)h=kv("Meta do dia",brl(md.total),"ok")+'<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Sua meta + custos do dia + custos mensais, anuais e reservas. Muda sozinha quando você lança um custo.</div>';
   $("fatnec").innerHTML=h;
 }
 function pausaMs(t,ag){var m=0;t.pausas.forEach(function(p){m+=(p.b||ag)-p.a});return m}
@@ -2028,7 +2036,7 @@ function lancMesMeta(m){var f=desdeIni(m),t=0;dC().forEach(function(e){if(e.data
 function metaMesBase(m){m=m||hoje().slice(0,7);if(ehMesIni(m)&&meta.prop)return (meta.mes||0)*diasTrab(m)/meta.dias;return meta.mes||0}
 function diasDoMes(m){return new Date(+m.slice(0,4),+m.slice(5,7),0).getDate()}
 function impModo(){return meta.impdiv==="trab"?"trab":"mes"}
-function impDia(m){return reservasMes(m)/diasTrab(m)}
+function impDia(m){var t=alMes(m)/diasTrab(m);venc.forEach(function(v){if(v.emb===false)return;planoReserva(v).forEach(function(x){if(x.m===m)t+=x.valor/diasV(v,m)})});return t}
 function nomeOnde(n,ign){
   var k=nomeNorm(n);ign=ign||{};
   if(allRec().concat(allDes()).some(function(x){return nomeNorm(x[1])===k&&x[0]!==ign.cat}))return "uma categoria de lançamento";
@@ -2135,14 +2143,14 @@ function renderImp(){
     var pl=planoReserva(v);if(!pl.length)return;
     if(v.emb===false){fora.push(v.nome);return}
     var x=pl.filter(function(p){return p.m===hm})[0];
-    if(x){n++;tot+=x.valor;h+=kv(esc(v.nome)+' <span style="font-size:11px;color:var(--mut)">'+brl(x.valor)+'/mês</span>',"+ "+brl(x.valor/dv)+"/dia")}
+    if(x){n++;tot+=x.valor;h+=kv(esc(v.nome)+' <span style="font-size:11px;color:var(--mut)">'+brl(x.valor)+'/mês</span>',"+ "+brl(x.valor/diasV(v,hm))+"/dia · ÷ "+diasV(v,hm)+" dias")}
     else if(pl[0].m>hm)fut.push(esc(v.nome)+" (começa em "+mesTxt(pl[0].m)+")");
   });
   var alm=alMes(hm);if(alm>0){n++;h+=kv('🚗 Aluguel do veículo <span style="font-size:11px;color:var(--mut)">'+alMesDatas(hm).length+'× '+brl(alug.valor)+' = '+brl(alm)+'</span>','+ '+brl(alm/dv)+'/dia')}
-  if(!n)h='<div style="font-size:13px;color:var(--mut);line-height:1.5;margin-bottom:6px">Nenhum custo anual ou reserva sendo diluído neste mês.</div>';
+  if(!n)h='<div style="font-size:13px;color:var(--mut);line-height:1.5;margin-bottom:6px">Nenhum custo mensal, anual ou reserva sendo diluído neste mês.</div>';
   var md=metaDiaD(hd),mm=metaMesM(hm);
-  h+='<div style="border-top:1px solid var(--bd);margin-top:6px"></div>'+kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos anuais e reservas (valor do dia)",brl(md.ar))+kv("= Meta de hoje",brl(md.total),"ok")+kv("Meta do mês",brl(mm.total))+difLinha("Custos de hoje",custoDiaDet(hd));
-  h+='<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Custos do dia: por categoria, o maior valor entre o previsto e o que você lançou hoje, inteiro e sem somar os dois. '+"Anuais e reservas: parcela do mês ÷ "+dt+" dias trabalhados, para a parcela inteira ser separada nos dias em que você trabalha. "+(modo==="trab"?"Reserva completa: a meta do mês soma as parcelas ("+brl(reservasMes(hm))+").":"Só o valor do dia: a meta do mês continua a sua; as parcelas entram só na meta de cada dia.")+' A meta compara com as receitas do dia.</div>';
+  h+='<div style="border-top:1px solid var(--bd);margin-top:6px"></div>'+kv("Sua meta por dia (base)",brl(md.base))+kv("+ Custos do dia",brl(md.cd))+kv("+ Custos mensais, anuais e reservas (valor do dia)",brl(md.ar))+kv("= Meta de hoje",brl(md.total),"ok")+kv("Meta do mês",brl(mm.total))+difLinha("Custos de hoje",custoDiaDet(hd));
+  h+='<div style="font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4">Custos do dia: por categoria, o maior valor entre o previsto e o que você lançou hoje, inteiro e sem somar os dois. '+"Custos mensais, anuais e reservas: valor do mês ÷ dias de diluição de cada um (padrão: os "+dt+" dias de trabalho da Meta), para o valor inteiro ser separado nos dias em que você trabalha. "+(modo==="trab"?"Reserva completa: a meta do mês soma as parcelas ("+brl(reservasMes(hm))+").":"Só o valor do dia: a meta do mês continua a sua; as parcelas entram só na meta de cada dia.")+' A meta compara com as receitas do dia.</div>';
   if(fut.length)h+='<div style="font-size:12px;color:var(--mut);margin-top:8px;line-height:1.4">Próximos a entrar na meta: '+fut.join(" · ")+'.</div>';
   if(fora.length)h+='<div style="font-size:12px;color:var(--mut);margin-top:4px;line-height:1.4">Fora da meta (opção desmarcada): '+fora.map(esc).join(", ")+'.</div>';
   $("impres").innerHTML=h;
@@ -2885,6 +2893,9 @@ $("vadd").onclick=function(){
   }
   if(M){var cbr=cobLer("v");if(cbr.err){toast(cbr.err);return}if(cbr.cb)it.cob=cobLimpa(Object.assign({desde:(old&&old.cob&&old.cob.desde)||hoje().slice(0,7)},cbr.cb));else delete it.cob}else delete it.cob;
   if($("vemb").checked)delete it.emb;else it.emb=false;
+  var dd1=parseInt($("vdd").value)||0;
+  if($("vemb").checked&&$("vdd").value!==""&&(dd1<1||dd1>31)){toast("Diluir em: de 1 a 31 dias");return}
+  if($("vemb").checked&&dd1>0&&dd1!==dPad())it.dd=dd1;else if($("vemb").checked)delete it.dd;
   it.ini=(old&&old.ini)||hoje();
   it.cat=vcat==="R"?"R":M?"M":"A";
   if(vedit)venc=venc.map(function(x){return x.id===vedit?it:x});else venc=venc.concat([it]);
@@ -2897,6 +2908,7 @@ $("vsel").onchange=function(){
 };
 $("vcalc").onchange=vCalcUI;$("vemb").onchange=vCalcUI;$("vtot").oninput=vCalcUI;$("vn2").oninput=vCalcUI;
 $("vdias").oninput=function(){vdiasMan=true;vCalcUI()};
+$("vdd").oninput=vCalcUI;
 $("s9cx").onclick=function(){$("ov9").className=""};
 $("ov9").onclick=function(e){if(e.target===$("ov9"))$("ov9").className=""};
 $("s9ok").onclick=function(){
@@ -2964,7 +2976,7 @@ $("vlist").onclick=$("vlistR").onclick=$("vlistM").onclick=function(ev){
     var v=venc.filter(function(x){return String(x.id)===e})[0];if(!v)return;
     gcSet(v.cat==="R"?"R":v.cat==="M"?"M":"A");vedit=v.id;cobFill("v",v.cob);$("vsel").value=vNames().indexOf(v.nome)>=0?v.nome:"__outro";
     $("vn2").value=vNames().indexOf(v.nome)>=0?"":v.nome;$("vn2").style.display=vNames().indexOf(v.nome)>=0?"none":"block";
-    $("vcalc").checked=true;$("vtot").value=v.vt>0?v.vt:"";$("vdv").value=v.dv||"";$("vdias").value=v.per>0?v.per:(v.vd>0&&v.data?Math.max(1,Math.round(diasEntre(v.ini||hoje(),v.data)/30.4)):12);$("vemb").checked=v.emb!==false;vdiasMan=v.vt>0;vCalcUI();$("vadd").textContent="Salvar alterações";$("vcx").style.display="block";$("vtit").textContent=v.cat==="R"?"Editar reserva":v.cat==="M"?"Editar custo mensal":"Editar custo anual";
+    $("vcalc").checked=true;$("vtot").value=v.vt>0?v.vt:"";$("vdv").value=v.dv||"";$("vdias").value=v.per>0?v.per:(v.vd>0&&v.data?Math.max(1,Math.round(diasEntre(v.ini||hoje(),v.data)/30.4)):12);$("vemb").checked=v.emb!==false;$("vdd").value=v.dd>0?v.dd:dPad();vdiasMan=v.vt>0;vCalcUI();$("vadd").textContent="Salvar alterações";$("vcx").style.display="block";$("vtit").textContent=v.cat==="R"?"Editar reserva":v.cat==="M"?"Editar custo mensal":"Editar custo anual";
     try{$("vtit").scrollIntoView({block:"center"})}catch(x){}
   }else if(r){
     venc=venc.map(function(x){if(String(x.id)!==r)return x;var o=Object.assign({},x,{ini:hoje(),sv:{},sep:{}});if(x.vt>0&&!(x.per>0)){o.per=12;delete o.vd}return o});
@@ -3231,7 +3243,7 @@ function restauraTexto(rtxt){
         if(l.alug&&l.alug.on&&!alug.on)alug=alLimpa(l.alug);
         if(l.catPrev&&typeof l.catPrev==="object")Object.keys(l.catPrev).forEach(function(k){if(+l.catPrev[k]>0&&catPrev[k]==null)catPrev[k]=+l.catPrev[k]});
         (l.turnos||[]).forEach(function(x){if(x&&x.id&&x.ini&&x.mt>0&&!turnos.some(function(y){return y.id===x.id}))turnos=turnos.concat([{id:+x.id,ini:+x.ini,fim:+x.fim||0,mt:+x.mt,mp:+x.mp||0}])});
-        (l.venc||[]).forEach(function(v){if(v&&v.id&&v.nome&&!venc.some(function(y){return y.id===v.id})){var o={id:v.id,nome:String(v.nome).slice(0,30)};if(v.data&&!(+v.per>=1))o.data=String(v.data).slice(0,10);if(+v.vt>0&&(+v.per>=1||+v.vd>=1)){o.vt=+v.vt;if(+v.per>=1)o.per=Math.min(36,Math.round(+v.per));else o.vd=Math.round(+v.vd);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.sep={};Object.keys(v.sep||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))o.sep[k]=1})}o.cat=v.cat==="R"?"R":v.cat==="M"?"M":"A";if(o.cat==="M"){if(+v.vt>0)o.vt=+v.vt;if(+v.dv>=1&&+v.dv<=31)o.dv=Math.round(+v.dv);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.pg={};o.pgd={};Object.keys(v.pg||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&v.pg[k])o.pg[k]=1});Object.keys(v.pgd||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&/^\d{4}-\d{2}-\d{2}$/.test(v.pgd[k]))o.pgd[k]=v.pgd[k]});o.pgw={};Object.keys(v.pgw||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&typeof v.pgw[k]==="string")o.pgw[k]=v.pgw[k].slice(0,12)});if(v.cob&&v.cob.on)o.cob=cobLimpa(v.cob)}if(v.sv&&typeof v.sv==="object"){o.sv={};Object.keys(v.sv).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&+v.sv[k]>=0)o.sv[k]=+v.sv[k]})}venc=venc.concat([o])}});
+        (l.venc||[]).forEach(function(v){if(v&&v.id&&v.nome&&!venc.some(function(y){return y.id===v.id})){var o={id:v.id,nome:String(v.nome).slice(0,30)};if(v.data&&!(+v.per>=1))o.data=String(v.data).slice(0,10);if(+v.vt>0&&(+v.per>=1||+v.vd>=1)){o.vt=+v.vt;if(+v.per>=1)o.per=Math.min(36,Math.round(+v.per));else o.vd=Math.round(+v.vd);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.sep={};Object.keys(v.sep||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))o.sep[k]=1})}o.cat=v.cat==="R"?"R":v.cat==="M"?"M":"A";if(+v.dd>=1&&+v.dd<=31)o.dd=Math.round(+v.dd);if(o.cat==="M"){if(+v.vt>0)o.vt=+v.vt;if(+v.dv>=1&&+v.dv<=31)o.dv=Math.round(+v.dv);if(v.emb===false)o.emb=false;o.ini=/^\d{4}-\d{2}-\d{2}$/.test(v.ini)?v.ini:hoje();o.pg={};o.pgd={};Object.keys(v.pg||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&v.pg[k])o.pg[k]=1});Object.keys(v.pgd||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&/^\d{4}-\d{2}-\d{2}$/.test(v.pgd[k]))o.pgd[k]=v.pgd[k]});o.pgw={};Object.keys(v.pgw||{}).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&typeof v.pgw[k]==="string")o.pgw[k]=v.pgw[k].slice(0,12)});if(v.cob&&v.cob.on)o.cob=cobLimpa(v.cob)}if(v.sv&&typeof v.sv==="object"){o.sv={};Object.keys(v.sv).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&+v.sv[k]>=0)o.sv[k]=+v.sv[k]})}venc=venc.concat([o])}});
         (l.contas||[]).forEach(function(c){if(c&&c.id&&c.nome&&!contas.some(function(y){return String(y.id)===String(c.id)}))contas=contas.concat([contaLimpa(c)])});
         (l.fixos||[]).forEach(function(v){if(v&&v.nome&&+v.valor>0&&!contas.some(function(y){return y.tipo==="F"&&y.nome.toLowerCase()===String(v.nome).toLowerCase()}))contas=contas.concat([contaLimpa({id:"m"+v.id,nome:v.nome,tipo:"F",icone:"💶",vals:[{de:"2000-01",v:+v.valor}]})])});
         if(l.meta&&!meta.dia&&!meta.mes)meta={dia:+l.meta.dia||0,mes:+l.meta.mes||0,dias:+l.meta.dias||0,impdiv:l.meta.impdiv==="trab"?"trab":undefined,ini:/^\d{4}-\d{2}-\d{2}$/.test(l.meta.ini)?l.meta.ini:undefined,diasAt:+l.meta.diasAt>0?Math.round(+l.meta.diasAt):undefined,prop:l.meta.prop?1:undefined,semR:+l.meta.semR>0?Math.round(+l.meta.semR):undefined,semV:+l.meta.semV>0?Math.round(+l.meta.semV):undefined,semRit:l.meta.semRit?1:undefined};
@@ -3717,7 +3729,7 @@ function ajSecoes(){
     f("Previsto por dia","Opcional. Por categoria, a meta do dia usa o maior entre o previsto e o lançado, nunca a soma. Ao editar: <b>Usar a média</b> dos últimos dias ou <b>Não prever</b>.")+
     f("➕ Novo custo diário","Nome (ex: Pedágio), ícone e previsto por dia.")+
     '<div class="ajs">🗓️ Custos mensais</div>'+
-    f("Cadastro","Nome, valor e (opcional) <b>dia do vencimento</b> do custo que se repete todo mês. O valor do dia entra na meta diária. Com o dia preenchido, o Início avisa 3 dias antes; sem ele, avisa nos últimos 5 dias do mês se ainda não estiver pago.")+
+    f("Cadastro","Nome, valor e (opcional) <b>dia do vencimento</b> do custo que se repete todo mês. O valor do dia (valor mensal ÷ <b>Diluir na meta do dia em (dias)</b>) entra na meta diária. Com o dia preenchido, o Início avisa 3 dias antes; sem ele, avisa nos últimos 5 dias do mês se ainda não estiver pago.")+
     f("Pagar e ✅ Pago","Toque em Pagar quando pagar: o valor sai do Saldo do mês na data do pagamento. Toque em ✅ Pago para mudar a data ou desmarcar.")+
     f("⏳ A pagar e ✅ Já pagas","Igual às contas de casa: os pagos vão para <b>Já pagas</b> (recolhida, toque para ver) e os que faltam ficam em <b>A pagar</b>, pelo dia do vencimento.")+
     '<div class="ajs">🚗 Aluguel do veículo (aba Custos mensais)</div>'+
@@ -3731,9 +3743,10 @@ function ajSecoes(){
     '<div class="ajs">📅 Custos anuais e 🏖️ Reservas</div>'+
     f("Valor total e Diluir em (meses)","O valor é dividido em parcelas mensais iguais, em reais inteiros, começando neste mês. A última parcela ajusta os centavos.")+
     f("Embutir na meta diária","Marcado, a parcela do mês entra na meta do dia.")+
+    f("Diluir na meta do dia em (dias)","Vale para custos mensais, anuais e reservas. O valor do mês é dividido por esse número de dias para entrar na meta do dia. Vem preenchido com os dias de trabalho da sua Meta (e acompanha a Meta se você deixar igual). Se colocar mais dias do que trabalha, a meta do dia fica menor e no fim do mês você não junta o valor inteiro: o app avisa.")+
     f("💰 Parcela do mês / Reserva do mês","Quanto separar neste mês. Toque em <b>Separar</b> para informar o valor guardado (o mês todo ou o valor do dia).")+
     f("🔄 e ✏️","🔄 recomeça a diluição por mais um período. ✏️ edita.")+
-    f("Composição da meta diária","Mostra a conta da meta de hoje: sua meta por dia + custos do dia + custos anuais e reservas.")},
+    f("Composição da meta diária","Mostra a conta da meta de hoje: sua meta por dia + custos do dia + custos mensais, anuais e reservas.")},
   {k:"relat",tab:6,t:"📄 Relatórios",b:
     f("Período","Este mês, Mês passado, Últimos 30 dias, Este ano ou Personalizado (De / Até). Todas as partes da tela seguem esse período.")+
     f("Resumo","Receitas, despesas lançadas, lucro, dias trabalhados, melhor dia, km, horas, ganho por hora e por corrida. No fim: contas pagas e manutenção e o <b>saldo após contas</b>, que é o mesmo número do Saldo do Início.")+
